@@ -10,12 +10,14 @@
     "socials": true
   },
   "categories_list": {
-    "featured": [],
+    "featured": [
+      "/caixas-embalagens-para-doces-e-brigadeiro?Embalagem para Doces"
+    ],
     "random": 6,
     "full_width": true
   },
   "centralized_logo": false,
-  "desktop_megamenu": false,
+  "desktop_megamenu": true,
   "search_input": true,
   "alphabetical_order_submenu": true,
   "full_width_submenu": true
