@@ -14,13 +14,13 @@
   "lang": "pt_br",
   "currency": "BRL",
   "mini_logo": "",
-  "font_family": "_",
+  "font_family": "Montserrat",
   "favicon": "/img/uploads/simbolo-bege-fundo-azul-5x-100.jpg",
-  "icons_font": "font-awesome",
+  "icons_font": "_",
   "country_code": "BR",
   "secondary_color": "#37b8f7",
-  "icon": "/img/icon.png",
+  "icon": "/img/uploads/simbolo-laranja-transp-9x.png",
   "store_id": 51395,
   "description": "pietroembalagens",
-  "large_icon": "/img/large-icon.png"
+  "large_icon": "/img/uploads/simbolo-laranja-transp-9x.png"
 }
