@@ -1,20 +1,11 @@
 {
   "marketing_stripe": {
-    "text": "Aproveite nossos descontos de até 50%!",
+    "text": "Aproveite 10% OFF Na Sua Primeira Compra! CUPOM: BEMVINDO10 / Não Cumulativo Com Promoções.",
     "link": "/promotion",
-    "color": "#fff7f7"
+    "color": "#fbe45a"
   },
   "contacts_stripe": {
-    "pages": [
-      {
-        "title": "Sobre nós",
-        "link": "/pages/sobre-nos"
-      },
-      {
-        "title": "Esta loja é um PWA",
-        "link": "/posts/esta-loja-e-um-pwa"
-      }
-    ],
+    "pages": [],
     "phone_wpp": true,
     "socials": true
   },
@@ -27,5 +18,5 @@
   "desktop_megamenu": false,
   "search_input": true,
   "alphabetical_order_submenu": true,
-  "full_width_submenu": false
+  "full_width_submenu": true
 }
