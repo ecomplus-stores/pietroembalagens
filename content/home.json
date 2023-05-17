@@ -64,9 +64,13 @@
       "page": 1
     },
     {
-      "type": "dynamic-showcase",
-      "load_more": true,
-      "sort": "views"
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "645b90914bd2e929c1f56b43:categories:Namorados:/embalagens-dia-dos-namorados",
+      "sort": "sales",
+      "title": "Namorados"
     },
     {
       "type": "page-title",
