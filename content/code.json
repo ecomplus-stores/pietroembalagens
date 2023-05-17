@@ -1,5 +1,5 @@
 {
-  "css": ".button-comprar {\n  border: none;\n  color: white;\n  padding: 10px 20px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  border-radius: 10px;\n}\n",
+  "css": ".button-comprar {\n  border: none;\n  color: white;\n  padding: 10px 20px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  border-radius: 30px;\n}\n",
   "html_head": "",
   "html_body": ""
 }
