@@ -16,7 +16,7 @@
   "mini_logo": "",
   "font_family": "Quicksand",
   "favicon": "/img/uploads/simbolo-bege-fundo-azul-5x-100.jpg",
-  "icons_font": "_",
+  "icons_font": "feather-icons",
   "country_code": "BR",
   "secondary_color": "#37b8f7",
   "icon": "/img/uploads/simbolo-laranja-transp-9x.png",
