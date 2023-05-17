@@ -1,5 +1,5 @@
 {
-  "css": "\n",
+  "css": "}\n.buy-together__title {\n  position: relative;\n  color: #365b80;\n  font-family: Averta;\n  line-height: 1.22;\n  text-decoration: none;\n  margin-bottom: 1.25rem;\n  > div {\n    padding: 0 var(--spacer-3);\n    margin: 0 auto;\n    display: inline-block;\n    background: #fff;\n    font-size: 1.375rem;\n    font-weight: 700;\n    z-index: 2;\n    position: relative;\n  }\n",
   "html_head": "",
   "html_body": ""
 }
