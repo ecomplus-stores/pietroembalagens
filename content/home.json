@@ -1,5 +1,5 @@
 {
-  "meta_title": "",
+  "meta_title": "Sacolas Kraft para Delivery",
   "meta_description": "",
   "sections": [
     {
@@ -34,7 +34,8 @@
         {
           "img": "/img/uploads/icone-categoria.png",
           "link": "https://pietroembalagens.netlify.app/10-sacolas-kraft---g-34x31x19cm---cromus",
-          "mobile_img": "/img/uploads/icone-categoria.png"
+          "mobile_img": "/img/uploads/icone-categoria.png",
+          "alt": "Sacolas Kraft"
         }
       ]
     },
