@@ -55,6 +55,11 @@
       "page": 1
     },
     {
+      "type": "dynamic-showcase",
+      "load_more": true,
+      "sort": "news"
+    },
+    {
       "type": "page-title",
       "title": "Pietro Embalagens",
       "description": "Especializada Caixas para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
