@@ -3,8 +3,8 @@
   "currency_symbol": "R$",
   "primary_color": "#fd8043",
   "theme": {
-    "bootswatch": "litera",
-    "custom": "clean-white"
+    "bootswatch": "minty",
+    "custom": "_"
   },
   "bg_color": "#ffffff",
   "repository": "ecomplus-stores/pietroembalagens",
