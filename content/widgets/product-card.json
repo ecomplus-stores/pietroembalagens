@@ -4,7 +4,7 @@
   "desktopOnly": false,
   "options": {
     "buyText": "ADICIONAR",
-    "buy": "",
+    "buy": "<div class=\"product-card--small\">\n    <div class=\"product-card__buy\"></div>\n</div>\n<div class=\"product-card\">\n    <div class=\"spinner-border\"></div>\n</div>\n",
     "footer": ""
   }
 }
