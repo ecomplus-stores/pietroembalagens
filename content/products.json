@@ -1,11 +1,6 @@
 {
   "sections": [
     {
-      "type": "banner-slider",
-      "autoplay": 9000,
-      "full_width": false
-    },
-    {
       "type": "breadcrumbs",
       "enabled": true
     },
