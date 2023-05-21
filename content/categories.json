@@ -17,12 +17,12 @@
       "sort": "sales"
     },
     {
-      "type": "document-description",
-      "enabled": true
-    },
-    {
       "type": "dynamic-showcase",
       "load_more": true
+    },
+    {
+      "type": "document-description",
+      "enabled": true
     }
   ]
 }
