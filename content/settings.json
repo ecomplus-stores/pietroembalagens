@@ -4,13 +4,13 @@
   "primary_color": "#fd8043",
   "theme": {
     "bootswatch": "minty",
-    "custom": "ecom-beauty"
+    "custom": "_"
   },
   "bg_color": "#ffffff",
   "repository": "ecomplus-stores/pietroembalagens",
   "logo": "/img/uploads/logo-2-laranja-transp-9x.png",
   "name": "pietroembalagens",
-  "short_name": "pietroembalagens",
+  "short_name": "Pietro Embalagens",
   "lang": "pt_br",
   "currency": "BRL",
   "mini_logo": "",
