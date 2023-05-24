@@ -11,9 +11,10 @@
   },
   "categories_list": {
     "featured": [
-      "/caixas-embalagens-para-doces-e-brigadeiro?Embalagem para Doces"
+      "/caixas-embalagens-para-doces-e-brigadeiro?Embalagem para Doces",
+      "/embalagens-dia-dos-namorados?Namorados"
     ],
-    "random": 0,
+    "random": 2,
     "full_width": false
   },
   "centralized_logo": false,
