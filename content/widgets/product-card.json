@@ -4,7 +4,7 @@
   "desktopOnly": false,
   "options": {
     "buyText": "ADICIONAR",
-    "buy": "<!DOCTYPE html>\n<html>\n<head>\n<style>\n    .botao-comprar {\n        background-color: green;\n        border: none;\n        color: white;\n        text-align: center;\n        text-decoration: none;\n        display: inline-block;\n        font-size: 16px;\n        cursor: pointer;\n        border-radius: 5px;\n        padding: 10px 20px;\n    }\n</style>\n</head>\n<body>\n\n<button class=\"botao-comprar\">Comprar</button>\n\n</body>\n</html>\n",
+    "buy": "",
     "footer": ""
   }
 }
