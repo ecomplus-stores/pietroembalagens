@@ -27,8 +27,12 @@
       "enabled": true
     },
     {
-      "type": "product-specifications",
-      "enabled": true
+      "type": "related-products",
+      "title": "Ei, não esqueça de mim :)"
+    },
+    {
+      "type": "recommended-products",
+      "title": "Quem comprou este produto, também comprou:"
     }
   ]
 }
