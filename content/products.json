@@ -29,14 +29,6 @@
     {
       "type": "product-specifications",
       "enabled": true
-    },
-    {
-      "type": "related-products",
-      "title": "Achamos que você vai gostar."
-    },
-    {
-      "type": "recommended-products",
-      "title": "Quem comprou este produto, também comprou:."
     }
   ]
 }
