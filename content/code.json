@@ -1,5 +1,5 @@
 {
-  "css": "",
+  "css": ".header__submenu {\n  max-width: none;\n  min-width: 100%;\n  left: 0%;\n  gap: var(--spacer-1);\n  margin-top: var(--spacer-2);\n  grid-template-columns: repeat(auto-fit, minmax(15%, 1fr)); \n}",
   "html_head": "",
   "html_body": "<a href=\"https://wa.me/5511945764807?text=Ola%20estou%20no%20site%20e\" style=\"position:fixed;width:60px;height:60px;bottom:40px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;font-size:30px;box-shadow: 1px 1px 2px #888;z-index:1000;right:40px;\" target=\"_blank\">\n<i style=\"margin-top:16px\" class=\"fab fa-whatsapp\"></i>\n</a>"
 }
