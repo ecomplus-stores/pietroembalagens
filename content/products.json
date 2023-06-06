@@ -18,21 +18,19 @@
     },
     {
       "type": "recommended-products",
-      "title": "Quem comprou este produto, também comprou:",
-      "show_loading": true
-    },
-    {
-      "type": "product-description",
-      "title": "Quem comprou este produto, também comprou:",
-      "enabled": true
+      "title": "Quem comprou este produto, também comprou:"
     },
     {
       "type": "related-products",
-      "title": "Ei, não esqueça de mim :)"
+      "title": "Você também pode gostar"
     },
     {
-      "type": "recommended-products",
-      "title": "Quem comprou este produto, também comprou:"
+      "type": "product-description",
+      "enabled": true
+    },
+    {
+      "type": "product-specifications",
+      "enabled": true
     }
   ]
 }
