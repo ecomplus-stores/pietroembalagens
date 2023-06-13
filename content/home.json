@@ -5,11 +5,11 @@
     {
       "type": "banner-slider",
       "autoplay": 9000,
-      "full_width": false,
+      "full_width": true,
       "slides": [
         {
           "img": "/img/uploads/sacolas-papel-kraft-full-getcommerce.png",
-          "link": "/sacolas",
+          "link": "https://pietroembalagens.com.br/sacola-kraft",
           "alt": "Sacolas Kraft",
           "start": "2020-04-11T05:54:06.750Z",
           "end": "",
