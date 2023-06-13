@@ -44,9 +44,9 @@
     },
     {
       "type": "collection-shelf",
-      "shuffle": true,
+      "shuffle": false,
       "collection_id": "645b8fbc4bd2e929c1f56964:categories:Temáticas:/caixas-tematicas",
-      "sort": "views",
+      "sort": "sales",
       "title": "Mais vendidos",
       "headless": false,
       "limit": 12,
