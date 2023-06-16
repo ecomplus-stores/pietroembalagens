@@ -190,7 +190,7 @@ import {
               for (let i = 0; i < selectFields.length; i++) {
                 const selectOptions = data[selectFields[i]]
                 if (selectOptions && selectOptions.length) {
-                  return import('../ProductQuickview.vue')
+                  return import('@ecomplus/storefront-components/src/ProductQuickview.vue')
                     .then(quickview => {
                       new Vue({
                         render: h => h(quickview.default, {
