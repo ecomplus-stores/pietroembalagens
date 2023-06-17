@@ -12,7 +12,7 @@
     "text": "Desconto Progressivo!"
   },
   "promo": {
-    "show": true,
+    "show": false,
     "text": "Diferentes promoções ao longo do ano!"
   }
 }
