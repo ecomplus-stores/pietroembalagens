@@ -19,6 +19,10 @@
     {
       "type": "document-description",
       "enabled": true
+    },
+    {
+      "type": "custom-content",
+      "markdown": "# Perguntas frequentes\n\n#### loren ipsun loren ipsun loren ipsun\n\nloren ipsunloren ipsunloren ipsunloren ipsun\n\n\n\n#### loren ipsunloren ipsunloren ipsunloren ipsun\n\nloren ipsunloren ipsunloren ipsunloren ipsun\n\n\n\n#### loren ipsunloren ipsunloren ipsun\n\nloren ipsunloren ipsunloren ipsunloren ipsun"
     }
   ]
 }
