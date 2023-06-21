@@ -28,8 +28,7 @@
           <component
             :is="isSSR ? 'portal' : 'div'"
             selector="#product-gallery"
-          > 
-            <slot name="stamps"/>
+          >
             <product-gallery
               :product="body"
               :can-add-to-cart="canAddToCart && body.available && isInStock"
@@ -92,44 +91,58 @@
             </slot>
           </div>
 
-          <div
-            v-else-if="isWithoutPrice"
-            class="product__without-price"
-          >
-            <slot name="without-price">
-              <a 
-                v-if="quoteLink"
-                target="_blank"
-                rel="noopener"
-                :href="quoteLink"
-              >
-                {{ i19quoteProduct }}
-              </a>
-            </slot>
-          </div>
-
           <template v-else>
+            <div
+              v-if="!isKit && kitCta.qnt > 1"
+              class="product__ct my-2"
+            >
+              <button
+                class="btn btn-light mr-2"
+                type="button"
+                :class="qntCt === 1 ? 'active' : null"
+                @click.prevent="qntCt = 1"
+              >
+                Unidade
+              </button>
+              <button
+                class="btn btn-light"
+                type="button"
+                :class="qntCt === kitCta.qnt ? 'active' : null"
+                @click.prevent="qntCt = (kitCta.qnt || 3)"
+              >
+                Kit com {{ kitCta.qnt }}
+                <small
+                  v-if="kitCta.discount"
+                  class="badge badge-primary"
+                >{{ kitCta.discount }}% OFF</small>
+              </button>
+            </div>
+
             <slot name="prices">
               <p class="product__prices">
+                <div v-if="qntCt > 1" class="mb-2">
+                  <a-prices
+                    :product="{ price: ghostProductForPrices.price / qntCt }"
+                    :can-show-price-options="false"
+                    style="display: inline-block"
+                  />
+                  <span style="color: #4698ca">/unidade</span>
+                </div>
                 <a-prices
                   :product="ghostProductForPrices"
                   :is-literal="true"
                   :is-big="true"
                   @fix-price="price => fixedPrice = price"
-                />
-
-                <slot
-                  name="discount-tag"
-                  v-bind="{ discount }"
                 >
-                  <span
-                    v-if="discount > 0"
-                    class="product__discount"
-                  >
-                    {{ i19discountOf }}
-                    <strong>{{ discount }}%</strong>
-                  </span>
-                </slot>
+                  <template #from>
+                    <span v-if="qntCt > 1">
+                      kit com {{ qntCt }} de
+                    </span>
+                    <span v-else>
+                      de
+                    </span>
+                  </template>
+                </a-prices>
               </p>
             </slot>
 
@@ -350,15 +363,13 @@
                           :id="`product-payment-${paymentOption.app_id}`"
                           class="mb-3"
                         >
-                          <slot :name="`payment-${paymentOption.app_id}`">
-                            <payment-option
-                              v-for="(gateway, i) in paymentOption.payment_gateways"
-                              :key="`${paymentOption.app_id}-${i}`"
-                              :payment-gateway="gateway"
-                              :installments-option="paymentOption.installments_option"
-                              :price="fixedPrice"
-                            />
-                          </slot>
+                          <payment-option
+                            v-for="(gateway, i) in paymentOption.payment_gateways"
+                            :key="`${paymentOption.app_id}-${i}`"
+                            :payment-gateway="gateway"
+                            :installments-option="paymentOption.installments_option"
+                            :price="fixedPrice"
+                          />
                         </div>
                       </div>
                     </div>
@@ -389,7 +400,6 @@
               <shipping-calculator
                 :shippedItems="isKit ? kitItems : [{
                   ...body,
-                  ...selectedVariation,
                   product_id: body._id,
                   quantity: qntToBuy || body.min_quantity || 1
                 }]"
@@ -455,9 +465,8 @@
               :can-show-price-options="true"
             />
             <a
-              class="btn btn-lg btn-primary"
-              href="#"
-              @click.prevent="buyOrScroll"
+              class="btn btn-lg btn-primary" 
+              @click="buyOrScroll"
             >
               <i class="i-shopping-bag mr-1"></i>
               {{ strBuy }}
