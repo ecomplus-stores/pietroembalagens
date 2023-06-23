@@ -19,10 +19,6 @@
     {
       "type": "document-description",
       "enabled": true
-    },
-    {
-      "type": "custom-html",
-      "html": "<div><br></div><title>Perguntas frequentes</title>\n  <style>\n    .pergunta {\n      font-weight: bold;\n      display: inline;\n    }\n\n    .resposta {\n      display: none;\n    }\n\n    .expandir {\n      cursor: pointer;\n      display: inline-block;\n      float: right;\n    }\n\n    .clearfix::after {\n      content: \"\";\n      display: table;\n      clear: both;\n    }\n  </style>\n  <script>\n    function expandirResposta() {\n      var resposta = document.getElementById(\"resposta\");\n      var botao = document.getElementById(\"botao\");\n\n      if (resposta.style.display === \"none\") {\n        resposta.style.display = \"block\";\n        botao.innerHTML = \"&#9660;\"; // seta para baixo\n      } else {\n        resposta.style.display = \"none\";\n        botao.innerHTML = \"&#9658;\"; // seta para direita\n      }\n    }\n  </script>\n\n\n  <h2><b>Perguntas frequentes</b></h2>\n\n  <div class=\"clearfix\">\n    <span class=\"pergunta\">Quanto custa o iPhone 12 em média?</span>\n    <span class=\"expandir\" id=\"botao\" onclick=\"expandirResposta()\">►</span>\n  </div>\n  <div class=\"resposta\" id=\"resposta\" style=\"display: none;\">O iPhone 12 custa em média R$ 1.000.</div>"
     }
   ]
 }
