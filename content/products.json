@@ -13,6 +13,10 @@
       }
     },
     {
+      "type": "product-description",
+      "enabled": true
+    },
+    {
       "type": "buy-together",
       "enabled": true
     },
@@ -23,10 +27,6 @@
     {
       "type": "related-products",
       "title": "Você também pode gostar"
-    },
-    {
-      "type": "product-description",
-      "enabled": true
     },
     {
       "type": "product-specifications",
