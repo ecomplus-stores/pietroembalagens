@@ -43,13 +43,25 @@
       ]
     },
     {
+      "type": "shelfs-nav",
+      "shuffle": true,
+      "limit": 8,
+      "page": 1,
+      "collection_ids": [
+        "6466cd0fa0e875411e942ff2:categories:Dia das crianças:/embalagem-brigadeiro-dia-das-criancas",
+        "6466d33ba0e875411e94355d:categories:Dia dos Pais:/caixa-para-doces-dia-dos-pais"
+      ],
+      "sort": "news",
+      "shelfs_title": "Dia das Crianças e Dia dos Pais"
+    },
+    {
       "type": "collection-shelf",
       "shuffle": true,
-      "collection_id": "649aabaf5e6069037049dc56:collections:Categorias: Crianças + Pais:/categorias-criancas--pais",
-      "sort": "highest_price",
-      "title": "Dia das Crianças e Dia dos Pais",
+      "collection_id": null,
+      "sort": "sales",
+      "title": "",
       "headless": false,
-      "limit": 16,
+      "limit": 12,
       "page": 2
     },
     {
@@ -65,18 +77,6 @@
       "type": "page-title",
       "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
       "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
-    },
-    {
-      "type": "shelfs-nav",
-      "shuffle": true,
-      "limit": 8,
-      "page": 1,
-      "collection_ids": [
-        "6466cd0fa0e875411e942ff2:categories:Dia das crianças:/embalagem-brigadeiro-dia-das-criancas",
-        "6466d33ba0e875411e94355d:categories:Dia dos Pais:/caixa-para-doces-dia-dos-pais"
-      ],
-      "sort": "news",
-      "shelfs_title": "Dia das Crianças e Dia dos Pais"
     }
   ]
 }
