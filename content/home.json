@@ -44,10 +44,10 @@
     },
     {
       "type": "collection-shelf",
-      "shuffle": false,
-      "collection_id": "645b8fbc4bd2e929c1f56964:categories:Temáticas:/caixas-tematicas",
-      "sort": "sales",
-      "title": "Mais vendidos",
+      "shuffle": true,
+      "collection_id": "649aabaf5e6069037049dc56:collections:Categorias: Crianças + Pais:/categorias-criancas--pais",
+      "sort": "views",
+      "title": "Dia das Crianças e Dia dos Pais",
       "headless": false,
       "limit": 12,
       "page": 2
