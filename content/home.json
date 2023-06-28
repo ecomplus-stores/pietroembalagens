@@ -50,7 +50,8 @@
           "img": "/img/uploads/visor_bolinhas.png"
         },
         {
-          "img": "/img/uploads/sem-ti-tulo-1.png"
+          "img": "/img/uploads/sem-ti-tulo-1.png",
+          "alt": "alo alo alo"
         },
         {
           "img": "/img/uploads/forminhas_bolinhas.png"
