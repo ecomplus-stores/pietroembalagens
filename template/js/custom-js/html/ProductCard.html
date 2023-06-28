@@ -105,14 +105,6 @@
           />
         </slot>
 
-        <quantity-selector
-            :items="[{ _id: body._id, quantity: body.min_quantity || 1 }]"
-            :min="body.min_quantity"
-            :max="body.quantity"
-            :has-buy-button="false"
-            @set-quantity="({ quantity }) => qntToBuy = quantity"
-        />
-
         <div
           @click="buy"
           class="product-card__buy fade"
@@ -122,6 +114,14 @@
               v-if="buyHtml"
               v-html="buyHtml"
             ></div>
+
+            <quantity-selector
+                :items="[{ _id: body._id, quantity: body.min_quantity || 1 }]"
+                :min="body.min_quantity"
+                :max="body.quantity"
+                :has-buy-button="false"
+                @set-quantity="({ quantity }) => qntToBuy = quantity"
+            />
 
             <button
               type="button"

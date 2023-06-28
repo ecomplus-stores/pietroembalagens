@@ -259,6 +259,7 @@
                     >
                       <button
                         type="button"
+                        id="addCart"
                         class="btn btn-lg btn-primary"
                         :disabled="hasClickedBuy && !isOnCart"
                       >
@@ -267,6 +268,7 @@
                           {{ strBuy }}
                         </slot>
                       </button>
+                      <a id="goToCart" href="javascript:;" class="btn btn-lg btn-primary">Adicionar ao Carrinho</a>
                     </slot>
                   </span>
                 </component>
