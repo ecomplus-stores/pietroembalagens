@@ -38,19 +38,19 @@
       "type": "banners-grid",
       "banners": [
         {
-          "img": "/img/uploads/bolinha-caixa-com-berc-o.png",
-          "mobile_img": "/img/uploads/bolinha-caixa-com-berc-o.png"
+          "img": "/img/uploads/tamap-acetato_bolinhas.png"
         },
         {
-          "img": "/img/uploads/bolinha-caixa-com-berc-o-fundo-laranja.png"
+          "img": "/img/uploads/forminhas_bolinhas.png"
         },
         {
-          "img": "/img/uploads/bolinha-caixa-com-berc-o_112x138.png",
-          "link": "",
-          "alt": ""
+          "img": "/img/uploads/fita-cetim_bolinhas.png"
         },
         {
-          "img": "/img/uploads/bolinha-caixa-com-berc-o-fundo-laranja_112x138.png"
+          "img": "/img/uploads/caixa-acetato_bolinhas.png"
+        },
+        {
+          "img": "/img/uploads/bolinhas_caixa-com-berc-o.png"
         }
       ]
     },
