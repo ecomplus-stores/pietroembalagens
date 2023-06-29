@@ -50,7 +50,8 @@
           "img": "/img/uploads/linha-visor_bolinhas.png"
         },
         {
-          "img": "/img/uploads/bolinha_linha-visor_x2.png"
+          "img": "/img/uploads/bolinha_linha-visor_x2.png",
+          "mobile_img": "/img/uploads/linha-visor_bolinhas.png"
         },
         {
           "img": "/img/uploads/sem-ti-tulo-1.png",
