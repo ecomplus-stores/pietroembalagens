@@ -59,8 +59,7 @@ body .search-engine__aside .custom-checkbox{padding:0}
 
 @media(min-width:990px){
     body .search-engine__info,
-    body .search-engine__aside .card-header,
-    body .search-engine__aside .card-footer{display:none;}
+    body .search-engine__aside .card-header{display:none;}
     body .search-engine__aside{
         position: absolute;
         padding: 0 1rem;
@@ -192,4 +191,73 @@ body .search-engine__aside .custom-checkbox{padding:0}
 }
 .breadcrumb * {
     color: #000 !important;
+}
+.product-card .product-card__buy{
+    opacity: 1!important;
+    position: relative;
+    top: auto;
+    margin: 0;
+    bottom: auto;
+    display: block;
+    left: auto;
+    transform: unset;
+    background: transparent!important;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .qtde-adicionar-carrinho{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #f4f4f4;
+    line-height: 36px!important;
+    border-radius: 36px!important;
+    width: auto!important;
+    padding: 0 10px;
+  }
+  
+  .qtde-adicionar-carrinho > input{
+    -moz-appearance:textfield; /* Firefox */
+    height: 36px;
+    padding: 0;
+    width:40px;
+    border: 0!important;
+    text-align:center
+  }
+  .qtde-adicionar-carrinho > button{
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+  .qtde-adicionar-carrinho > button > svg{
+    height: 16px;
+    margin: 0;
+    display: block;
+    width: 16px;
+  }
+  
+  .qtde-adicionar-carrinho > input::-webkit-outer-spin-button,
+  .qtde-adicionar-carrinho > input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .search-engine__aside .search-engine__filter > button + .collapse {
+    list-style-type: none;
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+  .search-engine__aside {
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        .search-engine__filter--Brands {
+            order: 1;
+        }
+    }
+    .card-footer {
+        background-color: #fff !important;
+    }
 }

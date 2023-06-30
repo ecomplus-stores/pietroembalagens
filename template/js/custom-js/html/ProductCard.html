@@ -21,7 +21,6 @@
           <i class="i-arrow-down"></i> <b>{{ discount }}</b>%
         </span>
       </slot>
-      <slot name="stamps" />
 
       <slot name="body">
         <a-link
@@ -86,15 +85,6 @@
         </p>
       </slot>
 
-      <slot
-        name="without-price"
-        v-else-if="isWithoutPrice"
-      >
-        <p class="badge badge-info mt-auto">
-          {{ i19uponRequest }}
-        </p>
-      </slot>
-
       <template v-else>
         <slot name="prices">
           <a-prices
@@ -106,7 +96,7 @@
         </slot>
 
         <div
-          @click="buy"
+          
           class="product-card__buy fade"
         >
           <slot name="buy">
@@ -115,15 +105,11 @@
               v-html="buyHtml"
             ></div>
 
-            <quantity-selector
-                :items="[{ _id: body._id, quantity: body.min_quantity || 1 }]"
-                :min="body.min_quantity"
-                :max="body.quantity"
-                :has-buy-button="false"
-                @set-quantity="({ quantity }) => qntToBuy = quantity"
-            />
-
+            <label class="qtde-adicionar-carrinho" style="width: 281px;"><button class="minus" @click="qtd(body._id , -1)" type="button"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>Remove</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M400 256H112"></path></svg></button>
+              <input type="number" min="1" value="1" class="qtde-carrinho" name="qtde-carrinho" :product_quantity="body._id">
+            <button type="button" @click="qtd(body._id , 1)"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><title>Add</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112"></path></svg></button></label>        
             <button
+              @click="buy"
               type="button"
               class="btn btn-primary"
               :class="isSmall ? 'btn-sm': 'btn-block'"
@@ -136,10 +122,13 @@
               >
                 <span class="sr-only">Loading...</span>
               </span>
-
-              <slot name="buy-button-content">
-                <i class="i-shopping-bag mr-1"></i>
-                {{ strBuy }}
+              <!-- <button type="button" class="btn btn-primary btn-block" >
+                ADICIONAR
+              </button> -->
+              <slot name="buy-button-content" >
+                <div >
+                  {{ strBuy }}
+                </div>
               </slot>
             </button>
           </slot>
