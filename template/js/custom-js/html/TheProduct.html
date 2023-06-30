@@ -93,7 +93,7 @@
 
           <template v-else>
             <div
-              v-if="!isKit && kitCta.qnt > 1"
+              v-if="!isKit && kitCta.length"
               class="product__ct my-2"
             >
               <button
@@ -105,17 +105,19 @@
                 Unidade
               </button>
               <button
+                v-for="kit in kitCta"
                 class="btn btn-light"
                 type="button"
-                :class="qntCt === kitCta.qnt ? 'active' : null"
-                @click.prevent="qntCt = (kitCta.qnt || 3)"
+                :class="qntCt === kit.qnt ? 'active' : null"
+                @click.prevent="qntCt = (kit.qnt || 3)"
               >
-                Kit com {{ kitCta.qnt }}
+                Kit com {{ kit.qnt }}
                 <small
-                  v-if="kitCta.discount"
+                  v-if="kit.discount"
                   class="badge badge-primary"
-                >{{ kitCta.discount }}% OFF</small>
+                >{{ kit.discount }}% OFF</small>
               </button>
+
             </div>
 
             <slot name="prices">
@@ -268,7 +270,7 @@
                           {{ strBuy }}
                         </slot>
                       </button>
-                      <a id="goToCart" href="javascript:;" class="btn btn-lg btn-primary">Adicionar ao Carrinho</a>
+                      <a id="goToCart" data-cart="true" href="javascript:;" class="btn btn-lg btn-primary">Adicionar ao Carrinho</a>
                     </slot>
                   </span>
                 </component>

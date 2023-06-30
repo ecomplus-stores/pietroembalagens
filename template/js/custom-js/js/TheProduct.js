@@ -156,6 +156,7 @@ export default {
       qntToBuy: 1,
       qntCt: 1,
       kitCta: window.productKitCta || {},
+      kitCta1: window.productKitCta1 || {},
       isStickyBuyVisible: false,
       isFavorite: false,
       hasClickedBuy: false,
@@ -390,15 +391,16 @@ export default {
 
     addProgressiveDiscount (price) {
       const { kitCta, isKit } = this
-      const progressiveDiscount =  !isKit && kitCta.qnt > 1 && this.qntToBuy * this.qntCt >= kitCta.qnt
-        ? kitCta.discount : 0
+      const getKit = kitCta.find(kit => kit.qnt === this.qntCt)
+      const progressiveDiscount =  !isKit && getKit && getKit.qnt > 1 && this.qntToBuy * this.qntCt >= getKit.qnt
+        ? getKit.discount : 0
       if (progressiveDiscount) {
         return price * ((100 - progressiveDiscount) / 100)
       }
       return price
     },
 
-    buy () {
+    buy (event) {
       this.hasClickedBuy = true
       const product = sanitizeProductBody(this.body)
       let variationId
@@ -418,6 +420,10 @@ export default {
           min_quantity: this.qntCt,
           price: this.addProgressiveDiscount(product.price)
         }, variationId, this.qntToBuy * this.qntCt)
+        const { target } = event
+        if (target.dataset && target.dataset.cart) {
+          window.location = '/app/#/cart/'
+        }
       }
       this.isOnCart = true
     },
@@ -533,10 +539,9 @@ export default {
         return skus && skus.includes(this.product.sku)
       })
       if (!kitCta) {
-        kitCta = this.product.sku && productKitCtas.find(({ skus }) => {
-          return !skus
-        })
+        kitCta = productKitCtas
       }
+      console.log(kitCta)
       if (kitCta) {
         this.kitCta = kitCta
       }
