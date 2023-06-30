@@ -1,27 +1,28 @@
 {
   "assetsByChunkName": {
-    "vendors~app-account~app-confirmation~app-order": "chunk.4606e8d80195c2cd5a64.js",
-    "vendors~app-account~app-checkout": "chunk.e55d4b70da9ba95491d9.js",
-    "vendors~app-cart~app-checkout": "chunk.3a99737ee705f8ceaf44.js",
+    "vendors~app-account~app-checkout~app-confirmation~app-order": "chunk.8e1e1bf495c8086636cf.js",
+    "vendors~app-account~app-confirmation~app-order": "chunk.a59c80722042ce28843c.js",
+    "vendors~app-account~app-checkout": "chunk.00418cd5db9adb2d4859.js",
     "admin": [
-      "admin.2daf4a1b0e3429549b0d.js",
-      "admin.2daf4a1b0e3429549b0d.js.map"
+      "admin.7bf1fbabc563df13c666.js",
+      "admin.7bf1fbabc563df13c666.js.map"
     ],
-    "app-account": "chunk.6b31e610c21302b72933.js",
-    "app-cart": "chunk.9a22c23a43e0341dc0b6.js",
-    "app-checkout": "chunk.375979f2d5c5ac4d9790.js",
-    "app-confirmation": "chunk.58462c428b00ded1b81a.js",
+    "app-account": "chunk.3d4731feff9c3be8e094.js",
+    "app-cart": "chunk.cfe8e10e4820afc2d7b4.js",
+    "app-checkout": "chunk.43cc145711b4e69ac7ef.js",
+    "app-confirmation": "chunk.6ad769d84519cac51404.js",
+    "app-order": "chunk.ca913ab2e175ef768047.js",
     "checkout": [
-      "checkout.7a86ae01503799942af9.js",
-      "checkout.7a86ae01503799942af9.js.map"
+      "checkout.c0244485a9f60a12db25.js",
+      "checkout.c0244485a9f60a12db25.js.map"
     ],
     "storefront": [
-      "storefront.a2a57816244b4f89e947.css",
-      "storefront.aca9eeacedebb165bb30.js",
-      "storefront.a2a57816244b4f89e947.css.map",
-      "storefront.aca9eeacedebb165bb30.js.map"
+      "storefront.3ddce5ec75f59bc7825c.css",
+      "storefront.a19538e00e6ecd259851.js",
+      "storefront.3ddce5ec75f59bc7825c.css.map",
+      "storefront.a19538e00e6ecd259851.js.map"
     ],
-    "vendors~app-cart": "chunk.90acd32736a8e74cf475.js",
-    "vendors~app-order": "chunk.327ed1a625ffbd74a031.js"
+    "vendors~app-cart": "chunk.a53b857886ab860a4ce5.js",
+    "vendors~app-checkout": "chunk.5c64a9b14e8d703d4a0b.js"
   }
 }
