@@ -59,7 +59,8 @@ body .search-engine__aside .custom-checkbox{padding:0}
 
 @media(min-width:990px){
     body .search-engine__info,
-    body .search-engine__aside .card-header{display:none;}
+    body .search-engine__aside .card-header,
+    body .search-engine__aside .card-footer{display:none;}
     body .search-engine__aside{
         position: absolute;
         padding: 0 1rem;
@@ -260,4 +261,4 @@ body .search-engine__aside .custom-checkbox{padding:0}
     .card-footer {
         background-color: #fff !important;
     }
-}
+  }

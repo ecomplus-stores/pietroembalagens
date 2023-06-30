@@ -36,7 +36,7 @@
                         type="button"
                         data-toggle="collapse"
                         :data-target="`#collapse-${filter}`"
-                        :aria-expanded="i < 5 ? 'true' : 'false'"
+                        :aria-expanded="true"
                         :aria-controls="`collapse-${filter}`"
                         >
                         <i class="fas fa-chevron-down"></i>
@@ -45,8 +45,7 @@
                         </button>
         
                         <div
-                        class="collapse"
-                        :class="i < 5 ? 'show' : null"
+                        class="collapse show"
                         :id="`collapse-${filter}`"
                         >
                         <div
