@@ -25,12 +25,12 @@
       "title": "Quem comprou este produto, também comprou:"
     },
     {
-      "type": "related-products",
-      "title": "Você também pode gostar"
-    },
-    {
       "type": "product-specifications",
       "enabled": true
+    },
+    {
+      "type": "related-products",
+      "title": "Você também pode gostar"
     }
   ]
 }
