@@ -20,7 +20,21 @@
       "markdown": "# \\    Embalagens para Brigadeiro\n\n### \\    \n\n### \\    Navegue por categoria"
     },
     {
-      "type": "banners-grid"
+      "type": "banners-grid",
+      "banners": [
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-visor.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-acetato.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-tematicas.png"
+        }
+      ]
     },
     {
       "type": "document-banner",
