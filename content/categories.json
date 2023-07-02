@@ -5,6 +5,13 @@
       "enabled": true
     },
     {
+      "type": "page-title"
+    },
+    {
+      "type": "document-banner",
+      "enabled": true
+    },
+    {
       "type": "shelfs-nav",
       "shuffle": true,
       "limit": 8,
@@ -16,37 +23,9 @@
       "shelfs_title": ""
     },
     {
-      "type": "custom-content",
-      "markdown": "# Embalagens para Brigadeiro\n\n### Navegue por categoria"
-    },
-    {
-      "type": "banners-grid",
-      "banners": [
-        {
-          "img": "/img/uploads/ilustracao-dos-produtos.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-visor.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-acetato.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-tematicas.png"
-        }
-      ]
-    },
-    {
-      "type": "document-banner",
-      "enabled": true
-    },
-    {
       "type": "category-retail",
       "enabled": true,
       "sort": "views"
-    },
-    {
-      "type": "page-title"
     },
     {
       "type": "document-description",
