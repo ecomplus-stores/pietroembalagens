@@ -111,7 +111,7 @@
                 :class="qntCt === kit.qnt ? 'active' : null"
                 @click.prevent="qntCt = (kit.qnt || 3)"
               >
-                Kit com {{ kit.qnt }}
+              {{ kit.qnt }} Pacotes 
                 <small
                   v-if="kit.discount"
                   class="badge badge-primary"
@@ -262,6 +262,7 @@
                       <button
                         type="button"
                         id="addCart"
+                        data-cart="true"
                         class="btn btn-lg btn-primary"
                         :disabled="hasClickedBuy && !isOnCart"
                       >
@@ -270,7 +271,7 @@
                           {{ strBuy }}
                         </slot>
                       </button>
-                      <a id="goToCart" data-cart="true" href="javascript:;" class="btn btn-lg btn-primary">Adicionar ao Carrinho</a>
+                      <a id="goToCart" href="javascript:;" class="btn btn-lg btn-primary">Adicionar ao Carrinho</a>
                     </slot>
                   </span>
                 </component>

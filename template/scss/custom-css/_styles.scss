@@ -262,3 +262,21 @@ body .search-engine__aside .custom-checkbox{padding:0}
         background-color: #fff !important;
     }
   }
+  @media (max-width: 990px) {
+    .product-card .product-card__buy > * {
+        justify-content: space-between;
+        width: 100% !important;
+    }
+    .product-card__buy .btn-primary {
+        height: auto;
+        min-width: unset;
+        padding: 8px 18px;
+        width: auto;
+    }
+    .product-card .product-card__buy {
+        flex-direction: column;
+    }
+    .banners-grid .col-12 {
+        max-width: 50% !important;
+    }
+  }
