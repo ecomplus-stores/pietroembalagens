@@ -5,6 +5,10 @@
       "enabled": true
     },
     {
+      "type": "custom-content",
+      "markdown": "# \\    Embalagens para Brigadeiro\n\n\n\n### \\    Navegue por categoria"
+    },
+    {
       "type": "banners-grid"
     },
     {
@@ -22,10 +26,6 @@
     {
       "type": "document-description",
       "enabled": true
-    },
-    {
-      "type": "custom-content",
-      "markdown": "# \\    Embalagens para Brigadeiro\n\n\n\n### \\    Navegue por categoria"
     }
   ]
 }
