@@ -5,7 +5,12 @@
     "color": "#ffffff"
   },
   "contacts_stripe": {
-    "pages": [],
+    "pages": [
+      {
+        "title": "Nossa História",
+        "link": "https://pietroembalagens.com.br/pages/sobre-nos"
+      }
+    ],
     "phone_wpp": false,
     "socials": true
   },
@@ -18,7 +23,7 @@
       "/caixas-tematicas?Datas especiais"
     ],
     "random": 0,
-    "full_width": false
+    "full_width": true
   },
   "centralized_logo": false,
   "desktop_megamenu": true,
