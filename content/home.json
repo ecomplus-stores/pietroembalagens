@@ -30,19 +30,19 @@
       "type": "banners-grid",
       "banners": [
         {
-          "img": "/img/uploads/visor_ilustrac-ao.png",
+          "img": "/img/uploads/desktop_bolinha_linha-visor.png",
           "mobile_img": "/img/uploads/mobile_bolinha_linha-visor.png",
           "link": "https://pietroembalagens.com.br/caixa-com-visor-para-doces-brigadeiros",
           "alt": "Caixa com visor para doces."
         },
         {
-          "img": "/img/uploads/acetato_ilustrac-ao.png",
+          "img": "/img/uploads/desktop_bolinha_linha-acetato.png",
           "link": "https://pietroembalagens.com.br/caixa-de-acetato",
           "alt": "Caixa de acetato. Ideal para doces e lembrancinhas. São diversos tamanhos e modelos",
           "mobile_img": "/img/uploads/mobile_bolinha_linha-acetato.png"
         },
         {
-          "img": "/img/uploads/berc-o_ilustrc-ao_prancheta-1.png",
+          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png",
           "link": "https://pietroembalagens.com.br/caixas-com-berco",
           "alt": "caixas para brigadeiros com berço fixo",
           "mobile_img": "/img/uploads/mobile_bolinha_linha-com-berc-o.png"
