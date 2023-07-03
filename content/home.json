@@ -78,7 +78,7 @@
       "shuffle": true,
       "collection_id": null,
       "sort": "sales",
-      "title": "",
+      "title": "Mais Vendidos",
       "headless": false,
       "limit": 12,
       "page": 2
@@ -90,7 +90,7 @@
       "page": 1,
       "collection_id": null,
       "sort": "news",
-      "title": ""
+      "title": "Lançamentos"
     },
     {
       "type": "page-title",
