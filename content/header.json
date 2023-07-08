@@ -18,11 +18,11 @@
       "/caixa-de-acetato?Caixa de Acetato"
     ],
     "random": 0,
-    "full_width": true
+    "full_width": false
   },
   "centralized_logo": false,
   "desktop_megamenu": true,
   "search_input": true,
   "alphabetical_order_submenu": true,
-  "full_width_submenu": true
+  "full_width_submenu": false
 }
