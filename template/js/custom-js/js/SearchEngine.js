@@ -257,9 +257,7 @@ import {
       updateFilters () {
         const updatedFilters = []
         const addFilter = (filter, options, isSpec) => {
-          options.sort((a, b)=> {
-            b.key > a.key ? -1 : 1
-          })
+          options.sort((a, b) => b.key > a.key ? -1 : 1)
           let filterIndex = this.filters.findIndex(filterObj => filterObj.filter === filter)
           if (filter !== this.lastSelectedFilter) {
             if (filterIndex === -1) {

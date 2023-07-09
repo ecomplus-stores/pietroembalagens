@@ -1,6 +1,6 @@
 <section class="search-engine">
     <div class="row">
-        <div class="col-md-2 col-12">       
+        <div class="col-md-3 col-12">       
             
             <aside
                 class="search-engine__aside card shadow"               
@@ -65,9 +65,6 @@
                             :for="`${filter}-${index}`"
                             >
                             {{ opt.key }}
-                            <small v-if="!isSpec">
-                                ({{ opt.doc_count }})
-                            </small>
                             </label>
                         </div>
                         </div>
@@ -91,7 +88,7 @@
             </aside>
             <span id="custom-backdrop"></span> 
         </div>
-        <div class="col-md-9 offset-md-1 col-12">
+        <div class="col-md-9 col-12">
             <transition
             enter-active-class="animated fadeInRight slower"
             leave-active-class="animated fadeOutRight"

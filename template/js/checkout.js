@@ -4,7 +4,7 @@ import ecomCart from '@ecomplus/shopping-cart'
 var lessUnit = document.getElementById('lessUnit')
 var firstphrase = document.getElementById('lessSome')
 var lastphrase = document.getElementById('noMore')
-var lessQuantity = 39.9
+var lessQuantity = window.giftWarning || 39.9
 lessUnit.innerHTML = window.ecomUtils.formatMoney(lessQuantity, 'BRL', 'pt_br')
 ecomCart.on('change', ({ data }) => {
   var cartCalc = document.querySelectorAll('#cart')
@@ -21,10 +21,8 @@ ecomCart.on('change', ({ data }) => {
       document.getElementById('percentBar').innerHTML = percentBar
       firstphrase.style.display = 'block'
       lastphrase.style.display = 'none'
-      checkoutButton.style.display = 'none'
     } else {
       percentBar = '100%'
-      checkoutButton.style.display = 'block'
       firstphrase.style.display = 'none'
       lastphrase.style.display = 'block'
       document.getElementById('lastUnitsBar').style.width = percentBar
@@ -34,26 +32,3 @@ ecomCart.on('change', ({ data }) => {
     document.getElementById('containerCalc').style.display = 'none'
   }
 })
-const router1 = window.storefrontApp && window.storefrontApp.router
-setInterval(function () {
-  if (router1) {
-    const emitCheckout1 = (name) => {
-      var countQuantity = ecomCart.data.subtotal
-      if (countQuantity < lessQuantity) {
-        window.location.href = '/app/#/cart'
-        window.alert('Um dos produtos o estoque acabou! Você estará sendo direcionado para o carrinho para inserir mais itens para pedido mínimo')
-      }
-    }
-
-    const addRoute1ToData = ({ name }) => {
-      if (name === 'checkout') {
-        emitCheckout1(name)
-      }
-    }
-
-    if (router1.currentRoute) {
-      addRoute1ToData(router1.currentRoute)
-    }
-    router1.afterEach(addRoute1ToData)
-  }
-}, 300)
