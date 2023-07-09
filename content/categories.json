@@ -12,6 +12,21 @@
       "enabled": true
     },
     {
+      "type": "offers-timer",
+      "max_hours": 24,
+      "start": "2023-07-09T20:24:31.531Z",
+      "end": "2023-07-09T20:25:01.849Z",
+      "offers": [
+        "6482adb15e60690370321949"
+      ],
+      "notes": "PROMOÇÃO!"
+    },
+    {
+      "type": "dynamic-showcase",
+      "load_more": true,
+      "sort": "offers"
+    },
+    {
       "type": "category-retail",
       "enabled": true,
       "sort": "views"
@@ -19,20 +34,6 @@
     {
       "type": "document-description",
       "enabled": true
-    },
-    {
-      "type": "offers-timer",
-      "max_hours": 24,
-      "start": "2023-07-09T20:24:31.531Z",
-      "end": "2023-07-09T20:25:01.849Z",
-      "offers": [
-        "6482adb15e60690370321949"
-      ]
-    },
-    {
-      "type": "dynamic-showcase",
-      "load_more": true,
-      "sort": "offers"
     }
   ]
 }
