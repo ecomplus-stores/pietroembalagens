@@ -28,6 +28,11 @@
       "offers": [
         "6482adb15e60690370321949"
       ]
+    },
+    {
+      "type": "dynamic-showcase",
+      "load_more": true,
+      "sort": "offers"
     }
   ]
 }
