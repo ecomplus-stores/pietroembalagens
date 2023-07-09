@@ -12,11 +12,6 @@
       "enabled": true
     },
     {
-      "type": "dynamic-showcase",
-      "load_more": false,
-      "sort": "offers"
-    },
-    {
       "type": "category-retail",
       "enabled": true,
       "sort": "views"
