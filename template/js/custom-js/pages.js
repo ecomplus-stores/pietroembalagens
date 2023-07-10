@@ -1,9 +1,4 @@
 // Add your custom JavaScript for storefront pages here.
-$('body').on('click','.search-engine__aside-open, .search-engine__aside .card-header .close, .search-engine__toggles > button',function(){
-    $('body .search-engine__aside').toggleClass('active')
-})
-
-$('#search-engine-snap > article > .row > div').removeClass('col-lg-3');
 const screenWidth = document.body ? document.body.offsetWidth : window.screen.width
 
 if (screenWidth >= 992) {
@@ -15,4 +10,9 @@ if (screenWidth >= 992) {
             }, 800)
         })
     }
+    $('body').on('click','.search-engine__aside-open, .search-engine__aside .card-header .close, .search-engine__toggles > button',function(){
+        $('body .search-engine__aside').toggleClass('active')
+    })
+    
+    $('#search-engine-snap > article > .row > div').removeClass('col-lg-3');
 }

@@ -29,6 +29,7 @@ import {
   import { Portal } from '@linusborg/vue-simple-portal'
   import ABackdrop from '@ecomplus/storefront-components/src/ABackdrop.vue'
   import ProductCard from '@ecomplus/storefront-components/src/ProductCard.vue'
+  import { isMobile } from '@ecomplus/storefront-twbs'
   
   const resetEcomSearch = ({ ecomSearch, term, page, defaultSort }) => {
     ecomSearch.reset()
@@ -124,7 +125,8 @@ import {
         popularItems: [],
         hasSetPopularItems: false,
         isAsideVisible: false,
-        searchFilterId: 0
+        searchFilterId: 0,
+        isMobile: isMobile
       }
     },
   
