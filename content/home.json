@@ -27,53 +27,6 @@
       "enabled": true
     },
     {
-      "type": "banners-grid",
-      "banners": [
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-visor.png",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-visor.png",
-          "link": "https://pietroembalagens.com.br/caixa-com-visor-para-doces-brigadeiros",
-          "alt": "Caixa com visor para doces."
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-acetato.webp",
-          "link": "https://pietroembalagens.com.br/caixa-de-acetato",
-          "alt": "Caixa de acetato. Ideal para doces e lembrancinhas. São diversos tamanhos e modelos",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-acetato.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png",
-          "link": "https://pietroembalagens.com.br/caixas-com-berco",
-          "alt": "caixas para brigadeiros com berço fixo",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-com-berc-o.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-fita-cetim.png",
-          "link": "https://pietroembalagens.com.br/fita-de-cetim",
-          "alt": "fitas de cetim"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png",
-          "link": "https://pietroembalagens.com.br/formas-para-chocolate",
-          "alt": "formas para chocolate Bwb",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-formas-bwb.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-forminhas.png",
-          "link": "https://pietroembalagens.com.br/forminhas-para-doces",
-          "alt": "forminhas para doces",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-forminhas.png"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-tematicas.png",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-tematica.png",
-          "link": "https://pietroembalagens.com.br/caixas-tematicas",
-          "alt": "caixas para doces com temas comemorativos"
-        }
-      ]
-    },
-    {
       "type": "collection-shelf",
       "shuffle": true,
       "collection_id": null,
