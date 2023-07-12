@@ -1,6 +1,6 @@
 {
   "pkg": "@ecomplus/widget-addi",
-  "active": true,
+  "active": false,
   "desktopOnly": false,
   "options": {
     "enableWidgetProduct": true,
