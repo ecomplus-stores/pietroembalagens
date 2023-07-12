@@ -85,7 +85,6 @@ body .search-engine__aside .custom-checkbox{padding:0}
         max-width: 100%;
         height: 100%;
         top: 0;
-        right: -100vw;
         z-index: 1100;
         border-radius: 0;
         transition:right .3s;
@@ -181,9 +180,7 @@ body .search-engine__aside .custom-checkbox{padding:0}
         margin-bottom: 5px;
     }
 }
-#cart-quickview .minicart__btn-checkout.btn.btn-block.btn-primary, .cart .cart__info .cart__btn-checkout {
-    display: none;
-}
+
 .header__toggler {
     display: block !important;
 }
@@ -298,6 +295,6 @@ body .search-engine__aside .custom-checkbox{padding:0}
   .search-engine__aside.card.shadow .card-footer {
     display: flex !important;
   }
-  body .search-engine__aside {
+  body .row .col-md-3.col-12 .search-engine__aside {
     position: relative !important;
   }
