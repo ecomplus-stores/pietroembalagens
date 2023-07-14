@@ -32,7 +32,8 @@
       "limit": 12,
       "page": 1,
       "collection_id": "6466d33ba0e875411e94355d:categories:Dia dos Pais:/caixa-para-doces-dia-dos-pais",
-      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-dia-dos-pais"
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-dia-dos-pais",
+      "sort": "highest_price"
     },
     {
       "type": "collection-shelf",
