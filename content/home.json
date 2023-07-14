@@ -46,9 +46,22 @@
       "page": 2
     },
     {
+      "type": "dynamic-showcase",
+      "load_more": true,
+      "sort": "offers"
+    },
+    {
       "type": "page-title",
       "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
       "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "6466d33ba0e875411e94355d:categories:Dia dos Pais:/caixa-para-doces-dia-dos-pais",
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-dia-dos-pais"
     }
   ]
 }
