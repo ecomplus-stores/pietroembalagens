@@ -4,7 +4,7 @@
   "desktopOnly": false,
   "enableCheckout": true,
   "options": {
-    "gtmContainerId": " GTM-PC6LB8B",
+    "gtmContainerId": "GTM-PC6LB8B",
     "dataLayerVar": "dataLayer",
     "partytown": false,
     "isDebug": true
