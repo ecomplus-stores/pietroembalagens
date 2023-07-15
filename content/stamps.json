@@ -1,3 +1,24 @@
 {
-  "stamps_list": []
+  "stamps_list": [
+    {
+      "id": "DIA DOS PAIS",
+      "skus": [
+        "BBD_K_TV_10",
+        "BBD_K_TT_10",
+        "BBD_K_TP_10",
+        "BBD_B_TP_10",
+        "BBD_B_TT_10",
+        "BBD_B_TV_10",
+        "BD-16-K-10",
+        "BD-16-B-10",
+        "BD04-16-K-10",
+        "BD04-01-B-10",
+        "BMG-08-K-10",
+        "BMG-08-B-10",
+        "BMG-16-K-10",
+        "BMG-16-B-10"
+      ],
+      "img": "/img/uploads/etiquetas_1.jpg"
+    }
+  ]
 }
