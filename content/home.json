@@ -23,12 +23,13 @@
     },
     {
       "type": "collection-shelf",
-      "shuffle": true,
+      "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "64d032db2cd6b659590b9090:categories:Embalagem para Transporte e Delivery:/embalagem-para-transporte-delivery-doces-macarons",
-      "link": "https://www.pietroembalagens.com.br/embalagem-para-transporte-delivery-doces-macarons",
-      "sort": "views"
+      "collection_id": "64c2c8845e6069037076015e:categories:Embalagens para Macarons:/embalagens-para-macarons",
+      "link": "https://www.pietroembalagens.com.br/embalagens-para-macarons",
+      "sort": "views",
+      "title": "Embalagens para Macarons"
     },
     {
       "type": "collection-shelf",
