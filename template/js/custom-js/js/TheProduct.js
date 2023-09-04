@@ -422,7 +422,7 @@ export default {
         }, variationId, this.qntToBuy * this.qntCt)
         const { target } = event
         if (target.dataset && target.dataset.cart) {
-          window.location = '/app/#/cart/'
+          window.location = '/app/#/checkout/'
         }
       }
       this.isOnCart = true
