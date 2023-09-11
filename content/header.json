@@ -16,7 +16,7 @@
   "centralized_logo": false,
   "marketing_stripe": {
     "text": "Aproveite 5% OFF Na Sua Primeira Compra! CUPOM: BEMVINDO5 / Não Cumulativo Com Promoções.",
-    "link": "/",
+    "link": "/.",
     "color": "#ffffff"
   },
   "alphabetical_order_submenu": true,
