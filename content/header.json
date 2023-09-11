@@ -1,14 +1,4 @@
 {
-  "marketing_stripe": {
-    "text": "Aproveite 5% OFF Na Sua Primeira Compra! CUPOM: BEMVINDO5 / Não Cumulativo Com Promoções.",
-    "link": "/",
-    "color": "#ffffff"
-  },
-  "contacts_stripe": {
-    "pages": [],
-    "phone_wpp": false,
-    "socials": true
-  },
   "categories_list": {
     "featured": [
       "/caixas-embalagens-para-doces-e-brigadeiro?Embalagem para Doces",
@@ -24,8 +14,19 @@
     "full_width": true
   },
   "centralized_logo": false,
-  "desktop_megamenu": false,
-  "search_input": true,
+  "marketing_stripe": {
+    "text": "Aproveite 5% OFF Na Sua Primeira Compra! CUPOM: BEMVINDO5 / Não Cumulativo Com Promoções.",
+    "link": "/",
+    "color": "#ffffff"
+  },
   "alphabetical_order_submenu": true,
-  "full_width_submenu": false
+  "popup": "/img/uploads/pop-up-965-x-638-natal-2023.webp",
+  "search_input": true,
+  "desktop_megamenu": false,
+  "full_width_submenu": false,
+  "contacts_stripe": {
+    "pages": [],
+    "phone_wpp": false,
+    "socials": true
+  }
 }
