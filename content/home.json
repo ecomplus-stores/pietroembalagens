@@ -8,20 +8,20 @@
       "full_width": false,
       "slides": [
         {
-          "start": "2023-09-10T18:24:54.446Z",
-          "end": "",
-          "alt": "caixa para transporte 100 doces",
-          "link": "https://www.pietroembalagens.com.br/100-brigadeiros-ou-doces",
-          "img": "/img/uploads/lancamento-100-doces-2-.webp",
-          "mobile_img": "/img/uploads/mobile-lancamento-100-doces.webp"
-        },
-        {
           "start": "2023-09-11T20:34:46.732Z",
           "end": "2023-09-18T02:34:19.169Z",
           "img": "/img/uploads/banner-semana-do-consumidor-site-1920px-x-500px.webp",
           "mobile_img": "/img/uploads/mobile-banner-semana-do-consumidor-site-1080px-x-1080px_v2.webp",
           "link": "https://www.pietroembalagens.com.br/caixas-em-promocao",
           "alt": "promoções embalagens para doces e brigadeiros"
+        },
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/full-banner-lancamento-linha-bolo-1920-500-px-.webp",
+          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
+          "alt": "caixas para bolo",
+          "mobile_img": "/img/uploads/mobile-lancamento-linha-bolo.webp"
         }
       ]
     },
