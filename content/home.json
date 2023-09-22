@@ -32,29 +32,14 @@
       "enabled": true
     },
     {
-      "type": "banners-grid",
-      "banners": [
-        {
-          "img": "/img/uploads/caixas-com-berco.webp",
-          "alt": "Banner Caixas com Berço",
-          "link": "https://www.pietroembalagens.com.br/caixas-com-berco"
-        },
-        {
-          "img": "/img/uploads/kit-mais-vendidos.webp",
-          "alt": "Banner Mais vendidos.",
-          "link": "https://www.pietroembalagens.com.br/kit-mais-vendidos-linha-padrao-pietro-embalagens"
-        }
-      ]
-    },
-    {
       "type": "collection-shelf",
-      "shuffle": false,
+      "shuffle": true,
       "limit": 12,
       "page": 1,
-      "collection_id": "64c2c8845e6069037076015e:categories:Embalagens para Macarons:/embalagens-para-macarons",
-      "link": "https://www.pietroembalagens.com.br/embalagens-para-macarons",
+      "collection_id": "650cea932cd6b65959589e7e:collections:Natal 2023:/natal-2023",
+      "link": "https://www.pietroembalagens.com.br/caixas-tema-natal",
       "sort": "views",
-      "title": "Embalagens para Macarons"
+      "title": "Lançamento Natal 2023"
     },
     {
       "type": "collection-shelf",
