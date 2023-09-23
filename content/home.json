@@ -20,6 +20,16 @@
     {
       "type": "collection-shelf",
       "shuffle": true,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "650cea932cd6b65959589e7e:collections:Natal 2023:/natal-2023",
+      "link": "https://www.pietroembalagens.com.br/caixas-tema-natal",
+      "sort": "views",
+      "title": "Lançamento Natal 2023"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": true,
       "collection_id": null,
       "sort": "sales",
       "title": "Mais Vendidos",
@@ -33,16 +43,6 @@
     },
     {
       "type": "collection-shelf",
-      "shuffle": true,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "650cea932cd6b65959589e7e:collections:Natal 2023:/natal-2023",
-      "link": "https://www.pietroembalagens.com.br/caixas-tema-natal",
-      "sort": "views",
-      "title": "Lançamento Natal 2023"
-    },
-    {
-      "type": "collection-shelf",
       "shuffle": false,
       "limit": 12,
       "page": 1,
@@ -50,15 +50,6 @@
       "sort": "views",
       "link": "https://www.pietroembalagens.com.br/embalagem-para-transporte-delivery-doces-macarons",
       "title": "Transporte ou Delivery"
-    },
-    {
-      "type": "collection-shelf",
-      "shuffle": true,
-      "limit": 12,
-      "page": 1,
-      "collection_id": null,
-      "sort": "news",
-      "title": "Lançamentos"
     },
     {
       "type": "page-title",
