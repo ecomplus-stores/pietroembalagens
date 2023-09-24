@@ -5,6 +5,10 @@
       "enabled": true
     },
     {
+      "type": "custom-html",
+      "html": "<div class=\"promocao-frete\">\n  <h2><strong>FRETE EM</strong> PROMOÇÃO!</h2>\n  <p>Coloque seu CEP no campo calculo de frete e aproveite.</p>\n</div>\n"
+    },
+    {
       "type": "product-block",
       "enabled": true,
       "size_guide": {
