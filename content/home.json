@@ -4,7 +4,7 @@
   "sections": [
     {
       "type": "banner-slider",
-      "autoplay": 4000,
+      "autoplay": 5000,
       "full_width": false,
       "slides": [
         {
@@ -17,11 +17,11 @@
         },
         {
           "start": "",
-          "end": "",
-          "img": "/img/uploads/full-banner-lanc-amento-linha-bolo-1920-500-px-1-.webp",
-          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
-          "alt": "caixas para bolos",
-          "mobile_img": "/img/uploads/mobile-lanc-amento-linha-bolo-1-.webp"
+          "end": "2023-10-06T03:00:00.000Z",
+          "img": "/img/uploads/desktop-full-banner-das-criancas-1920-x-500.webp",
+          "link": "https://www.pietroembalagens.com.br/embalagem-brigadeiro-dia-das-criancas",
+          "alt": "embalagem para dia das crianças",
+          "mobile_img": "/img/uploads/mobile-full-banner-das-criancas-1080-x-1080.webp"
         }
       ]
     },
