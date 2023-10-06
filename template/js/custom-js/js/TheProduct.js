@@ -253,10 +253,7 @@ export default {
     ghostProductForPrices () {
       const prices = {}
       ;['price', 'base_price'].forEach(field => {
-        let price = this.selectedVariation[field] || this.body[field]
-        if (field === 'price') {
-          price = getPrice(this.body)
-        } 
+        let price = this.selectedVariation[field] || getPrice(this.body) || this.body[field]
         if (price !== undefined) {
           this.customizations.forEach(customization => {
             if (customization.add_to_price) {
@@ -269,6 +266,7 @@ export default {
       })
       prices.price = this.addProgressiveDiscount(prices.price)
       const ghostProduct = { ...this.body }
+      delete ghostProduct.price_effective_date
       if (this.selectedVariationId) {
         Object.assign(ghostProduct, this.selectedVariation)
         delete ghostProduct.variations
