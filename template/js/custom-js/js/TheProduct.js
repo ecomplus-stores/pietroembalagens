@@ -254,6 +254,9 @@ export default {
       const prices = {}
       ;['price', 'base_price'].forEach(field => {
         let price = this.selectedVariation[field] || this.body[field]
+        if (field === 'price') {
+          price = getPrice(this.body)
+        } 
         if (price !== undefined) {
           this.customizations.forEach(customization => {
             if (customization.add_to_price) {
@@ -541,7 +544,6 @@ export default {
       if (!kitCta) {
         kitCta = productKitCtas
       }
-      console.log(kitCta)
       if (kitCta) {
         this.kitCta = kitCta
       }
