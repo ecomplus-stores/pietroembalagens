@@ -6,24 +6,7 @@
       "type": "banner-slider",
       "autoplay": 5000,
       "full_width": false,
-      "slides": [
-        {
-          "start": "",
-          "end": "2023-11-30T12:03:41.394Z",
-          "img": "/img/uploads/desktop-banner-natal-2023-1920-500-px-.webp",
-          "link": "https://www.pietroembalagens.com.br/caixas-tema-natal",
-          "alt": "EMBALGENS TEMA NATAL",
-          "mobile_img": "/img/uploads/mobile-banner-natal-2023.webp"
-        },
-        {
-          "start": "",
-          "end": "2023-10-06T03:00:00.000Z",
-          "img": "/img/uploads/desktop-full-banner-das-criancas-1920-x-500.webp",
-          "link": "https://www.pietroembalagens.com.br/embalagem-brigadeiro-dia-das-criancas",
-          "alt": "embalagem para dia das crianças",
-          "mobile_img": "/img/uploads/mobile-full-banner-das-criancas-1080-x-1080.webp"
-        }
-      ]
+      "slides": []
     },
     {
       "type": "info-bar",
