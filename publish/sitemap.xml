@@ -3350,30 +3350,6 @@
     </url>
   
     <url>
-      <loc>https://pietroembalagens.com.br/categoria-caixas-com-berco</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-  
-    <url>
-      <loc>https://pietroembalagens.com.br/categorias-criancas--pais</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-  
-    <url>
-      <loc>https://pietroembalagens.com.br/ofertas-em-destaque-embalagens-para-doces</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-  
-    <url>
-      <loc>https://pietroembalagens.com.br/natal-2023</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-  
-    <url>
       <loc>https://pietroembalagens.com.br/caixas-embalagens-para-doces-e-brigadeiro</loc>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
@@ -3890,6 +3866,30 @@
     </url>
   
     <url>
+      <loc>https://pietroembalagens.com.br/categoria-caixas-com-berco</loc>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  
+    <url>
+      <loc>https://pietroembalagens.com.br/categorias-criancas--pais</loc>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  
+    <url>
+      <loc>https://pietroembalagens.com.br/ofertas-em-destaque-embalagens-para-doces</loc>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  
+    <url>
+      <loc>https://pietroembalagens.com.br/natal-2023</loc>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  
+    <url>
       <loc>https://pietroembalagens.com.br/pietro-embalagens</loc>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
@@ -3932,13 +3932,13 @@
     </url>
   
     <url>
-      <loc>https://pietroembalagens.com.br/pages/contato</loc>
+      <loc>https://pietroembalagens.com.br/pages/dicas-e-conteudo</loc>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
   
     <url>
-      <loc>https://pietroembalagens.com.br/pages/dicas-e-conteudo</loc>
+      <loc>https://pietroembalagens.com.br/pages/contato</loc>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
@@ -3956,13 +3956,13 @@
     </url>
   
     <url>
-      <loc>https://pietroembalagens.com.br/pages/pagamentos</loc>
+      <loc>https://pietroembalagens.com.br/pages/politica-de-frete-gratis</loc>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
   
     <url>
-      <loc>https://pietroembalagens.com.br/pages/politica-de-frete-gratis</loc>
+      <loc>https://pietroembalagens.com.br/pages/pagamentos</loc>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>
