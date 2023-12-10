@@ -1,0 +1,37 @@
+{
+  "icons": [
+    {
+      "src": "/icon_512x512.b17b897c0a431457ad37dc24b4fdfc8f.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/icon_384x384.da4656a83901e32eccfd79d87a4e8ba5.jpeg",
+      "sizes": "384x384",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/icon_192x192.92060649fb35a2edea10fcd0a2617b32.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_128x128.50fbfdea5f7d674e891072bc09fba975.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_96x96.ff7923c12874590a28f7f941549dacc1.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Pietro Embalagens",
+  "short_name": "Pietro Embalagens",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "Pietro Embalagens. Embalagens que valorizam seu talento.",
+  "background_color": "#ffffff",
+  "theme_color": "#fd8043"
+}
