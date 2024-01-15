@@ -366,3 +366,6 @@ body .search-engine__aside .custom-checkbox{padding:0}
     }
     height: unset;
   }
+  .product-card__name {
+    --max-lines: 4 !important;
+  }
