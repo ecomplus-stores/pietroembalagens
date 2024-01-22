@@ -18,16 +18,6 @@
       ]
     },
     {
-      "type": "offers-timer",
-      "max_hours": 24,
-      "start": "2024-01-22T09:45:47.142Z",
-      "end": "2024-01-22T09:45:21.600Z",
-      "offers": [
-        "6599a3d42cd6b65959f5dfaa"
-      ],
-      "notes": "Promoção do dia."
-    },
-    {
       "type": "info-bar",
       "enabled": true
     },
