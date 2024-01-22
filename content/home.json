@@ -23,9 +23,9 @@
       "start": "2024-01-22T09:45:47.142Z",
       "end": "2024-01-22T09:45:21.600Z",
       "offers": [
-        "65999b8c2cd6b65959f5d331",
         "6599a3d42cd6b65959f5dfaa"
-      ]
+      ],
+      "notes": "Promoção do dia."
     },
     {
       "type": "info-bar",
@@ -40,11 +40,6 @@
       "link": "https://www.pietroembalagens.com.br/pascoa",
       "sort": "news",
       "title": "Páscoa 2024 🐰"
-    },
-    {
-      "type": "dynamic-showcase",
-      "load_more": true,
-      "sort": "views"
     },
     {
       "type": "collection-shelf",
