@@ -4,7 +4,7 @@
   "sections": [
     {
       "type": "banner-slider",
-      "autoplay": 3000,
+      "autoplay": 2000,
       "full_width": false,
       "slides": [
         {
@@ -22,6 +22,14 @@
           "link": "https://www.pietroembalagens.com.br/search?term=encanto&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1",
           "alt": "caixa para ovo de colher",
           "mobile_img": "/img/uploads/webp_-mobile-_linha-encanto-1080-x-1080-px-.webp"
+        },
+        {
+          "start": "2024-01-27T20:30:39.781Z",
+          "end": "2024-03-18T03:00:00.000Z",
+          "img": "/img/uploads/webp_-full-banner-linha-versa-til-1920-x-500-px.webp",
+          "link": "https://www.pietroembalagens.com.br/search?term=versátil&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1",
+          "alt": "caixa para doces tema pascia",
+          "mobile_img": "/img/uploads/webp_-mobile-linha-versa-til-1080-x-1080-px-.webp"
         }
       ]
     },
