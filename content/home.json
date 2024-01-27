@@ -32,16 +32,22 @@
       "title": "Páscoa 2024 🐰"
     },
     {
-      "type": "shelfs-nav",
-      "shuffle": true,
+      "type": "collection-shelf",
+      "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_ids": [
-        "6477272fa0e875411ea4f4af:categories:Formas BWB Para Páscoa:/formas-para-chocolate-pascoa",
-        "658ee0a92cd6b65959ed85a6:categories:Fitas de Cetim - Páscoa:/fitas-de-cetim-tema-pascoa"
-      ],
-      "sort": "sales",
-      "shelfs_title": "Mais produtos Páscoa 2024"
+      "collection_id": "658ee0a92cd6b65959ed85a6:categories:Fitas de Cetim - Páscoa:/fitas-de-cetim-tema-pascoa",
+      "title": "Fitas Decorativas para Páscoa",
+      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-pascoa"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "6477272fa0e875411ea4f4af:categories:Formas Ovo de Páscoa BWB:/formas-para-chocolate-pascoa",
+      "link": "https://www.pietroembalagens.com.br/formas-para-chocolate-pascoa",
+      "title": "Formas para Páscoa"
     },
     {
       "type": "collection-shelf",
