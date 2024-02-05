@@ -263,9 +263,13 @@ export default {
         }
         price *= this.qntCt
         prices[field] = price
+        if (field === 'base_price' && checkOnPromotion(this.body) && this.body['base_price']) {
+          prices[field] = this.body['base_price'] * this.qntCt
+        }
       })
       prices.price = this.addProgressiveDiscount(prices.price)
       const ghostProduct = { ...this.body }
+      console.log(ghostProduct)
       delete ghostProduct.price_effective_date
       if (this.selectedVariationId) {
         Object.assign(ghostProduct, this.selectedVariation)
