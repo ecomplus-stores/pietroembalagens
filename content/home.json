@@ -69,6 +69,16 @@
       "type": "page-title",
       "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
       "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "6468b95ca0e875411e95fc22:categories:Forminha para doces:/forminhas-para-doces",
+      "sort": "sales",
+      "link": "https://www.pietroembalagens.com.br/forminhas-para-doces",
+      "autoplay": 1000
     }
   ]
 }
