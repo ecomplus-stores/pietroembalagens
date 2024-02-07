@@ -34,25 +34,6 @@
       ]
     },
     {
-      "type": "banners-grid",
-      "banners": [
-        {
-          "img": "/img/uploads/berc-o_ilustrc-ao_prancheta-1.png",
-          "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
-          "alt": "caixa para brigadeiros com berço"
-        },
-        {
-          "img": "/img/uploads/acetato_ilustrac-ao.png",
-          "link": "https://www.pietroembalagens.com.br/caixa-de-acetato",
-          "alt": "caixas de acetato"
-        },
-        {
-          "img": "/img/uploads/visor_ilustrac-ao.png",
-          "link": "https://www.pietroembalagens.com.br/caixa-com-visor-para-doces-brigadeiros"
-        }
-      ]
-    },
-    {
       "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
