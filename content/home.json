@@ -66,11 +66,6 @@
       "title": "Formas para Páscoa"
     },
     {
-      "type": "page-title",
-      "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
-      "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
-    },
-    {
       "type": "collection-shelf",
       "shuffle": false,
       "limit": 12,
@@ -79,6 +74,11 @@
       "sort": "sales",
       "link": "https://www.pietroembalagens.com.br/forminhas-para-doces",
       "autoplay": 1000
+    },
+    {
+      "type": "page-title",
+      "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
+      "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
     }
   ]
 }
