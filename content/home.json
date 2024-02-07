@@ -34,14 +34,15 @@
       ]
     },
     {
-      "type": "collection-shelf",
+      "autoplay": 3000,
+      "page": 2,
+      "title": "Páscoa 2024 🐰",
       "shuffle": true,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "6466d975a0e875411e9439d8:categories:Páscoa:/pascoa",
+      "type": "collection-shelf",
       "link": "https://www.pietroembalagens.com.br/pascoa",
-      "sort": "news",
-      "title": "Páscoa 2024 🐰"
+      "limit": 12,
+      "collection_id": "6466d975a0e875411e9439d8:categories:Páscoa:/pascoa",
+      "sort": "news"
     },
     {
       "type": "collection-shelf",
@@ -50,7 +51,8 @@
       "page": 1,
       "collection_id": "658ee0a92cd6b65959ed85a6:categories:Fitas de Cetim - Páscoa:/fitas-de-cetim-tema-pascoa",
       "title": "Fitas Decorativas para Páscoa",
-      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-pascoa"
+      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-pascoa",
+      "autoplay": 3000
     },
     {
       "type": "collection-shelf",
@@ -59,7 +61,8 @@
       "page": 1,
       "collection_id": "6477272fa0e875411ea4f4af:categories:Formas Ovo de Páscoa BWB:/formas-para-chocolate-pascoa",
       "link": "https://www.pietroembalagens.com.br/formas-para-chocolate-pascoa",
-      "title": "Formas para Páscoa"
+      "title": "Formas para Páscoa",
+      "autoplay": 3000
     },
     {
       "type": "collection-shelf",
@@ -69,10 +72,10 @@
       "collection_id": "6468b95ca0e875411e95fc22:categories:Forminha para doces:/forminhas-para-doces",
       "sort": "sales",
       "link": "https://www.pietroembalagens.com.br/forminhas-para-doces",
-      "autoplay": 1000
+      "autoplay": 3000
     },
     {
-      "autoplay": 1000,
+      "autoplay": 3000,
       "page": 2,
       "title": "Embalagens com berço",
       "shuffle": false,
@@ -83,17 +86,18 @@
       "sort": "sales"
     },
     {
-      "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
+      "autoplay": 3000,
       "page": 1,
-      "collection_id": "64c2c8845e6069037076015e:categories:Caixas P/ Macarons:/embalagens-para-macarons",
-      "sort": "sales",
+      "title": "Embalagens para Macarons",
+      "shuffle": false,
+      "type": "collection-shelf",
       "link": "https://www.pietroembalagens.com.br/embalagens-para-macarons",
-      "title": "Embalagens para Macarons"
+      "limit": 12,
+      "collection_id": "64c2c8845e6069037076015e:categories:Caixas P/ Macarons:/embalagens-para-macarons",
+      "sort": "sales"
     },
     {
-      "autoplay": 1000,
+      "autoplay": 3000,
       "page": 1,
       "title": "Embalagens para Brownie",
       "shuffle": false,
@@ -104,7 +108,7 @@
       "sort": "sales"
     },
     {
-      "autoplay": 1000,
+      "autoplay": 3000,
       "page": 1,
       "title": "Caixas para Biscoitos",
       "shuffle": false,
