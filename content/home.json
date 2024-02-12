@@ -38,15 +38,6 @@
       "enabled": true
     },
     {
-      "type": "banners-grid",
-      "banners": [
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-visor.png",
-          "mobile_img": "/img/uploads/mobile_bolinha_linha-visor.png"
-        }
-      ]
-    },
-    {
       "autoplay": 3000,
       "page": 1,
       "title": "Páscoa 2024 🐰",
