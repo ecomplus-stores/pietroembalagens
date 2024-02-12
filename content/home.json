@@ -35,12 +35,12 @@
     },
     {
       "autoplay": 3000,
-      "page": 2,
+      "page": 1,
       "title": "Páscoa 2024 🐰",
       "shuffle": true,
       "type": "collection-shelf",
       "link": "https://www.pietroembalagens.com.br/pascoa",
-      "limit": 12,
+      "limit": "",
       "collection_id": "6466d975a0e875411e9439d8:categories:Páscoa:/pascoa",
       "sort": "news"
     },
