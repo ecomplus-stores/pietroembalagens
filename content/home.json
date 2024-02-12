@@ -62,6 +62,16 @@
           "img": "/img/uploads/desktop_bolinha_linha_brownie.png",
           "link": "https://www.pietroembalagens.com.br/embalagem-para-brownies",
           "alt": "caixas para brownies"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png",
+          "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
+          "alt": "Fitas de Cetim"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png",
+          "link": "https://www.pietroembalagens.com.br/formas-para-chocolate",
+          "alt": "formas para chocolate"
         }
       ]
     },
