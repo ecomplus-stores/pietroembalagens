@@ -49,7 +49,8 @@
         {
           "img": "/img/uploads/desktop_bolinha_linha-acetato.png",
           "link": "https://www.pietroembalagens.com.br/caixa-de-acetato",
-          "alt": "caixas de acetato"
+          "alt": "caixas de acetato",
+          "mobile_img": "/img/uploads/mobile_bolinhas_linha-acetato.png"
         },
         {
           "img": "/img/uploads/desktop_bolina_macaron.png",
