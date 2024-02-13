@@ -38,6 +38,73 @@
       "enabled": true
     },
     {
+      "type": "banners-grid",
+      "banners": [
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-visor.png",
+          "link": "https://www.pietroembalagens.com.br/caixa-com-visor-para-doces-brigadeiros",
+          "alt": "caixa para doces com visor",
+          "mobile_img": "/img/uploads/mobile_bolinhas_linha-visor.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-acetato.png",
+          "link": "https://www.pietroembalagens.com.br/caixa-de-acetato",
+          "alt": "caixas de acetato",
+          "mobile_img": "/img/uploads/mobile_bolinhas_linha-acetato.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolina_macaron.png",
+          "link": "https://www.pietroembalagens.com.br/embalagens-para-macarons",
+          "alt": "caixas para macarons"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png",
+          "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
+          "alt": "caixas com berço fixo para delivery"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha_biscoito.png",
+          "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos",
+          "alt": "caixas e embalagens para biscoitos"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha_brownie.png",
+          "link": "https://www.pietroembalagens.com.br/embalagem-para-brownies",
+          "alt": "caixas para brownies"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png",
+          "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
+          "alt": "Fitas de Cetim"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png",
+          "link": "https://www.pietroembalagens.com.br/formas-para-chocolate",
+          "alt": "formas para chocolate"
+        },
+        {
+          "img": "/img/uploads/prancheta-2.png",
+          "link": "https://www.pietroembalagens.com.br/embalagem-para-doces-tampa-em-acetato",
+          "alt": "caixas para doces e brigadeiros"
+        },
+        {
+          "img": "/img/uploads/prancheta-3.png",
+          "link": "https://www.pietroembalagens.com.br/search?term=sacolas&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1",
+          "alt": "Sacolas kraft para transporte"
+        },
+        {
+          "img": "/img/uploads/prancheta-4.png",
+          "link": "https://www.pietroembalagens.com.br/confeitaria",
+          "alt": "bicos de confeitar"
+        },
+        {
+          "img": "/img/uploads/caixas-para-bolo.png",
+          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
+          "alt": "caixas para bolo"
+        }
+      ]
+    },
+    {
       "autoplay": 3000,
       "page": 1,
       "title": "Páscoa 2024 🐰",
