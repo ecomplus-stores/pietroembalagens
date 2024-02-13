@@ -94,6 +94,11 @@
           "img": "/img/uploads/prancheta-4.png",
           "link": "https://www.pietroembalagens.com.br/confeitaria",
           "alt": "bicos de confeitar"
+        },
+        {
+          "img": "/img/uploads/caixas-para-bolo.png",
+          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
+          "alt": "caixas para bolo"
         }
       ]
     },
