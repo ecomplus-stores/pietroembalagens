@@ -369,3 +369,9 @@ body .search-engine__aside .custom-checkbox{padding:0}
   .product-card__name {
     --max-lines: 4 !important;
   }
+
+  @media (max-width: 767px) {
+    .banners-grid .col-12 {
+      max-width: 50% !important;
+    }
+  }
