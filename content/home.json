@@ -102,6 +102,11 @@
           "img": "/img/uploads/desktop_bolinhas_acesso-rios.png",
           "alt": "acessórios para confeitaria",
           "link": "https://www.pietroembalagens.com.br/confeitaria"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-forminhas.png",
+          "link": "https://www.pietroembalagens.com.br/forminhas-para-doces",
+          "alt": "forminhas para doces"
         }
       ]
     },
