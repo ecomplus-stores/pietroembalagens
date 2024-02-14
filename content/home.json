@@ -117,17 +117,6 @@
     {
       "autoplay": 3000,
       "page": 1,
-      "title": "Embalagens para Macarons",
-      "shuffle": false,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/embalagens-para-macarons",
-      "limit": 12,
-      "collection_id": "64c2c8845e6069037076015e:categories:Caixas P/ Macarons:/embalagens-para-macarons",
-      "sort": "sales"
-    },
-    {
-      "autoplay": 3000,
-      "page": 1,
       "title": "Embalagens para Brownie",
       "shuffle": false,
       "type": "collection-shelf",
