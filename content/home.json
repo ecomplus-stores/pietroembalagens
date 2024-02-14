@@ -54,19 +54,9 @@
           "alt": "caixas de acetato"
         },
         {
-          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png",
-          "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
-          "alt": "caixas para doces com berço"
-        },
-        {
           "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png",
           "alt": "Fitas de Cetim",
           "link": "https://www.pietroembalagens.com.br/fita-de-cetim"
-        },
-        {
-          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png",
-          "link": "https://www.pietroembalagens.com.br/formas-para-chocolate",
-          "alt": "Formas para chocolate BWB"
         },
         {
           "img": "/img/uploads/desktop_bolinha_linha-tematicas.png",
@@ -97,6 +87,16 @@
           "img": "/img/uploads/desktop_caixas-para-bolo.png",
           "alt": "caixas para bolo",
           "link": "https://www.pietroembalagens.com.br/caixas-para-bolos"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png",
+          "link": "https://www.pietroembalagens.com.br/formas-para-chocolate",
+          "alt": "Formas para chocolate BWB"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png",
+          "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
+          "alt": "caixas para doces com berço"
         },
         {
           "img": "/img/uploads/desktop_bolinhas_acesso-rios.png",
