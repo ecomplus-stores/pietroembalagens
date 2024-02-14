@@ -90,6 +90,21 @@
           "img": "/img/uploads/desktop_bolinha_linha_brownie.png",
           "link": "https://www.pietroembalagens.com.br/embalagem-para-brownies",
           "alt": "caixas para brownie"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinhas_sacola.png",
+          "link": "https://www.pietroembalagens.com.br/search?term=sacolas&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1&qtde-carrinho=1",
+          "alt": "sacolas kraft"
+        },
+        {
+          "img": "/img/uploads/desktop_caixas-para-bolo.png",
+          "alt": "caixas para bolo",
+          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinhas_acesso-rios.png",
+          "alt": "acessórios para confeitaria",
+          "link": "https://www.pietroembalagens.com.br/confeitaria"
         }
       ]
     },
