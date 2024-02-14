@@ -34,6 +34,32 @@
       ]
     },
     {
+      "type": "banners-grid",
+      "banners": [
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-acetato.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-tematicas.png"
+        },
+        {
+          "img": "/img/uploads/desktop_bolinha_linha-visor.png"
+        }
+      ]
+    },
+    {
       "type": "info-bar",
       "enabled": true
     },
