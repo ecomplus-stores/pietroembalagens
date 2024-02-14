@@ -116,17 +116,6 @@
     },
     {
       "autoplay": 3000,
-      "page": 2,
-      "title": "Embalagens com berço",
-      "shuffle": false,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
-      "limit": 12,
-      "collection_id": "649aaa135e6069037049dc38:collections:Categoria: Caixas com Berço:/categoria-caixas-com-berco",
-      "sort": "sales"
-    },
-    {
-      "autoplay": 3000,
       "page": 1,
       "title": "Embalagens para Macarons",
       "shuffle": false,
