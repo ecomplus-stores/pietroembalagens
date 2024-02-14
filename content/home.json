@@ -48,6 +48,10 @@
       "notes": "PROMO DO DIA! Aproveite e compre agora com desconto. \nNovas ofertas todos os dias!"
     },
     {
+      "type": "custom-content",
+      "markdown": "## Navegue pelas categorias, clique nas imagens"
+    },
+    {
       "type": "banners-grid",
       "banners": [
         {
@@ -169,10 +173,6 @@
       "type": "page-title",
       "title": "Pietro Embalagens - Embalagem para brigadeiros doces e artesanato.",
       "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
-    },
-    {
-      "type": "custom-content",
-      "markdown": "## Navegue pelas categorias, clique nas imagens"
     }
   ]
 }
