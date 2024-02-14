@@ -153,13 +153,13 @@
       "sort": "sales"
     },
     {
-      "autoplay": 2000,
+      "autoplay": 1500,
       "page": 1,
       "title": "PROMOÇÕES.  +ver mais",
       "shuffle": true,
       "type": "collection-shelf",
       "link": "https://www.pietroembalagens.com.br/caixas-em-promocao",
-      "limit": 18,
+      "limit": 24,
       "collection_id": "646d6910a0e875411e9ad039:categories:Promoções:/caixas-em-promocao",
       "sort": "offers"
     },
