@@ -34,6 +34,19 @@
       ]
     },
     {
+      "type": "info-bar",
+      "enabled": true
+    },
+    {
+      "type": "offers-timer",
+      "max_hours": 24,
+      "start": "2024-02-14T18:42:43.270Z",
+      "end": "2024-02-14T18:42:43.305Z",
+      "offers": [
+        "649f99855e606903704fad56"
+      ]
+    },
+    {
       "type": "banners-grid",
       "banners": [
         {
@@ -67,10 +80,6 @@
           "alt": "caixas para doces com visor"
         }
       ]
-    },
-    {
-      "type": "info-bar",
-      "enabled": true
     },
     {
       "autoplay": 3000,
