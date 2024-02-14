@@ -41,8 +41,11 @@
       "type": "offers-timer",
       "max_hours": 7,
       "start": "2024-02-15T10:00:43.270Z",
-      "end": "2024-02-15T16:00:43.305Z",
-      "offers": [],
+      "end": "2024-02-15T21:44:43.305Z",
+      "offers": [
+        "659ab95d2cd6b65959f68d54",
+        "65bcff432cd6b659591f86ad"
+      ],
       "notes": "PROMO DO DIA! Aproveite e compre agora com desconto. \nNovas ofertas todos os dias, sempre das 7h até as 13h."
     },
     {
