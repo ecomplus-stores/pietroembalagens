@@ -38,16 +38,6 @@
       "enabled": true
     },
     {
-      "type": "offers-timer",
-      "max_hours": 6,
-      "start": "2024-02-14T03:01:13.224Z",
-      "end": "2024-03-17T02:59:43.305Z",
-      "offers": [
-        "65b04e1b2cd6b65959100167"
-      ],
-      "notes": "PROMO DO DIA! Aproveite e compre agora com desconto. \nNovas ofertas todos os dias!"
-    },
-    {
       "type": "custom-content",
       "markdown": "# Navegue pelas categorias, clique nas imagens"
     },
@@ -136,6 +126,16 @@
       "title": "Fitas Decorativas para Páscoa",
       "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-pascoa",
       "autoplay": 3000
+    },
+    {
+      "type": "offers-timer",
+      "max_hours": 6,
+      "start": "2024-02-14T03:01:13.224Z",
+      "end": "2024-03-17T02:59:43.305Z",
+      "offers": [
+        "65b04e1b2cd6b65959100167"
+      ],
+      "notes": "PROMO DO DIA! Aproveite e compre agora com desconto. \nNovas ofertas todos os dias!"
     },
     {
       "type": "collection-shelf",
