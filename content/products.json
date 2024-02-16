@@ -13,7 +13,7 @@
       }
     },
     {
-      "type": "product-description",
+      "type": "product-specifications",
       "enabled": true
     },
     {
@@ -21,12 +21,12 @@
       "enabled": true
     },
     {
-      "type": "recommended-products",
-      "title": "Quem comprou este produto, também comprou:"
+      "type": "product-description",
+      "enabled": true
     },
     {
-      "type": "product-specifications",
-      "enabled": true
+      "type": "recommended-products",
+      "title": "Quem comprou este produto, também comprou:"
     },
     {
       "type": "related-products",
