@@ -1,15 +1,17 @@
 {
   "shipping": {
     "show": true,
-    "text": "Entregamos para todo o Brasil"
+    "text": "Promoção de Frete Fixo por região.",
+    "title": "Entregamos para todo o Brasil"
   },
   "installments": {
     "show": true,
-    "text": "Parcele em até 5x S/ juros"
+    "text": "Parcele em até 5x s/ juros"
   },
   "exchange": {
     "show": true,
-    "text": "Desconto Progressivo!"
+    "text": "Quanto mais unidades comprar do mesmo item, ganhe mais desconto.",
+    "title": "Desconto Progressivo!"
   },
   "promo": {
     "show": false,
