@@ -2,15 +2,16 @@
   "shipping": {
     "show": true,
     "text": "Promoção de Frete Fixo por região.",
-    "title": "Entregamos para todo o Brasil"
+    "title": "Entregamos para todo o Brasil!"
   },
   "installments": {
     "show": true,
-    "text": "Parcele em até 5x s/ juros"
+    "text": "Parcele em até 5x s/ juros* ou ganhe desconto extra no PIX.",
+    "title": "Facilidades no pagamento!"
   },
   "exchange": {
     "show": true,
-    "text": "Quanto mais unidades comprar do mesmo item, ganhe mais desconto.",
+    "text": "Quanto mais unidades comprar do mesmo item, maior seu desconto.",
     "title": "Desconto Progressivo!"
   },
   "promo": {
