@@ -34,10 +34,6 @@
       ]
     },
     {
-      "type": "responsive-banner",
-      "img": "/img/uploads/banner-tarja-getcommerce-1920px-x-130px.png"
-    },
-    {
       "type": "info-bar",
       "enabled": true
     },
