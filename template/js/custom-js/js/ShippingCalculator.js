@@ -97,6 +97,7 @@ import {
         shippingServices: [],
         selectedService: null,
         hasPaidOption: false,
+        hasFreeOption: false,
         freeFromValue: null,
         isScheduled: false,
         retryTimer: null,
@@ -192,6 +193,14 @@ import {
             this.hasPaidOption = Boolean(this.shippingServices.find(service => {
               return service.shipping_line.total_price || service.shipping_line.price
             }))
+            this.hasFreeOption = Boolean(this.shippingServices.find(service => {
+              return service.shipping_line.total_price === 0 || service.shipping_line.price === 0
+            }))
+            if (this.hasFreeOption) {
+              this.setSelectedService(1)
+            } else {
+              this.setSelectedService(0)
+            }
             if (Array.isArray(this.shippingAppsSort) && this.shippingAppsSort.length) {
               this.shippingServices = sortApps(this.shippingServices, this.shippingAppsSort)
             }
