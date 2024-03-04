@@ -1,0 +1,91 @@
+<%
+let brands
+const params = {}
+;['sort', 'limit', 'offset'].forEach(param => {
+  if (opt[param]) {
+    params[param] = opt[param]
+  }
+})
+try {
+  const { data } = await _.ecomClient.store({
+    url: '/categories',
+    axiosConfig: {
+      params
+    }
+  })
+  brands = data.result
+} catch (err) {
+  console.error(err)
+}
+
+if (opt.category_ids) {
+    const categoryIds = opt.category_ids
+
+    brands = brands.filter(({ _id }) => categoryIds.includes(_id))
+}
+
+const hasImage = brands.some(({icon}) => icon)
+
+if (brands && brands.length && hasImage) {
+  %>
+
+  <section class="brands-carousel container" id="category-carousel">
+    <% if (opt.title) { %>
+      <h4 class="products-carousel__title">
+        <%= opt.title %>
+      </h4>
+    <% } %>
+    <div
+      class="glide"
+      data-autoplay="<%= opt.autoplay %>"
+      data-per-view="6"
+      data-per-view-md="4"
+      data-per-view-sm="3"
+      data-per-view-xs="2"
+    >
+      <div class="glide__track" data-glide-el="track">
+        <ul class="glide__slides brands-carousel__list">
+          <% brands.forEach(({ name, slug, icon }) => {
+            if (icon) {  %>
+                <li class="glide__slide brands-carousel__item">
+                    <a href="<%= slug ? `/${slug}` : '#' %>">
+                        <% if (icon && icon.url) { %>
+                        <img src="<%= icon.url %>" alt="<%= name %>" class="img-fluid">
+                        <h4><%= name %></h4>
+                        <% } else { %>
+                        <h4><%= name %></h4>
+                        <% } %>
+                    </a>
+                </li>
+            <% } %>
+          <% }) %>
+        </ul>
+
+        <% if (brands.length > 3) { %>
+          <div
+            class="glide__arrows glide__arrows--outer"
+            data-glide-el="controls"
+          >
+            <button
+              class="btn glide__arrow glide__arrow--left"
+              data-glide-dir="<"
+              aria-label="<%= _.dictionary('previous') %>"
+            >
+              <i class="i-arrow-left"></i>
+            </button>
+            <button
+              class="btn glide__arrow glide__arrow--right"
+              data-glide-dir=">"
+              aria-label="<%= _.dictionary('next') %>"
+            >
+              <i class="i-arrow-right"></i>
+            </button>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <%
+}
+%>

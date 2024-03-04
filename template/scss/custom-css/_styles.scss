@@ -375,3 +375,10 @@ body .search-engine__aside .custom-checkbox{padding:0}
       max-width: 50% !important;
     }
   }
+
+  #category-carousel {
+    .products-carousel__title::before {
+      content: "" !important;
+      height: 0;
+    }
+  }

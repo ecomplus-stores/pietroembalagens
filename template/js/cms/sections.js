@@ -54,6 +54,49 @@ export default ({ state }) => {
             widget: 'string'
         }
     ]
+}, {
+    label: 'Carrossel de Categorias',
+    name: 'categories-carousel',
+    widget: 'object',
+    icon: 'https://api.iconify.design/mdi:copyright.svg',
+    fields: [
+        {
+            label: 'Selecione categorias',
+            required: true,
+            name: 'category_ids',
+            widget: 'select',
+            multiple: true,
+            options: [{
+              resource: 'categories',
+              label: 'Categoria: '
+            }].reduce((options, shelf) => {
+              state.routes.forEach(({ _id, resource, name, path }) => {
+                if (resource === shelf.resource) {
+                  options.push({
+                    label: shelf.label + name,
+                    value: `${_id}`
+                  })
+                }
+              })
+              return options
+            }, [])
+          },
+      {
+        label: 'Carousel autoplay',
+        required: false,
+        name: 'autoplay',
+        hint: 'Exibição de cada página em milisegundos, 0 desativa o autoplay',
+        min: 0,
+        step: 1000,
+        widget: 'number'
+      },
+      {
+        name: 'title',
+        widget: 'string',
+        required: false,
+        label: 'Nome do carousel de categorias'
+      }
+    ]
 })
   return sections
 }
