@@ -29,13 +29,13 @@
     {
       "autoplay": 3000,
       "page": 1,
-      "title": "Namorados 2024 ❤️",
+      "title": "Mais Vendidos ❤️",
       "shuffle": true,
       "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/embalagem-dia-das-maes",
+      "link": "",
       "limit": "",
-      "collection_id": "6466d3d3a0e875411e9435c9:categories:Dia Das Mães:/embalagem-dia-das-maes",
-      "sort": "news"
+      "collection_id": "645995294bd2e929c1f2d64f:categories:Caixas P/ Doces:/caixas-embalagens-para-doces-e-brigadeiro",
+      "sort": "sales"
     },
     {
       "type": "collection-shelf",
