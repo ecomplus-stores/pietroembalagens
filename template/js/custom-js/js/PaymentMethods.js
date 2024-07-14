@@ -43,6 +43,7 @@ import {
       },
       cartItems: Array,
       customer: Object,
+      minToBuy: 39.9,
       paymentGateways: {
         type: Array,
         default () {
@@ -108,11 +109,11 @@ import {
       },
   
       minToBuy () {
-        return 39.9
+        return window.minToBuy || 39.9
       },
   
       minToBuyMsg () {
-        const price = this.formatMoney(this.amount.subtotal - minToBuy)
+        const price = this.formatMoney(this.minToBuy - this.amount.subtotal)
         const phrase = window.minToBuyMsg || `Necessário inserir $1 para finalizar compra`
         return phrase.replace('$1', price)
       },
