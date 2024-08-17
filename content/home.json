@@ -10,16 +10,15 @@
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/full-banner-site-100-doces-.webp",
-          "link": "https://www.pietroembalagens.com.br/100-brigadeiros-ou-doces",
-          "alt": "caixa para 100 doces",
-          "mobile_img": "/img/uploads/mobile-mais-vendida-100-doces.webp"
+          "img": "/img/uploads/desktop-full-banner-frete-fixo-1920-x-500-3-.webp",
+          "mobile_img": "/img/uploads/mobile-full-banner-frete-fixo-1080-x-1080-px-1-.webp"
         },
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/desktop-full-banner-frete-fixo-1920-x-500-3-.webp",
-          "mobile_img": "/img/uploads/mobile-full-banner-frete-fixo-1080-x-1080-px-1-.webp"
+          "img": "/img/uploads/webp_cashback-web-full-banner-1920-x-500.webp",
+          "link": "https://www.pietroembalagens.com.br/pages/cashback",
+          "mobile_img": "/img/uploads/webp_cashback-mobile-banner.webp"
         }
       ]
     },
