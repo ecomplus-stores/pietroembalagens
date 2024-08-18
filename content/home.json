@@ -10,15 +10,15 @@
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/desktop-full-banner-frete-fixo-1920-x-500-3-.webp",
-          "mobile_img": "/img/uploads/mobile-full-banner-frete-fixo-1080-x-1080-px-1-.webp"
+          "img": "/img/uploads/webp-full-banner-1920x500-orange.webp",
+          "mobile_img": "/img/uploads/webp-full-banner-laranja.webp"
         },
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/webp_cashback-web-full-banner-1920-x-500.webp",
+          "img": "/img/uploads/webp-cashback-web-banner.webp",
           "link": "https://www.pietroembalagens.com.br/pages/cashback",
-          "mobile_img": "/img/uploads/webp_cashback-mobile-banner.webp"
+          "mobile_img": "/img/uploads/webp-cashback-mobile-banner-2-.webp"
         }
       ]
     },
