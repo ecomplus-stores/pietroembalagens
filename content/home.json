@@ -19,6 +19,13 @@
           "img": "/img/uploads/webp-cashback-web-banner.webp",
           "link": "https://www.pietroembalagens.com.br/pages/cashback",
           "mobile_img": "/img/uploads/webp-cashback-mobile-banner-2-.webp"
+        },
+        {
+          "start": "2024-09-09T03:10:46.900Z",
+          "end": "2024-09-16T02:59:00.000Z",
+          "img": "/img/uploads/desktop-banner-full-semana-do-cliente_2024.webp",
+          "alt": "semana do cliente Pietro Embalagens",
+          "mobile_img": "/img/uploads/mobile-banner-full-semana-do-cliente-2024.webp"
         }
       ]
     },
