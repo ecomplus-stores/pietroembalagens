@@ -6,12 +6,12 @@
   },
   "installments": {
     "show": true,
-    "text": "Parcele em até 5x s/ juros* ou ganhe desconto extra no PIX.",
+    "text": "Até 5x s/ juros* ou desconto no PIX.",
     "title": "Facilidades no pagamento!"
   },
   "exchange": {
     "show": true,
-    "text": "Quanto mais unidades comprar do mesmo item, maior seu desconto.",
+    "text": "Desconto por quantidade do mesmo item",
     "title": "Desconto Progressivo!"
   },
   "promo": {
