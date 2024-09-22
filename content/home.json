@@ -18,9 +18,10 @@
         {
           "start": "",
           "end": "",
-          "img": "/img/uploads/desktop-full-banner-sacolas.webp",
+          "img": "/img/uploads/desktop-full-banner-sacolas-1920x500.webp",
           "alt": "sacolas kraft e brancas",
-          "link": "https://www.pietroembalagens.com.br/sacola-kraft-branca"
+          "link": "https://www.pietroembalagens.com.br/sacola-kraft-branca",
+          "mobile_img": "/img/uploads/mobile-full-banner-sacolas-1080-x-1080-px-.webp"
         }
       ]
     },
