@@ -1,10 +1,10 @@
 {
   "meta_title": "Pietro Embalagens - Embalagens de Qualidade para Brigadeiros e Doces. Fitas de Cetim, moldes para Chocolate e muito mais. ",
-  "meta_description": "Procurando a embalagem perfeita para brigadeiros e doces? Nossas embalagens são feitas com papel kraft, papel cartão branco ou acetato transparente, são fáceis de montar e super resistentes. Faça seu pedido agora!" ,
+  "meta_description": "Procurando a embalagem perfeita para brigadeiros e doces? Nossas embalagens são feitas com papel kraft, papel cartão branco ou acetato transparente, são fáceis de montar e super resistentes. Faça seu pedido agora!",
   "sections": [
     {
       "type": "banner-slider",
-      "autoplay": 2500,
+      "autoplay": 4000,
       "full_width": false,
       "slides": [
         {
@@ -22,6 +22,12 @@
           "alt": "sacolas kraft e brancas",
           "link": "https://www.pietroembalagens.com.br/sacola-kraft-branca",
           "mobile_img": "/img/uploads/mobile-full-banner-sacolas-1080-x-1080-px-.webp"
+        },
+        {
+          "start": "2024-12-17T11:39:14.550Z",
+          "end": "2025-01-05T03:00:00.000Z",
+          "img": "/img/uploads/2025_banner-recesso-final-de-ano_banner-site.webp",
+          "mobile_img": "/img/uploads/2025_1080x1080_banner-recesso-final-de-ano_insta.webp"
         }
       ]
     },
