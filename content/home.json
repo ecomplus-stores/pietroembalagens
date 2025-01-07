@@ -25,14 +25,6 @@
       "autoplay": 8000
     },
     {
-      "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "6466d506a0e875411e94369a:categories:Natal:/caixas-tema-natal",
-      "sort": "views"
-    },
-    {
       "autoplay": 3000,
       "page": 1,
       "title": "Mais Vendidos ❤️",
@@ -67,12 +59,12 @@
     {
       "autoplay": 3000,
       "page": 1,
-      "title": "Fitas Natal 2024",
+      "title": "Fitas Cetim",
       "shuffle": false,
       "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-natal",
+      "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
       "limit": 12,
-      "collection_id": "6466d853a0e875411e9438cd:categories:Fitas de Cetim - Natal:/fitas-de-cetim-tema-natal",
+      "collection_id": "646d65c7a0e875411e9ace0c:categories:Fitas de Cetim:/fita-de-cetim",
       "sort": "sales"
     },
     {
