@@ -79,17 +79,6 @@
       "sort": "sales"
     },
     {
-      "autoplay": 2000,
-      "page": 1,
-      "title": "",
-      "shuffle": true,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/pascoa-2025---linha-encanto",
-      "limit": 12,
-      "collection_id": "67abda3a53d3dd5b9c670207:collections:Páscoa 2025 - Linha Versátil:/pascoa-2025---linha-versatil",
-      "sort": "sales"
-    },
-    {
       "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
