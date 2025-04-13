@@ -35,6 +35,17 @@
       "autoplay": 8000
     },
     {
+      "autoplay": 2500,
+      "page": 1,
+      "title": "Dia das Mães e Namorados",
+      "shuffle": true,
+      "type": "collection-shelf",
+      "link": "https://www.pietroembalagens.com.br/embalagem-dia-das-maes-namorados",
+      "limit": "",
+      "collection_id": "6466d3d3a0e875411e9435c9:categories:Dia Dos Namorados:/embalagem-dia-das-maes-namorados",
+      "sort": "sales"
+    },
+    {
       "autoplay": 2000,
       "page": 1,
       "title": "Lançamentos Páscoa 2025",
@@ -43,17 +54,6 @@
       "link": "https://www.pietroembalagens.com.br/pascoa",
       "limit": 12,
       "collection_id": "6466d975a0e875411e9439d8:categories:Páscoa 2025:/pascoa",
-      "sort": "sales"
-    },
-    {
-      "autoplay": 2000,
-      "page": 1,
-      "title": "",
-      "shuffle": true,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/pascoa-2025---linha-mimo",
-      "limit": "",
-      "collection_id": "67abd8aa53d3dd5b9c67008f:collections:Páscoa 2025 - Linha Mimo:/pascoa-2025---linha-mimo",
       "sort": "sales"
     },
     {
@@ -91,10 +91,10 @@
     {
       "autoplay": 2000,
       "page": 1,
-      "title": "Fitas de Cetim Páscoa",
+      "title": "Fitas de Cetim Mães e Namorados",
       "shuffle": true,
       "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-pascoa",
+      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-maes-namorados",
       "limit": 24,
       "collection_id": "658ee0a92cd6b65959ed85a6:categories:Fitas de Cetim - Páscoa:/fitas-de-cetim-tema-pascoa",
       "sort": "offers"
