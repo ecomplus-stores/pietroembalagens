@@ -35,6 +35,17 @@
       "autoplay": 8000
     },
     {
+      "autoplay": 2500,
+      "page": 1,
+      "title": "Linha Mães e Namorados",
+      "shuffle": false,
+      "type": "collection-shelf",
+      "link": "https://www.pietroembalagens.com.br/embalagens-dia-das-maes-dia-dos-namorados",
+      "limit": 12,
+      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
+      "sort": "sales"
+    },
+    {
       "autoplay": 2000,
       "page": 1,
       "title": "Fitas de Cetim Mães e Namorados",
