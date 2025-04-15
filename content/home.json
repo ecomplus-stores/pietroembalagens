@@ -35,36 +35,6 @@
       "autoplay": 8000
     },
     {
-      "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
-      "sort": "sales",
-      "title": "Lançamentos Mães e Namorados"
-    },
-    {
-      "autoplay": 2000,
-      "page": 1,
-      "title": "Páscoa 2025",
-      "shuffle": false,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/pascoa",
-      "limit": 12,
-      "collection_id": "6466d975a0e875411e9439d8:categories:Páscoa 2025:/pascoa",
-      "sort": "sales"
-    },
-    {
-      "type": "collection-shelf",
-      "shuffle": true,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "67ba270d53d3dd5b9c770d34:categories:Caixas para biscoitos - Tema Páscoa:/embalagem-para-biscoitos-pascoa",
-      "sort": "views",
-      "title": "Caixas para biscoito tema Páscoa",
-      "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos-pascoa"
-    },
-    {
       "autoplay": 2000,
       "page": 1,
       "title": "Fitas de Cetim Mães e Namorados",
