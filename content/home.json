@@ -46,6 +46,17 @@
       "sort": "sales"
     },
     {
+      "autoplay": 2500,
+      "page": 1,
+      "title": "Caixas para Mães e Namorados",
+      "shuffle": false,
+      "type": "collection-shelf",
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-maes-namorados",
+      "limit": 12,
+      "collection_id": "6606c2720fc534303de4c570:categories:Caixa para Doces Tema Mães e Namorados:/caixa-para-doces-maes-namorados",
+      "sort": "news"
+    },
+    {
       "autoplay": 2000,
       "page": 1,
       "title": "Fitas de Cetim Mães e Namorados",
