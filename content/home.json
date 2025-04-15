@@ -35,6 +35,15 @@
       "autoplay": 8000
     },
     {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
+      "sort": "sales",
+      "title": "Lançamentos Mães e Namorados"
+    },
+    {
       "autoplay": 2000,
       "page": 1,
       "title": "Páscoa 2025",
