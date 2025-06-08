@@ -1,14 +1,13 @@
 {
   "sort_categories": [
-    "embalagens-dia-das-maes-dia-dos-namorados",
-    "caixas-em-promocao",
+    "embalagem-para-biscoitos",
     "caixas-embalagens-para-doces-e-brigadeiro",
     "caixas-para-bolos",
     "embalagem-para-transporte-delivery-doces-macarons",
     "caixas-com-berco",
     "embalagens-para-macarons",
-    "embalagem-para-biscoitos",
-    "embalagem-para-brownies"
+    "embalagem-para-brownies",
+    "caixas-em-promocao"
   ],
   "alphabetical_order": true,
   "phone_wpp": true,
