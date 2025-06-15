@@ -29,12 +29,12 @@
       "autoplay": 2500,
       "page": 1,
       "title": "Linha Mães e Namorados",
-      "shuffle": false,
+      "shuffle": true,
       "type": "collection-shelf",
       "link": "https://www.pietroembalagens.com.br/embalagens-dia-das-maes-dia-dos-namorados",
       "limit": 12,
-      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
-      "sort": "sales"
+      "collection_id": "684f22a8578b5f79543fbdd6:categories:Caixas para presente:/caixas-para-presente",
+      "sort": "news"
     },
     {
       "autoplay": 2550,
