@@ -39,13 +39,13 @@
     {
       "autoplay": 2550,
       "page": 1,
-      "title": "Caixas para Mães e Namorados",
-      "shuffle": false,
+      "title": "Caixas com berço",
+      "shuffle": true,
       "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-maes-namorados",
+      "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
       "limit": 12,
-      "collection_id": "6606c2720fc534303de4c570:categories:Caixa para Doces Tema Mães e Namorados:/caixa-para-doces-maes-namorados",
-      "sort": "news"
+      "collection_id": "64d032db2cd6b659590b9090:categories:Caixas P/ Transporte e Delivery:/embalagem-para-transporte-delivery-doces-macarons",
+      "sort": "sales"
     },
     {
       "autoplay": 2000,
