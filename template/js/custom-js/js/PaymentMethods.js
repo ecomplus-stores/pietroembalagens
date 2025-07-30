@@ -109,7 +109,7 @@ import {
       },
   
       minToBuy () {
-        return window.minToBuy || 
+        return window.minToBuy || 0
       },
   
       minToBuyMsg () {
