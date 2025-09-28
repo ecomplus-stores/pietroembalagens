@@ -42,7 +42,8 @@
           "end": "",
           "img": "/img/uploads/panetone.webp",
           "link": "https://www.pietroembalagens.com.br/caixas-para-mini-panetone",
-          "alt": "caixas para panetone"
+          "alt": "caixas para panetone",
+          "mobile_img": "/img/uploads/mobile-_panetone.webp"
         }
       ]
     },
