@@ -8,9 +8,10 @@
       "/caixa-de-acetato?Caixa de Acetato",
       "/embalagem-para-brownies?Caixas P/ Brownie",
       "/embalagens-para-macarons?Caixas P/ Macarons",
-      "/embalagem-para-biscoitos?Caixas P/ biscoitos"
+      "/embalagem-para-biscoitos?Caixas P/ biscoitos",
+      "/caixas-tema-natal?Natal"
     ],
-    "random": 0,
+    "random": 4,
     "full_width": true
   },
   "centralized_logo": false,
