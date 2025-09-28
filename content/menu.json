@@ -1,7 +1,6 @@
 {
   "sort_categories": [
     "caixas-tema-natal",
-    "caixa-para-doces-dia-dos-pais",
     "caixas-para-presente",
     "embalagem-para-biscoitos",
     "caixas-embalagens-para-doces-e-brigadeiro",
@@ -9,8 +8,7 @@
     "embalagem-para-transporte-delivery-doces-macarons",
     "caixas-com-berco",
     "embalagens-para-macarons",
-    "embalagem-para-brownies",
-    "caixas-em-promocao"
+    "embalagem-para-brownies"
   ],
   "alphabetical_order": false,
   "phone_wpp": true,
