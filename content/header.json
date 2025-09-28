@@ -1,6 +1,7 @@
 {
   "categories_list": {
     "featured": [
+      "/caixas-tema-natal?Natal",
       "/caixas-para-presente?Caixas para presente",
       "/caixas-embalagens-para-doces-e-brigadeiro?Caixas P/ Doces",
       "/caixas-com-berco?Caixas com berço",
@@ -8,8 +9,7 @@
       "/caixa-de-acetato?Caixa de Acetato",
       "/embalagem-para-brownies?Caixas P/ Brownie",
       "/embalagens-para-macarons?Caixas P/ Macarons",
-      "/embalagem-para-biscoitos?Caixas P/ biscoitos",
-      "/caixas-tema-natal?Natal"
+      "/embalagem-para-biscoitos?Caixas P/ biscoitos"
     ],
     "random": 4,
     "full_width": true
