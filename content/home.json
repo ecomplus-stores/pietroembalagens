@@ -8,17 +8,17 @@
       "full_width": false,
       "slides": [
         {
-          "start": "2025-06-13T11:28:38.189Z",
-          "end": "",
-          "img": "/img/uploads/full-banner-site-100-doces-.webp",
-          "link": "https://www.pietroembalagens.com.br/100-brigadeiros-ou-doces",
-          "mobile_img": "/img/uploads/mobile-lancamento-100-doces.webp"
-        },
-        {
           "start": "",
           "end": "",
           "img": "/img/uploads/banner-full-frete-gratis-1920-x-500-px-.webp",
           "mobile_img": "/img/uploads/mobile-frete-gratis.webp"
+        },
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/brigaeiros.webp",
+          "link": "https://www.pietroembalagens.com.br/caixa-para-doces-natal",
+          "alt": "Caixas para doces tema natal"
         }
       ]
     },
