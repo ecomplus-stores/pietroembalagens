@@ -68,25 +68,14 @@
       "sort": "news"
     },
     {
-      "autoplay": 2550,
-      "page": 1,
-      "title": "Caixas com berço",
-      "shuffle": true,
-      "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/caixas-com-berco",
-      "limit": 12,
-      "collection_id": "64d032db2cd6b659590b9090:categories:Caixas P/ Transporte e Delivery:/embalagem-para-transporte-delivery-doces-macarons",
-      "sort": "sales"
-    },
-    {
       "autoplay": 2000,
       "page": 1,
-      "title": "Caixas para Doces",
+      "title": "Caixas Natalinas para Doces - Natal 2025",
       "shuffle": true,
       "type": "collection-shelf",
-      "link": "https://www.pietroembalagens.com.br/caixas-embalagens-para-doces-e-brigadeiro",
-      "limit": 24,
-      "collection_id": "645995294bd2e929c1f2d64f:categories:Caixas P/ Doces:/caixas-embalagens-para-doces-e-brigadeiro",
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-natal",
+      "limit": 22,
+      "collection_id": "6466d629a0e875411e943724:categories:Caixa para Doces:/caixa-para-doces-natal",
       "sort": "sales"
     },
     {
@@ -94,19 +83,30 @@
       "shuffle": true,
       "limit": 12,
       "page": 1,
-      "collection_id": "64a0e0b35e60690370509555:categories:Caixas P/ biscoitos:/embalagem-para-biscoitos",
+      "collection_id": "66e772ad9e4b2e07f50c7382:categories:Caixas para biscoitos:/embalagem-para-biscoitos-natal",
       "sort": "sales",
-      "title": "Linha Biscoitos",
-      "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos"
+      "title": "Caixas Natalinas para Biscoitos - Natal 2025",
+      "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos-natal"
+    },
+    {
+      "autoplay": 2550,
+      "page": 1,
+      "title": "Caixas para Panetone - Natal 2025",
+      "shuffle": true,
+      "type": "collection-shelf",
+      "link": "https://www.pietroembalagens.com.br/caixas-para-mini-panetone",
+      "limit": 12,
+      "collection_id": "6466d594a0e875411e9436d3:categories:Caixas para Panetone:/caixas-para-mini-panetone",
+      "sort": "sales"
     },
     {
       "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
       "page": 1,
-      "collection_id": "646d65c7a0e875411e9ace0c:categories:Fitas de Cetim:/fita-de-cetim",
+      "collection_id": "6466d853a0e875411e9438cd:categories:Fitas de Cetim:/fitas-de-cetim-tema-natal",
       "sort": "views",
-      "title": "Fitas de Cetim"
+      "title": "Fitas de Cetim - Natal 2025"
     },
     {
       "type": "page-title",
