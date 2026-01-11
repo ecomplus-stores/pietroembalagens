@@ -62,16 +62,6 @@
     },
     {
       "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "6466d853a0e875411e9438cd:categories:Fitas de Cetim:/fitas-de-cetim-tema-natal",
-      "sort": "sales",
-      "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
-      "title": "Fitas de Cetim"
-    },
-    {
-      "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
       "page": 1,
@@ -79,6 +69,16 @@
       "sort": "sales",
       "title": "Forminhas",
       "link": "https://www.pietroembalagens.com.br/forminhas-para-doces"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "6466d853a0e875411e9438cd:categories:Fitas de Cetim:/fitas-de-cetim-tema-natal",
+      "sort": "sales",
+      "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
+      "title": "Fitas de Cetim"
     },
     {
       "type": "page-title",
