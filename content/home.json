@@ -25,6 +25,51 @@
       "autoplay": 8000
     },
     {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "649aaa135e6069037049dc38:collections:Categoria: Caixas com Berço:/categoria-caixas-com-berco",
+      "sort": "sales",
+      "title": "Caixas com Berço Fixo",
+      "link": "https://www.pietroembalagens.com.br/caixas-com-berco"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": true,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "645995294bd2e929c1f2d64f:categories:Caixas P/ Doces:/caixas-embalagens-para-doces-e-brigadeiro",
+      "sort": "sales",
+      "title": "Caixas para Doces",
+      "link": "https://www.pietroembalagens.com.br/caixas-embalagens-para-doces-e-brigadeiro"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "64a0e0b35e60690370509555:categories:Caixas P/ biscoitos:/embalagem-para-biscoitos",
+      "sort": "sales",
+      "title": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "6466d853a0e875411e9438cd:categories:Fitas de Cetim:/fitas-de-cetim-tema-natal",
+      "sort": "sales",
+      "link": "https://www.pietroembalagens.com.br/fita-de-cetim",
+      "title": "Fitas de Cetim"
+    },
+    {
       "type": "page-title",
       "title": "Pietro Embalagens - Embalagem para brigadeiros, doces e artesanato.",
       "description": "Especializada em Embalagens para brigadeiros, doces finos, lembrancinhas, presentes, aniversários etc. Trabalhamos com acetato, kraft, papel cartão, fitas e forminhas."
