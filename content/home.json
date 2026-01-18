@@ -29,26 +29,20 @@
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "649aaa135e6069037049dc38:collections:Categoria: Caixas com Berço:/categoria-caixas-com-berco",
-      "sort": "sales",
-      "title": "Caixas com Berço Fixo",
-      "link": "https://www.pietroembalagens.com.br/caixas-com-berco"
+      "collection_id": "658ec0f02cd6b65959ed5035:categories:Caixa para Ovo de Colher:/ovo-de-colher",
+      "sort": "news",
+      "title": "Caixas para Ovo de Colher",
+      "link": "https://www.pietroembalagens.com.br/ovo-de-colher"
     },
     {
       "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
       "page": 1,
-      "collection_id": "645995294bd2e929c1f2d64f:categories:Caixas P/ Doces:/caixas-embalagens-para-doces-e-brigadeiro",
+      "collection_id": "67ba270d53d3dd5b9c770d34:categories:Caixas para biscoitos - Páscoa:/embalagem-para-biscoitos-pascoa",
       "sort": "sales",
-      "title": "Caixas para Doces",
-      "link": "https://www.pietroembalagens.com.br/caixas-embalagens-para-doces-e-brigadeiro"
-    },
-    {
-      "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
-      "page": 1
+      "title": "Caixas Natalinas para Biscoitos",
+      "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos-pascoa"
     },
     {
       "type": "collection-shelf",
