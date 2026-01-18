@@ -41,8 +41,18 @@
       "page": 1,
       "collection_id": "67ba270d53d3dd5b9c770d34:categories:Caixas para biscoitos - Páscoa:/embalagem-para-biscoitos-pascoa",
       "sort": "sales",
-      "title": "Caixas Natalinas para Biscoitos",
+      "title": "Caixas para Biscoitos - Páscoa",
       "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos-pascoa"
+    },
+    {
+      "type": "collection-shelf",
+      "shuffle": false,
+      "limit": 12,
+      "page": 1,
+      "collection_id": "65b0e3e22cd6b65959107a1a:categories:Caixa para Doces - Páscoa:/caixa-para-doces-pascoa",
+      "sort": "sales",
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-pascoa",
+      "title": "Caixas tema Páscoa para Doces"
     },
     {
       "type": "collection-shelf",
