@@ -97,6 +97,18 @@ Mudança no ar em ~5 minutos
 
 ---
 
+### 29/03/2026 — Checkout: botão de valor mínimo estilizado
+
+**O que foi feito:** O aviso de valor mínimo para finalizar compra ("Necessário inserir R$ X,XX para finalizar compra") foi transformado de texto simples em um botão estilizado no padrão Pietro Embalagens.
+
+**Arquivo alterado:** `template/js/custom-js/html/PaymentMethods.html`
+
+**Estilo aplicado:** Botão arredondado (border-radius: 50px), laranja `#FD8043`, texto branco, fonte Quicksand bold, ícone de carrinho (Font Awesome), centralizado, desabilitado (não clicável).
+
+**Commit:** `feat(checkout): transforma aviso de valor mínimo em botão estilizado Pietro`
+
+---
+
 ## 📌 Próximos Passos Sugeridos
 
 - [ ] Textos descritivos nos produtos mais vendidos
