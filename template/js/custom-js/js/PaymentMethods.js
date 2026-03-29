@@ -43,7 +43,7 @@ import {
       },
       cartItems: Array,
       customer: Object,
-      minToBuy: 50,
+      minToBuy: 20,
       paymentGateways: {
         type: Array,
         default () {
@@ -109,7 +109,7 @@ import {
       },
   
       minToBuy () {
-        return window.minToBuy || 50
+        return window.minToBuy || 20
       },
   
       minToBuyMsg () {
