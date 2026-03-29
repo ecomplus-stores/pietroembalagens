@@ -109,6 +109,13 @@ Mudança no ar em ~5 minutos
 
 ---
 
+Como editar valor minimo pedido:
+Vá no campo de pesquisa dentro de código e digite paymentmethod.js
+altere as linhas 46 e 112
+
+---
+
+
 ## 📌 Próximos Passos Sugeridos
 
 - [ ] Textos descritivos nos produtos mais vendidos
