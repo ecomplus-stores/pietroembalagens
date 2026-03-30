@@ -386,6 +386,142 @@ span.product-card__offer-stamp {
     background: red !important;
 }
 
+/* === SEÇÃO: Menu de navegação - formatação estilo Tia Sônia === */
+
+/* Ocultar hamburger no desktop */
+@media (min-width: 992px) {
+  .header__toggler {
+    display: none !important;
+  }
+}
+
+/* Linha laranja na base do nav */
+.header__nav {
+  border-bottom: 3px solid var(--primary);
+  padding-bottom: 0;
+}
+
+/* Links nível 1 */
+.header__nav .header__category {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  text-transform: none !important;
+  color: #333 !important;
+  padding: 10px 14px !important;
+  display: inline-block;
+  position: relative;
+  text-decoration: none !important;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.header__nav .header__category:hover {
+  color: var(--primary) !important;
+  border-bottom-color: var(--primary) !important;
+}
+
+/* Dropdown submenu */
+.header__submenu {
+  background: #fff !important;
+  border: 1px solid #f0f0f0 !important;
+  border-top: 3px solid var(--primary) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+  border-radius: 0 0 6px 6px !important;
+  padding: 10px 0 !important;
+  min-width: 200px;
+}
+
+.header__submenu a {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  padding: 7px 20px !important;
+  display: block;
+  text-decoration: none !important;
+  transition: color 0.15s, background 0.15s;
+}
+
+.header__submenu a:hover {
+  color: var(--primary) !important;
+  background: #fff7f3 !important;
+}
+
+.header__submenu .header__submenu-subcategory {
+  font-size: 13px !important;
+  color: #666 !important;
+  padding-left: 30px !important;
+}
+
+.header__submenu .header__submenu-subcategory:hover {
+  color: var(--primary) !important;
+  background: #fff7f3 !important;
+}
+
+/* === SEÇÃO: Instant Search - termos mais buscados estilo Jango === */
+
+/* Painel compacto e centralizado */
+@media (min-width: 991px) {
+  #header #instant-search .search__box.card {
+    width: 240px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    border-radius: 6px !important;
+  }
+}
+
+/* Título */
+#header .search__popular .card-title,
+#header .search__popular > p {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #333 !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  margin-bottom: 6px !important;
+}
+
+/* Lista de termos */
+#header .search__popular ol {
+  counter-reset: search-terms;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#header .search__popular ol li {
+  counter-increment: search-terms;
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 14px !important;
+}
+
+#header .search__popular ol li::before {
+  content: counter(search-terms);
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #333;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#header .search__popular ol li a {
+  font-size: 12px !important;
+  color: #444 !important;
+  text-decoration: none !important;
+}
+
+#header .search__popular ol li:hover {
+  background: #fafafa;
+}
+
 /* === FIX: Instant Search - fechar com ESC / clique fora / mobile === */
 
 /* 1. Reativar o backdrop (overlay escuro clicável) — não forçar display, Vue controla */
