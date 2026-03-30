@@ -21,7 +21,9 @@ if (screenWidth >= 992) {
         $('body .search-engine__aside').toggleClass('active')
     })
 
-    
-    
+    $('body').on('click', '#custom-backdrop', function(){
+        $('body .search-engine__aside').removeClass('active')
+    })
+
     $('#search-engine-snap > article > .row > div').removeClass('col-lg-3');
 }
