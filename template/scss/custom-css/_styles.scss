@@ -410,6 +410,7 @@ body #header .header__nav .d-inline-block > a.header__category {
   letter-spacing: 0 !important;
   color: #333 !important;
   padding: 10px 14px !important;
+  white-space: nowrap !important;
   display: inline-block;
   position: relative;
   text-decoration: none !important;
@@ -425,55 +426,85 @@ body #header .header__nav .d-inline-block:hover > a.header__category {
   background: transparent !important;
 }
 
-/* Dropdown submenu */
+/* Dropdown submenu — forçar coluna única */
 body #header .header__nav .header__submenu {
+  display: block !important;
   background: #fff !important;
   border: 1px solid #f0f0f0 !important;
   border-top: 3px solid var(--primary) !important;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
   border-radius: 0 0 6px 6px !important;
   padding: 10px 0 !important;
-  min-width: 200px;
+  min-width: 220px !important;
+  max-width: 260px !important;
 }
 
-body #header .header__nav .header__submenu a,
-body #header .header__nav .header__submenu div > a {
-  font-weight: 400 !important;
+/* Cada grupo (div) dentro do submenu: coluna, sem float */
+body #header .header__nav .header__submenu > div {
+  display: block !important;
+  width: 100% !important;
+  position: relative;
+}
+
+/* Link nível 2 */
+body #header .header__nav .header__submenu > div > a:first-child {
+  font-weight: 600 !important;
   font-size: 14px !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
   color: #333 !important;
   padding: 7px 20px !important;
-  display: block;
+  display: block !important;
   text-decoration: none !important;
+  white-space: nowrap;
   transition: color 0.15s, background 0.15s;
 }
 
-body #header .header__nav .header__submenu a:hover,
-body #header .header__nav .header__submenu div > a:hover {
+body #header .header__nav .header__submenu > div > a:first-child:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
 
-body #header .header__nav .header__submenu .header__submenu-subcategory {
+/* Links nível 3 (subcategorias) — flyout lateral ao hover no div pai */
+body #header .header__nav .header__submenu > div .header__submenu-subcategory {
+  display: none !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 100% !important;
+  background: #fff !important;
+  border: 1px solid #f0f0f0 !important;
+  border-top: 3px solid var(--primary) !important;
+  box-shadow: 4px 6px 20px rgba(0,0,0,0.1) !important;
+  border-radius: 0 0 6px 6px !important;
+  min-width: 200px !important;
   font-size: 13px !important;
-  color: #666 !important;
-  padding-left: 30px !important;
+  color: #555 !important;
+  padding: 5px 0 !important;
+  white-space: nowrap;
+  text-decoration: none !important;
+  transition: color 0.15s, background 0.15s;
+  z-index: 10;
 }
 
-body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
+body #header .header__nav .header__submenu > div:hover .header__submenu-subcategory {
+  display: block !important;
+}
+
+body #header .header__nav .header__submenu > div .header__submenu-subcategory:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
 
 /* === SEÇÃO: Instant Search - termos mais buscados estilo Jango === */
 
-/* Painel compacto e centralizado */
+/* Painel compacto e centralizado abaixo do input */
 @media (min-width: 991px) {
   #header #instant-search .search__box.card {
-    width: 240px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
+    width: 300px !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+    transform: none !important;
     border-radius: 6px !important;
   }
 }
