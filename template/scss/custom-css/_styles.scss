@@ -401,9 +401,8 @@ body #header .header__nav {
   padding-bottom: 0;
 }
 
-/* Links nível 1 — vencer o tema bootswatch minty */
-body #header .header__nav .header__category,
-body #header .header__nav .d-inline-block > a.header__category {
+/* Links nível 1 */
+body #header .header__nav .header__category {
   font-weight: 400 !important;
   font-size: 14px !important;
   text-transform: none !important;
@@ -411,24 +410,23 @@ body #header .header__nav .d-inline-block > a.header__category {
   color: #333 !important;
   padding: 10px 14px !important;
   white-space: nowrap !important;
-  display: inline-block;
-  position: relative;
+  display: inline-block !important;
   text-decoration: none !important;
   border-bottom: 3px solid transparent !important;
   margin-bottom: -3px;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-body #header .header__nav .header__category:hover,
-body #header .header__nav .d-inline-block:hover > a.header__category {
+body #header .header__nav .header__category:hover {
   color: var(--primary) !important;
   border-bottom-color: var(--primary) !important;
   background: transparent !important;
 }
 
-/* Dropdown submenu — forçar coluna única */
+/* Submenu — NÃO setar display (o JS do EcomPlus controla show/hide via inline style)
+   Apenas estilizar e forçar layout em coluna única */
 body #header .header__nav .header__submenu {
-  display: block !important;
+  flex-direction: column !important;
   background: #fff !important;
   border: 1px solid #f0f0f0 !important;
   border-top: 3px solid var(--primary) !important;
@@ -436,18 +434,18 @@ body #header .header__nav .header__submenu {
   border-radius: 0 0 6px 6px !important;
   padding: 10px 0 !important;
   min-width: 220px !important;
-  max-width: 260px !important;
+  max-width: 280px !important;
 }
 
-/* Cada grupo (div) dentro do submenu: coluna, sem float */
+/* Cada grupo dentro do submenu: forçar bloco único, sem float/grid */
 body #header .header__nav .header__submenu > div {
   display: block !important;
+  float: none !important;
   width: 100% !important;
-  position: relative;
 }
 
 /* Link nível 2 */
-body #header .header__nav .header__submenu > div > a:first-child {
+body #header .header__nav .header__submenu > div > a {
   font-weight: 600 !important;
   font-size: 14px !important;
   text-transform: none !important;
@@ -455,55 +453,44 @@ body #header .header__nav .header__submenu > div > a:first-child {
   color: #333 !important;
   padding: 7px 20px !important;
   display: block !important;
+  float: none !important;
   text-decoration: none !important;
-  white-space: nowrap;
+  white-space: nowrap !important;
   transition: color 0.15s, background 0.15s;
 }
 
-body #header .header__nav .header__submenu > div > a:first-child:hover {
+body #header .header__nav .header__submenu > div > a:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
 
-/* Links nível 3 (subcategorias) — flyout lateral ao hover no div pai */
-body #header .header__nav .header__submenu > div .header__submenu-subcategory {
-  display: none !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 100% !important;
-  background: #fff !important;
-  border: 1px solid #f0f0f0 !important;
-  border-top: 3px solid var(--primary) !important;
-  box-shadow: 4px 6px 20px rgba(0,0,0,0.1) !important;
-  border-radius: 0 0 6px 6px !important;
-  min-width: 200px !important;
+/* Link nível 3 (subcategoria) — indentado abaixo do pai */
+body #header .header__nav .header__submenu .header__submenu-subcategory {
   font-size: 13px !important;
-  color: #555 !important;
-  padding: 5px 0 !important;
-  white-space: nowrap;
-  text-decoration: none !important;
-  transition: color 0.15s, background 0.15s;
-  z-index: 10;
-}
-
-body #header .header__nav .header__submenu > div:hover .header__submenu-subcategory {
+  font-weight: 400 !important;
+  color: #777 !important;
+  padding: 5px 20px 5px 34px !important;
   display: block !important;
+  float: none !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  transition: color 0.15s, background 0.15s;
 }
 
-body #header .header__nav .header__submenu > div .header__submenu-subcategory:hover {
+body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
 
 /* === SEÇÃO: Instant Search - termos mais buscados estilo Jango === */
 
-/* Painel compacto e centralizado abaixo do input */
+/* Painel compacto abaixo do input, alinhado à esquerda do campo */
 @media (min-width: 991px) {
   #header #instant-search .search__box.card {
     width: 300px !important;
     left: 0 !important;
-    right: 0 !important;
-    margin: 0 auto !important;
+    right: auto !important;
     transform: none !important;
     border-radius: 6px !important;
   }
