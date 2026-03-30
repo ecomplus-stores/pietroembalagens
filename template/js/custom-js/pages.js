@@ -27,3 +27,13 @@ if (screenWidth >= 992) {
 
     $('#search-engine-snap > article > .row > div').removeClass('col-lg-3');
 }
+
+// Fechar busca instantânea com ESC
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' || e.keyCode === 27) {
+    var backdrop = document.querySelector('#instant-search .backdrop')
+    if (backdrop) backdrop.click()
+    var searchInput = document.getElementById('search-input')
+    if (searchInput) searchInput.blur()
+  }
+})
