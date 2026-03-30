@@ -24,6 +24,8 @@
   "popup": "",
   "search_input": true,
   "desktop_megamenu": true,
+  "menu_all_departments": true,
+  "name_all_departments": "Ver todas",
   "full_width_submenu": false,
   "contacts_stripe": {
     "pages": [],

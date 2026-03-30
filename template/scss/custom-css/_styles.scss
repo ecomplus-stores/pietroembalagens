@@ -399,17 +399,17 @@ span.product-card__offer-stamp {
 body #header .header__nav {
   border-bottom: 3px solid var(--primary);
   padding-bottom: 0;
+  flex-wrap: wrap !important;
 }
 
-/* Links nível 1 */
+/* Links nível 1 — sobrescrever admin CSS que tem !important em uppercase/font-size */
 body #header .header__nav .header__category {
   font-weight: 400 !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
   color: #333 !important;
-  padding: 10px 14px !important;
-  white-space: nowrap !important;
+  padding: 10px 8px !important;
   display: inline-block !important;
   text-decoration: none !important;
   border-bottom: 3px solid transparent !important;
@@ -423,10 +423,16 @@ body #header .header__nav .header__category:hover {
   background: transparent !important;
 }
 
-/* Submenu — NÃO setar display (o JS do EcomPlus controla show/hide via inline style)
-   Apenas estilizar e forçar layout em coluna única */
+/* Submenu — NÃO setar display (JS EcomPlus controla show/hide)
+   Forçar coluna única quebrando column-count e flex-wrap do tema */
 body #header .header__nav .header__submenu {
+  /* Zera multi-coluna CSS (caso o tema use columns) */
+  column-count: 1 !important;
+  columns: 1 !important;
+  /* Zera flex-wrap caso o tema use flex */
   flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  /* Visual */
   background: #fff !important;
   border: 1px solid #f0f0f0 !important;
   border-top: 3px solid var(--primary) !important;
@@ -434,18 +440,26 @@ body #header .header__nav .header__submenu {
   border-radius: 0 0 6px 6px !important;
   padding: 10px 0 !important;
   min-width: 220px !important;
-  max-width: 280px !important;
+  max-width: 300px !important;
+  /* Posicionamento */
+  position: absolute !important;
+  z-index: 500 !important;
 }
 
-/* Cada grupo dentro do submenu: forçar bloco único, sem float/grid */
-body #header .header__nav .header__submenu > div {
+/* Cada grupo filho: forçar bloco único, sem float nem coluna */
+body #header .header__nav .header__submenu > div,
+body #header .header__nav .header__submenu > ul,
+body #header .header__nav .header__submenu > li {
   display: block !important;
   float: none !important;
   width: 100% !important;
+  column-span: none !important;
+  break-inside: avoid;
 }
 
 /* Link nível 2 */
-body #header .header__nav .header__submenu > div > a {
+body #header .header__nav .header__submenu > div > a,
+body #header .header__nav .header__submenu > ul > li > a {
   font-weight: 600 !important;
   font-size: 14px !important;
   text-transform: none !important;
@@ -459,7 +473,8 @@ body #header .header__nav .header__submenu > div > a {
   transition: color 0.15s, background 0.15s;
 }
 
-body #header .header__nav .header__submenu > div > a:hover {
+body #header .header__nav .header__submenu > div > a:hover,
+body #header .header__nav .header__submenu > ul > li > a:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
@@ -469,7 +484,7 @@ body #header .header__nav .header__submenu .header__submenu-subcategory {
   font-size: 13px !important;
   font-weight: 400 !important;
   color: #777 !important;
-  padding: 5px 20px 5px 34px !important;
+  padding: 5px 20px 5px 32px !important;
   display: block !important;
   float: none !important;
   text-decoration: none !important;
@@ -485,14 +500,12 @@ body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
 
 /* === SEÇÃO: Instant Search - termos mais buscados estilo Jango === */
 
-/* Painel compacto abaixo do input, alinhado à esquerda do campo */
+/* Painel compacto abaixo do input */
 @media (min-width: 991px) {
   #header #instant-search .search__box.card {
-    width: 300px !important;
-    left: 0 !important;
-    right: auto !important;
-    transform: none !important;
+    width: 320px !important;
     border-radius: 6px !important;
+    /* NÃO alterar left/right/transform — deixar o storefront posicionar */
   }
 }
 
