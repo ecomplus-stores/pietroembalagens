@@ -388,14 +388,9 @@ span.product-card__offer-stamp {
 
 /* === FIX: Instant Search - fechar com ESC / clique fora / mobile === */
 
-/* 1. Reativar o backdrop (overlay escuro clicável) */
+/* 1. Reativar o backdrop (overlay escuro clicável) — não forçar display, Vue controla */
 #header #instant-search > .backdrop {
-  display: block !important;
-  position: fixed !important;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
   background: rgba(0,0,0,0.4);
-  z-index: 1079;
 }
 
 /* 2. Search box acima do backdrop */
