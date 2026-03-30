@@ -390,39 +390,43 @@ span.product-card__offer-stamp {
 
 /* Ocultar hamburger no desktop */
 @media (min-width: 992px) {
-  .header__toggler {
+  body .header__toggler.d-lg-none {
     display: none !important;
   }
 }
 
 /* Linha laranja na base do nav */
-.header__nav {
+body #header .header__nav {
   border-bottom: 3px solid var(--primary);
   padding-bottom: 0;
 }
 
-/* Links nível 1 */
-.header__nav .header__category {
+/* Links nível 1 — vencer o tema bootswatch minty */
+body #header .header__nav .header__category,
+body #header .header__nav .d-inline-block > a.header__category {
   font-weight: 400 !important;
   font-size: 14px !important;
   text-transform: none !important;
+  letter-spacing: 0 !important;
   color: #333 !important;
   padding: 10px 14px !important;
   display: inline-block;
   position: relative;
   text-decoration: none !important;
-  border-bottom: 3px solid transparent;
+  border-bottom: 3px solid transparent !important;
   margin-bottom: -3px;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.header__nav .header__category:hover {
+body #header .header__nav .header__category:hover,
+body #header .header__nav .d-inline-block:hover > a.header__category {
   color: var(--primary) !important;
   border-bottom-color: var(--primary) !important;
+  background: transparent !important;
 }
 
 /* Dropdown submenu */
-.header__submenu {
+body #header .header__nav .header__submenu {
   background: #fff !important;
   border: 1px solid #f0f0f0 !important;
   border-top: 3px solid var(--primary) !important;
@@ -432,9 +436,12 @@ span.product-card__offer-stamp {
   min-width: 200px;
 }
 
-.header__submenu a {
+body #header .header__nav .header__submenu a,
+body #header .header__nav .header__submenu div > a {
   font-weight: 400 !important;
   font-size: 14px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
   color: #333 !important;
   padding: 7px 20px !important;
   display: block;
@@ -442,18 +449,19 @@ span.product-card__offer-stamp {
   transition: color 0.15s, background 0.15s;
 }
 
-.header__submenu a:hover {
+body #header .header__nav .header__submenu a:hover,
+body #header .header__nav .header__submenu div > a:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
 
-.header__submenu .header__submenu-subcategory {
+body #header .header__nav .header__submenu .header__submenu-subcategory {
   font-size: 13px !important;
   color: #666 !important;
   padding-left: 30px !important;
 }
 
-.header__submenu .header__submenu-subcategory:hover {
+body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
