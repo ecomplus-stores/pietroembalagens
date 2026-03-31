@@ -439,6 +439,33 @@ body #header .header__nav .header__submenu {
   z-index: 500 !important;
 }
 
+/* Submenu "Ver todas" (--full): mega menu com 3 colunas limpas */
+body #header .header__nav .header__submenu.header__submenu--full {
+  grid-template-columns: repeat(3, 1fr) !important;
+  min-width: unset !important;
+  max-width: 900px !important;
+  width: auto !important;
+  left: 0 !important;
+  transform: none !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  padding: 16px !important;
+  gap: 4px 20px !important;
+}
+
+/* Links do mega menu "Ver todas" */
+body #header .header__nav .header__submenu.header__submenu--full > div > a {
+  font-size: 13px !important;
+  padding: 6px 10px !important;
+  white-space: normal !important;
+}
+
+body #header .header__nav .header__submenu.header__submenu--full .header__submenu-subcategory {
+  font-size: 12px !important;
+  padding: 4px 10px 4px 20px !important;
+  white-space: normal !important;
+}
+
 /* Link nível 2 */
 body #header .header__nav .header__submenu > div > a {
   font-weight: 600 !important;
