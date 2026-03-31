@@ -446,20 +446,18 @@ body #header .header__nav .header__submenu {
   z-index: 500 !important;
 }
 
-/* Cada grupo filho: forçar bloco único, sem float nem coluna */
-body #header .header__nav .header__submenu > div,
-body #header .header__nav .header__submenu > ul,
-body #header .header__nav .header__submenu > li {
+/* Cada grupo filho: flex: 0 0 100% força linha própria em qualquer contexto flex */
+body #header .header__nav .header__submenu > div {
   display: block !important;
   float: none !important;
   width: 100% !important;
-  column-span: none !important;
-  break-inside: avoid;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+  box-sizing: border-box;
 }
 
 /* Link nível 2 */
-body #header .header__nav .header__submenu > div > a,
-body #header .header__nav .header__submenu > ul > li > a {
+body #header .header__nav .header__submenu > div > a {
   font-weight: 600 !important;
   font-size: 14px !important;
   text-transform: none !important;
@@ -473,8 +471,7 @@ body #header .header__nav .header__submenu > ul > li > a {
   transition: color 0.15s, background 0.15s;
 }
 
-body #header .header__nav .header__submenu > div > a:hover,
-body #header .header__nav .header__submenu > ul > li > a:hover {
+body #header .header__nav .header__submenu > div > a:hover {
   color: var(--primary) !important;
   background: #fff7f3 !important;
 }
@@ -490,6 +487,7 @@ body #header .header__nav .header__submenu .header__submenu-subcategory {
   text-decoration: none !important;
   text-transform: none !important;
   white-space: nowrap !important;
+  flex: 0 0 100% !important;
   transition: color 0.15s, background 0.15s;
 }
 
