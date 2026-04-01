@@ -7,13 +7,12 @@
       "/caixas-com-berco?Caixas com berço",
       "/embalagem-para-transporte-delivery-doces-macarons?Caixas P/ Transporte e Delivery",
       "/caixa-de-acetato?Caixa de Acetato",
-      "/embalagem-para-brownies?Caixas P/ Brownie",
-      "/embalagens-para-macarons?Caixas P/ Macarons",
       "/embalagem-para-biscoitos?Caixas P/ biscoitos"
     ],
     "random": 0,
     "full_width": true
   },
+  "menu_all_departments": true,
   "centralized_logo": false,
   "marketing_stripe": {
     "text": "5% OFF Na Primeira Compra! CUPOM: BEMVINDO5",
@@ -22,10 +21,9 @@
   },
   "alphabetical_order_submenu": true,
   "popup": "",
+  "name_all_departments": "Ver todas",
   "search_input": true,
   "desktop_megamenu": true,
-  "menu_all_departments": true,
-  "name_all_departments": "Ver todas",
   "full_width_submenu": false,
   "contacts_stripe": {
     "pages": [],
