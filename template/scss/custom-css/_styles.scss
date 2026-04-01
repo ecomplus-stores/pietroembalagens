@@ -627,11 +627,11 @@ body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
     left: 0 !important;
     margin: 0 !important;
     max-height: min(32rem, 70vh) !important;
-    max-width: min(420px, calc(100vw - 2rem)) !important;
+    max-width: min(720px, calc(100vw - 2rem)) !important;
     position: absolute !important;
     right: auto !important;
     top: 0 !important;
-    width: 320px !important;
+    width: min(720px, calc(100vw - 2rem)) !important;
   }
 
   body[id^='page-'] #header #instant-search .search__body {
@@ -647,7 +647,6 @@ body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
   }
 
   body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full {
-    display: block !important;
     grid-template-columns: none !important;
     left: 0 !important;
     margin-top: 0.75rem !important;
