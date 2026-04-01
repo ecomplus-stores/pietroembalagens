@@ -606,73 +606,77 @@ body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
   }
 }
 
-/* === FIX: desktop header search and categories submenu layout === */
+/* === FIX: beat panel CSS on desktop search and "Ver todas" menu === */
 @media (min-width: 992px) {
-  .header__search {
-    overflow: visible;
+  body[id^='page-'] #header .header__search {
+    overflow: visible !important;
   }
 
-  #instant-search {
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: calc(100% + 0.5rem);
-    z-index: 1090;
+  body[id^='page-'] #header #instant-search {
+    left: 0 !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: calc(100% + 0.5rem) !important;
+    z-index: 1090 !important;
   }
 
-  #instant-search .search__box,
-  #instant-search .search__box.card {
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--box-shadow);
-    left: 0;
-    margin: 0;
-    max-height: min(32rem, 70vh);
-    position: absolute;
-    top: 0;
-    width: 100%;
+  body[id^='page-'] #header #instant-search .search__box,
+  body[id^='page-'] #header #instant-search .search__box.card {
+    border-radius: var(--border-radius-lg) !important;
+    box-shadow: var(--box-shadow) !important;
+    left: 0 !important;
+    margin: 0 !important;
+    max-height: min(32rem, 70vh) !important;
+    max-width: min(420px, calc(100vw - 2rem)) !important;
+    position: absolute !important;
+    right: auto !important;
+    top: 0 !important;
+    width: 320px !important;
   }
 
-  #instant-search .search__body {
-    max-height: calc(min(32rem, 70vh) - 5.5rem);
+  body[id^='page-'] #header #instant-search .search__body {
+    max-height: calc(min(32rem, 70vh) - 5.5rem) !important;
   }
 
-  .header__nav-block {
-    position: relative;
+  body[id^='page-'] #header .header__nav-block {
+    position: relative !important;
   }
 
-  .header__nav > .d-inline-block {
-    position: static;
+  body[id^='page-'] #header .header__nav > .d-inline-block {
+    position: static !important;
   }
 
-  .header__submenu {
-    align-items: start;
-    column-gap: var(--spacer-4);
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    left: 0;
-    margin-top: 0.75rem;
-    max-height: min(34rem, 75vh);
-    max-width: min(1100px, 100%);
-    min-width: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: var(--spacer-4);
-    right: auto;
-    row-gap: var(--spacer-3);
-    width: 100%;
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full {
+    display: block !important;
+    grid-template-columns: none !important;
+    left: 0 !important;
+    margin-top: 0.75rem !important;
+    max-height: 75vh !important;
+    max-width: min(1100px, calc(100vw - 2rem)) !important;
+    min-width: min(760px, calc(100vw - 2rem)) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+    transform: none !important;
+    width: min(1100px, calc(100vw - 2rem)) !important;
   }
 
-  .header__submenu > div {
-    min-width: 0;
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
-  .header__submenu a {
-    display: block;
-    overflow-wrap: anywhere;
-    text-align: left;
-    white-space: normal;
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div {
+    min-width: 0 !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
-  .header__submenu-subcategory {
-    margin-top: 0.35rem;
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div > a,
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full .header__submenu-subcategory {
+    display: block !important;
+    overflow-wrap: anywhere !important;
+    text-align: left !important;
+    white-space: normal !important;
   }
 }
