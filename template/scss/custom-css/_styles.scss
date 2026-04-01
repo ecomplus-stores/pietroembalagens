@@ -671,6 +671,22 @@ body #header .header__nav .header__submenu .header__submenu-subcategory:hover {
     padding-right: 10px !important;
   }
 
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div .header__links {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div [id^='header__submenu-'] {
+    display: none !important;
+    margin-top: 0.35rem !important;
+  }
+
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div:hover [id^='header__submenu-'],
+  body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div:focus-within [id^='header__submenu-'] {
+    display: block !important;
+  }
+
   body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full > .row > div > a,
   body[id^='page-'] #header .header__nav #s-all.header__submenu.header__submenu--full .header__submenu-subcategory {
     display: block !important;
