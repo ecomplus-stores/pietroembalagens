@@ -39,30 +39,30 @@
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "658ec0f02cd6b65959ed5035:categories:Caixa para Ovo de Colher:/ovo-de-colher",
-      "sort": "news",
-      "title": "Caixas para Ovo de Colher",
-      "link": "https://www.pietroembalagens.com.br/ovo-de-colher"
+      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
+      "sort": "sales",
+      "title": "Dias das Mães e Namorados",
+      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-maes-namorados"
     },
     {
       "type": "collection-shelf",
       "shuffle": true,
       "limit": 12,
       "page": 1,
-      "collection_id": "67ba270d53d3dd5b9c770d34:categories:Caixas para biscoitos - Páscoa:/embalagem-para-biscoitos-pascoa",
+      "collection_id": "6606bf070fc534303de4c2cf:categories:Formas para Mães Namorados BWB:/formas-para-chocolate-maes-namorados",
       "sort": "sales",
-      "title": "Caixas para Biscoitos - Páscoa",
-      "link": "https://www.pietroembalagens.com.br/embalagem-para-biscoitos-pascoa"
+      "title": "Formas para mães e namorados",
+      "link": "https://www.pietroembalagens.com.br/formas-para-chocolate-maes-namorados"
     },
     {
       "type": "collection-shelf",
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "65b0e3e22cd6b65959107a1a:categories:Caixa para Doces - Páscoa:/caixa-para-doces-pascoa",
+      "collection_id": "6606b7200fc534303de4baba:categories:Fitas de Cetim - Mães e Namorados:/fitas-de-cetim-tema-maes-namorados",
       "sort": "sales",
-      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-pascoa",
-      "title": "Caixas tema Páscoa para Doces"
+      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-maes-namorados",
+      "title": "Fitas de cetim mães e namorados"
     },
     {
       "type": "collection-shelf",
