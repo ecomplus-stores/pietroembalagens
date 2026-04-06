@@ -16,15 +16,15 @@ const barCols = []
 
 <% if (barCols.length) { %>
   <section class="info-bar">
-    <div class="container">
-      <div class="info-bar__nav row">
+    <div class="info-bar__inner">
+      <div class="info-bar__nav row no-gutters">
         <% barCols.forEach(({ link, icon, title, text }) => { %>
-          <div class="col-auto col-sm-6 col-lg">
+          <div class="col-12 col-md-6 col-lg">
             <a class="info-bar__item" href="<%= link || 'javascript:;' %>">
               <span class="rounded-icon">
                 <i class="i-<%= icon %>"></i>
               </span>
-              <div class="ml-2 ml-md-3">
+              <div class="info-bar__content">
                 <% if(title) { %>
                   <div class="info-bar__title">
                     <%= title %>
