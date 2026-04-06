@@ -17,9 +17,9 @@ const barCols = []
 <% if (barCols.length) { %>
   <section class="info-bar">
     <div class="info-bar__inner">
-      <div class="info-bar__nav row no-gutters">
+      <div class="info-bar__nav">
         <% barCols.forEach(({ link, icon, title, text }) => { %>
-          <div class="col-12 col-md-6 col-lg">
+          <div class="info-bar__col">
             <a class="info-bar__item" href="<%= link || 'javascript:;' %>">
               <span class="rounded-icon">
                 <i class="i-<%= icon %>"></i>
