@@ -192,6 +192,88 @@ export default {
     
     },
 
+    getListContext (element) {
+      const cardEl = element && element.closest('.product-card')
+      const wrappers = [
+        '.search-engine__retail .row',
+        '.search-engine__retail',
+        '.products-carousel .swiper-wrapper',
+        '.products-carousel',
+        '.shelfs .row',
+        '.shelfs',
+        '.row'
+      ]
+      let listEl = null
+      for (let i = 0; i < wrappers.length; i++) {
+        listEl = cardEl && cardEl.closest(wrappers[i])
+        if (listEl) {
+          break
+        }
+      }
+
+      let listName = ''
+      if (listEl) {
+        if (listEl.closest('.search-engine__retail')) {
+          listName = 'Resultados da busca'
+        } else {
+          const sectionEl = listEl.closest('section, article, .products-carousel, .shelfs, .container')
+          if (sectionEl) {
+            const headingEl = sectionEl.querySelector('h1, h2, h3, .section-title, .products-carousel__title')
+            if (headingEl && headingEl.textContent) {
+              listName = headingEl.textContent.trim()
+            }
+          }
+        }
+      }
+
+      let position = 1
+      if (listEl && cardEl) {
+        const cards = Array.from(listEl.querySelectorAll('.product-card'))
+        const index = cards.indexOf(cardEl)
+        if (index > -1) {
+          position = index + 1
+        }
+      }
+
+      return {
+        listName,
+        position
+      }
+    },
+
+    trackSelectItem (event) {
+      if (typeof window !== 'object') {
+        return
+      }
+
+      const { listName, position } = this.getListContext(event && event.currentTarget)
+      const item = {
+        id: this.body.sku || this.body._id,
+        name: this.name,
+        position
+      }
+      const price = getPrice(this.body)
+      if (price) {
+        item.price = price
+      }
+      if (listName) {
+        item.list = listName
+      }
+
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: 'eec.click',
+        ecommerce: {
+          click: {
+            actionField: listName
+              ? { list: listName }
+              : {},
+            products: [item]
+          }
+        }
+      })
+    },
+
     buy () {
       const product = this.body
       this.$emit('buy', { product })
