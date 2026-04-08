@@ -1,5 +1,7 @@
 {
   "title": "Rastreie seu pedido",
+  "meta_title": "Rastreie seu pedido | Acompanhe a entrega online",
+  "meta_description": "Acompanhe o status de envio do seu pedido na Pietro Embalagens com a página de rastreamento online.",
   "body": "<!--StartFragment-->\n\n*<div id=\"rastreioDiv\"></div>*\\\n*<script type=\"text/javascript\" id=\"rastreioScript\" data-user=\"L2wcPXKY\" src=\"https://empreender.nyc3.cdn.digitaloceanspaces.com/static/RASTREIOPUB/rastreio.js\" ></script>*\n\n<!--EndFragment-->",
   "sections": [
     {
