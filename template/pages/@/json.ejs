@@ -58,6 +58,35 @@ if (Array.isArray(_.widgets)) {
 }
 
 const productCardStamps = (_.cms('stamps') || {}).stamps_list || []
+const contacts = _.cms('contacts') || {}
+const socialLinks = ['instagram', 'facebook', 'youtube', 'pinterest', 'tiktok', 'twitter']
+  .map(field => contacts[field])
+  .filter(link => typeof link === 'string' && link)
+const organizationJsonLd = {
+  '@context': 'http://schema.org',
+  '@type': 'Organization',
+  '@id': `https://${(_.store.domain || _.settings.domain)}/#organization`,
+  name: _.settings.name || _.store.name,
+  url: _.store.homepage || `https://${(_.store.domain || _.settings.domain)}/`,
+  logo: (_.store.logo && _.store.logo.url) || `https://${_.settings.domain}${_.settings.logo}`,
+  email: contacts.email || undefined,
+  taxID: contacts.doc_number || undefined,
+  sameAs: socialLinks.length ? socialLinks : undefined
+}
+
+if (contacts.whatsapp) {
+  const digits = String(contacts.whatsapp).replace(/\D/g, '')
+  if (digits) {
+    organizationJsonLd.telephone = `+55${digits}`
+    organizationJsonLd.contactPoint = [{
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      telephone: `+55${digits}`,
+      email: contacts.email || undefined,
+      availableLanguage: 'Portuguese'
+    }]
+  }
+}
 %>
 
 <script>/*<!--*/<%-
@@ -70,11 +99,5 @@ const productCardStamps = (_.cms('stamps') || {}).stamps_list || []
 %>/*-->*/</script>
 
 <script type="application/ld+json"><%-
-  JSON.stringify({
-    '@context': 'http://schema.org',
-    '@type': 'Organization',
-    name: _.settings.name || _.store.name,
-    url: _.store.homepage || `https://${(_.store.domain || _.settings.domain)}/`,
-    logo: (_.store.logo && _.store.logo.url) || `https://${_.settings.domain}${_.settings.logo}`
-  })
+  JSON.stringify(organizationJsonLd)
 %></script>

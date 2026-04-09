@@ -242,7 +242,9 @@ const hasAllDepartments = header.menu_all_departments
               JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'WebSite',
+                name: _.settings.name || _.store.name,
                 url: `https://${_.settings.domain}/`,
+                inLanguage: 'pt-BR',
                 potentialAction: {
                   '@type': 'SearchAction',
                   target: `https://${_.settings.domain}/search?term={search_term_string}`,
