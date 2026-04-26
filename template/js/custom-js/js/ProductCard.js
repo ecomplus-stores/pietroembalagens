@@ -181,15 +181,15 @@ export default {
         this.isFavorite = toggleFavorite(this.body._id, this.ecomPassport)
       }
     },
-    qtd (el,quantity) { 
-      const { body } = this     
-      let me = $("[product_quantity='"+ el +"']");
-      let atual = parseInt(me.closest('label').find('input').val());
-      atual = atual + parseInt(quantity);
-
-      if(atual < 1){atual = 1}
-      me.closest('label').find('input').val(atual);
-    
+    qtd (el, quantity) {
+      const input = document.querySelector(`[product_quantity="${el}"]`)
+      if (!input) {
+        return
+      }
+      const currentValue = parseInt(input.value, 10) || 1
+      const nextValue = Math.max(1, currentValue + (parseInt(quantity, 10) || 0))
+      input.value = nextValue
+      input.dispatchEvent(new Event('change', { bubbles: true }))
     },
 
     getListContext (element) {
@@ -297,9 +297,9 @@ export default {
                   })
               }
             }
-            const { quantity, price } = data
-            //ecomCart.addProduct({ ...product, quantity : parseInt($("[product_quantity='"+ product._id +"']")), price })
-            ecomCart.addProduct({ ...product }, '', parseInt(document.querySelector("[product_quantity='"+ product._id +"']").value))
+            const quantityInput = document.querySelector(`[product_quantity="${product._id}"]`)
+            const quantity = quantityInput ? parseInt(quantityInput.value, 10) : 1
+            ecomCart.addProduct({ ...product }, '', quantity || 1)
           })
           .catch(err => {
             console.error(err)
