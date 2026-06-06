@@ -8,20 +8,19 @@
       "full_width": false,
       "slides": [
         {
-          "start": "",
-          "end": "",
-          "img": "/img/uploads/webp-cashback-web-banner.webp",
-          "alt": "Cashback Pietro Embalagens",
-          "mobile_img": "/img/uploads/webp-cashback-mobile-banner-2-.webp",
-          "link": "https://www.pietroembalagens.com.br/pages/cashback"
-        },
-        {
           "start": "2026-06-01T11:26:49.773Z",
           "end": "",
           "img": "/img/uploads/banner-full-linha-florzinhas.webp",
           "link": "https://www.pietroembalagens.com.br/caixas-para-presente",
           "alt": "Caixas para presentes, cosmeticos, doces e lembrancinhas",
           "mobile_img": "/img/uploads/arte-linha-florezinhas-1080x1080.webp"
+        },
+        {
+          "start": "",
+          "end": "",
+          "img": "/img/uploads/chatgpt-image-jun-6-2026-03_34_32-pm.webp",
+          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
+          "alt": "Caixas para bolo"
         }
       ]
     },
