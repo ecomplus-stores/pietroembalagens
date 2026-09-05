@@ -38,10 +38,9 @@
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "645b90914bd2e929c1f56b43:categories:Dia das Mães e Namorados:/embalagens-dia-das-maes-dia-dos-namorados",
+      "collection_id": "64d032db2cd6b659590b9090:categories:Caixas p/ Transporte:/embalagem-para-transporte-delivery-doces-macarons",
       "sort": "sales",
-      "title": "Dias das Mães e Namorados",
-      "link": "https://www.pietroembalagens.com.br/caixa-para-doces-maes-namorados"
+      "link": "https://www.pietroembalagens.com.br/embalagem-para-transporte-delivery-doces-macarons"
     },
     {
       "type": "collection-shelf",
@@ -62,16 +61,6 @@
       "sort": "sales",
       "title": "Caixas com berço",
       "link": "https://www.pietroembalagens.com.br/caixas-com-berco"
-    },
-    {
-      "type": "collection-shelf",
-      "shuffle": false,
-      "limit": 12,
-      "page": 1,
-      "collection_id": "6606b7200fc534303de4baba:categories:Fitas de Cetim - Mães e Namorados:/fitas-de-cetim-tema-maes-namorados",
-      "sort": "sales",
-      "link": "https://www.pietroembalagens.com.br/fitas-de-cetim-tema-maes-namorados",
-      "title": "Fitas de cetim mães e namorados"
     },
     {
       "type": "collection-shelf",
