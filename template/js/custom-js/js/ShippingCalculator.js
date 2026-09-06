@@ -241,6 +241,7 @@ import {
       },
   
       setSelectedService (i, explicit = true) {
+        if (explicit && this.isWaiting) return
         const service = this.shippingServices[i]
         if (this.canSelectServices && service) {
           if (explicit) setPreference(core.zip(this.localZipCode), core.serviceKey(service))
