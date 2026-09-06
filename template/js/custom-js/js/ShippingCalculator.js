@@ -1,3 +1,6 @@
+import core from '../freight/core'
+import { runtime, enabled, init, getPreference, setPreference } from '../freight/runtime'
+import FreightStatus from '../components/FreightStatus.vue'
 import {
     i19add$1ToEarn,
     i19calculateShipping,
@@ -20,40 +23,21 @@ import {
   const localStorage = typeof window === 'object' && window.localStorage
   const zipStorageKey = 'shipping-to-zip'
   
-  const reduceItemBody = itemOrProduct => {
-    const shippedItem = {}
-    ;[
-      'product_id',
-      'variation_id',
-      'sku',
-      'name',
-      'quantity',
-      'inventory',
-      'currency_id',
-      'currency_symbol',
-      'price',
-      'final_price',
-      'dimensions',
-      'weight'
-    ].forEach(field => {
-      if (itemOrProduct[field] !== undefined) {
-        shippedItem[field] = itemOrProduct[field]
-      }
-    })
-    return shippedItem
-  }
+  const reduceItemBody = core.shippingItem
   
   export default {
     name: 'ShippingCalculator',
   
     components: {
       CleaveInput,
-      ShippingLine
+      ShippingLine,
+      FreightStatus
     },
   
     props: {
       zipCode: String,
       canSelectServices: Boolean,
+      canAutoSelectService: { type: Boolean, default: true },
       canInputZip: {
         type: Boolean,
         default: true
@@ -92,6 +76,13 @@ import {
     data () {
       return {
         localZipCode: null,
+        peSequence: 0,
+        peFetchTimer: null,
+        peSettledKey: null,
+        peError: false,
+        peRequest: {},
+        peRequestUrl: null,
+        peDestroyed: false,
         localShippedItems: [],
         amountSubtotal: null,
         shippingServices: [],
@@ -110,6 +101,23 @@ import {
       i19add$1ToEarn: () => i18n(i19add$1ToEarn),
       i19calculateShipping: () => i18n(i19calculateShipping),
       i19zipCode: () => i18n(i19zipCode),
+      i19selectShippingMsg: () => 'Selecione uma opção de entrega',
+      peEnabled () { return runtime.ready && enabled() && this.canSelectServices },
+      peCurrentKey () {
+        return core.fingerprint(this.shippedItems, this.localZipCode, { shippingData: this.shippingData, skipIds: this.skipAppIds, country: this.countryCode })
+      },
+      peSnapshot () {
+        const postalCode = core.zip(this.localZipCode)
+        const current = this.peSettledKey === this.peCurrentKey
+        return {
+          status: postalCode.length !== 8 ? 'idle' : this.isWaiting || !current ? 'loading' : this.peError ? 'error' : 'ready',
+          key: this.peCurrentKey, zip: postalCode, subtotal: core.subtotal(this.shippedItems),
+          threshold: current && this.freeFromValue ? core.cents(this.freeFromValue) : null,
+          services: current && !this.isWaiting ? this.shippingServices : [],
+          selected: current && this.selectedService !== null ? this.shippingServices[this.selectedService] : null,
+          request: this.peRequest, url: this.peRequestUrl, skipIds: this.skipAppIds || []
+        }
+      },
       i19freeShipping: () => i18n(i19freeShipping).toLowerCase(),
   
       cleaveOptions () {
@@ -146,66 +154,20 @@ import {
         this.$emit('update:zip-code', this.localZipCode)
       },
   
-      parseShippingOptions (shippingResult = [], isRetry = false) {
-        this.freeFromValue = null
-        this.shippingServices = []
-        if (shippingResult.length) {
-          shippingResult.forEach(appResult => {
-            const { validated, error, response } = appResult
-            if (!validated || error) {
-              return
-            }
-            if (this.skipAppIds && this.skipAppIds.includes(appResult.app_id)) {
-              return
-            }
-            response.shipping_services.forEach(service => {
-              this.shippingServices.push({
-                app_id: appResult.app_id,
-                ...service
-              })
-            })
-            const freeShippingFromValue = response.free_shipping_from_value
-            if (
-              freeShippingFromValue &&
-              (!this.freeFromValue || this.freeFromValue > freeShippingFromValue)
-            ) {
-              this.freeFromValue = freeShippingFromValue
-            }
-          })
-          if (!this.shippingServices.length) {
-            if (!isRetry) {
-              this.fetchShippingServices(true)
-            } else {
-              this.scheduleRetry()
-            }
-          } else {
-            this.shippingServices = this.shippingServices.sort((a, b) => {
-              const priceDiff = a.shipping_line.total_price - b.shipping_line.total_price
-              return priceDiff < 0
-                ? -1
-                : priceDiff > 0
-                  ? 1
-                  : a.shipping_line.delivery_time && b.shipping_line.delivery_time &&
-                    a.shipping_line.delivery_time.days < b.shipping_line.delivery_time.days
-                    ? -1
-                    : 1
-            })
-            this.hasPaidOption = Boolean(this.shippingServices.find(service => {
-              return service.shipping_line.total_price || service.shipping_line.price
-            }))
-            this.hasFreeOption = Boolean(this.shippingServices.find(service => {
-              return service.shipping_line.total_price === 0 || service.shipping_line.price === 0
-            }))
-            if (this.hasFreeOption) {
-              this.setSelectedService(1)
-            } else {
-              this.setSelectedService(0)
-            }
-            if (Array.isArray(this.shippingAppsSort) && this.shippingAppsSort.length) {
-              this.shippingServices = sortApps(this.shippingServices, this.shippingAppsSort)
-            }
-          }
-        }
+      parseShippingOptions (shippingResult = []) {
+        const result = core.parseQuote(shippingResult, this.skipAppIds || [])
+        this.freeFromValue = result.threshold === null ? null : result.threshold / 100
+        this.shippingServices = Array.isArray(this.shippingAppsSort) && this.shippingAppsSort.length
+          ? sortApps(result.services, this.shippingAppsSort)
+          : result.services
+        this.hasPaidOption = this.shippingServices.some(service => core.serviceCost(service) > 0)
+        this.hasFreeOption = this.shippingServices.some(core.isFreeDelivery)
+        this.peError = !result.valid || !this.shippingServices.length
+        this.selectedService = null
+        const preferred = getPreference(core.zip(this.localZipCode))
+        const index = core.chooseService(this.shippingServices, preferred, this.canAutoSelectService)
+        if (index >= 0) this.setSelectedService(index, false)
+        else if (this.canSelectServices) this.$emit('select-service', {})
       },
   
       scheduleRetry (timeout = 10000) {
@@ -217,119 +179,130 @@ import {
         }, timeout)
       },
   
-      fetchShippingServices (isRetry) {
-        if (!this.isScheduled) {
-          this.isScheduled = true
-          setTimeout(() => {
-            this.isScheduled = false
-            const { storeId } = this
-            let url = '/calculate_shipping.json'
-            if (this.skipAppIds && this.skipAppIds.length) {
-              url += '?skip_ids='
-              this.skipAppIds.forEach((appId, i) => {
-                if (i > 0) url += ','
-                url += `${appId}`
-              })
-            }
-            const method = 'POST'
-            const data = {
-              ...this.shippingData,
-              to: {
-                zip: this.localZipCode,
-                ...this.shippingData.to
+      fetchShippingServices () {
+        clearTimeout(this.peFetchTimer)
+        clearTimeout(this.retryTimer)
+        const sequence = ++this.peSequence
+        this.isScheduled = false
+        this.peError = false
+        if (core.zip(this.localZipCode).length !== 8 || !this.shippedItems.length) {
+          this.isWaiting = false
+          this.shippingServices = []
+          this.freeFromValue = null
+          this.selectedService = null
+          this.peSettledKey = null
+          if (this.canSelectServices) this.$emit('select-service', {})
+          return
+        }
+        this.isWaiting = true
+        this.freeFromValue = null
+        this.selectedService = null
+        if (this.canSelectServices) this.$emit('select-service', {})
+        this.peFetchTimer = setTimeout(() => {
+          const requestKey = this.peCurrentKey
+          let url = '/calculate_shipping.json'
+          if (this.skipAppIds && this.skipAppIds.length) url += '?skip_ids=' + this.skipAppIds.join(',')
+          const data = {
+            ...this.shippingData,
+            to: { ...this.shippingData.to, zip: this.localZipCode },
+            items: this.shippedItems.map(reduceItemBody),
+            subtotal: this.shippedItems.reduce((sum, item) => sum + getPrice(item) * item.quantity, 0)
+          }
+          this.peRequest = JSON.parse(JSON.stringify(data))
+          this.peRequestUrl = url
+          const current = () => !this.peDestroyed && sequence === this.peSequence && requestKey === this.peCurrentKey
+          modules({ url, method: 'POST', storeId: this.storeId, data, axiosConfig: { timeout: 15000 } })
+            .then(({ data }) => {
+              if (current()) this.parseShippingOptions(data.result)
+            })
+            .catch(() => {
+              if (current()) {
+                this.peError = true
+                this.shippingServices = []
+                if (this.canSelectServices) this.$emit('select-service', {})
               }
-            }
-            if (this.localShippedItems.length) {
-              data.items = this.localShippedItems
-              data.subtotal = this.amountSubtotal
-            }
-            this.isWaiting = true
-            modules({ url, method, storeId, data })
-              .then(({ data }) => this.parseShippingOptions(data.result, isRetry))
-              .catch(err => {
-                if (!isRetry) {
-                  this.scheduleRetry(4000)
-                }
-                console.error(err)
-              })
-              .finally(() => {
+            })
+            .finally(() => {
+              if (current()) {
+                this.peSettledKey = requestKey
                 this.hasCalculated = true
                 this.isWaiting = false
-              })
-          }, this.hasCalculated ? 150 : 50)
-        }
+              }
+            })
+        }, this.hasCalculated ? 250 : 50)
       },
   
       submitZipCode () {
         this.updateZipCode()
         if (localStorage) {
-          localStorage.setItem(zipStorageKey, this.localZipCode)
+          try { localStorage.setItem(zipStorageKey, this.localZipCode) } catch (_) {}
         }
         this.fetchShippingServices()
       },
   
-      setSelectedService (i) {
-        if (this.canSelectServices) {
-          this.$emit('select-service', this.shippingServices[i])
+      setSelectedService (i, explicit = true) {
+        const service = this.shippingServices[i]
+        if (this.canSelectServices && service) {
+          if (explicit) setPreference(core.zip(this.localZipCode), core.serviceKey(service))
           this.selectedService = i
+          this.$emit('select-service', service)
         }
+      },
+      peSelectFree () {
+        const index = this.shippingServices.findIndex(core.isFreeDelivery)
+        if (index >= 0) this.setSelectedService(index)
       }
     },
-  
+
     watch: {
+      peSnapshot: {
+        handler (snapshot) { this.$emit('pe-quote', snapshot) },
+        deep: true, immediate: true
+      },
       shippedItems: {
         handler () {
-          setTimeout(() => {
-            this.localShippedItems = this.shippedItems.map(reduceItemBody)
-            const { amountSubtotal } = this
-            this.amountSubtotal = this.shippedItems.reduce((subtotal, item) => {
-              return subtotal + getPrice(item) * item.quantity
-            }, 0)
-            if (
-              this.hasCalculated &&
-              (this.canSelectServices || amountSubtotal !== this.amountSubtotal ||
-                (!this.shippingServices.length && !this.isWaiting))
-            ) {
-              this.fetchShippingServices()
-            }
-          }, 50)
+          this.localShippedItems = this.shippedItems.map(reduceItemBody)
+          this.amountSubtotal = this.shippedItems.reduce((sum, item) => sum + getPrice(item) * item.quantity, 0)
+          this.fetchShippingServices()
         },
-        deep: true,
-        immediate: true
+        deep: true, immediate: true
       },
-  
-      localZipCode (zipCode) {
-        if (this.countryCode === 'BR' && zipCode.replace(/\D/g, '').length === 8) {
-          this.submitZipCode()
-        }
+      localZipCode () {
+        if (core.zip(this.localZipCode).length === 8) this.submitZipCode()
+        else this.fetchShippingServices()
       },
-  
       zipCode: {
-        handler (zipCode) {
-          if (zipCode) {
-            this.localZipCode = zipCode
-          }
-        },
+        handler (value) { if (value !== undefined && value !== this.localZipCode) this.localZipCode = value },
         immediate: true
       },
-  
-      skipAppIds () {
-        this.fetchShippingServices()
-      },
-  
+      shippingData: { handler () { this.fetchShippingServices() }, deep: true },
+      skipAppIds () { this.fetchShippingServices() },
       shippingResult: {
         handler (result) {
           if (result.length) {
+            clearTimeout(this.peFetchTimer)
+            this.peSequence++
             this.parseShippingOptions(result)
+            this.peSettledKey = this.peCurrentKey
+            this.hasCalculated = true
+            this.isWaiting = false
           }
         },
         immediate: true
       }
     },
-  
+    beforeDestroy () {
+      this.peDestroyed = true
+      this.peSequence++
+      clearTimeout(this.peFetchTimer)
+      clearTimeout(this.retryTimer)
+    },
+
     created () {
+      init()
       if (!this.zipCode && localStorage) {
-        const storedZip = localStorage.getItem(zipStorageKey)
+        let storedZip
+        try { storedZip = localStorage.getItem(zipStorageKey) } catch (_) {}
         if (storedZip) {
           this.localZipCode = storedZip
         }

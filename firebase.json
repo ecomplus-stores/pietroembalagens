@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "redirects": [
-    ],
+    "redirects": [],
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -91,6 +90,15 @@
           {
             "key": "cache-control",
             "value": "public, max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "/pe-freight-config.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
           }
         ]
       }

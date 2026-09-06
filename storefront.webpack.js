@@ -19,6 +19,11 @@ module.exports = () => ({
       './js/PaymentMethods.js': path.resolve(__dirname, 'template/js/custom-js/js/PaymentMethods.js'),
       './html/SearchEngine.html': path.resolve(__dirname, 'template/js/custom-js/html/SearchEngine.html'),
       './js/SearchEngine.js': path.resolve(__dirname, 'template/js/custom-js/js/SearchEngine.js'),
+      './js/TheCart.js': path.resolve(__dirname, 'template/js/custom-js/js/TheCart.js'),
+      './html/TheCart.html': path.resolve(__dirname, 'template/js/custom-js/html/TheCart.html'),
+      './js/CartQuickview.js': path.resolve(__dirname, 'template/js/custom-js/js/CartQuickview.js'),
+      './html/CartQuickview.html': path.resolve(__dirname, 'template/js/custom-js/html/CartQuickview.html'),
+      './html/ShippingCalculator.html': path.resolve(__dirname, 'template/js/custom-js/html/ShippingCalculator.html'),
       './js/ShippingCalculator.js': path.resolve(__dirname, 'template/js/custom-js/js/ShippingCalculator.js')
     }
   }

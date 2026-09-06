@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "rolloutPercent": 100,
+  "maxCandidates": 12,
+  "maxSimulations": 3,
+  "curatedPairs": [],
+  "excludedProductIds": [],
+  "maxAdditionalQuantity": 5
+}
