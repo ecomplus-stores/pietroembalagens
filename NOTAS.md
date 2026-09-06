@@ -30,6 +30,16 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 06/09/2026 — PDP: apresentação das informações de frete
+
+- Oculta a linha de prazo de produção na PDP.
+- Exibe o aviso de frete grátis por quantidade depois de “Prazo contado a partir da aprovação do pagamento.”
+- CSS restrito a `#product`, em `content/code.json` (`html_head`). Mantém o cálculo de frete e os dados de produção.
+- Validação: prévia com estrutura e estilos atuais em desktop e celular; JSON válido e `git diff --check` sem erros.
+- Backup anterior à alteração: branch `backup/pdp-frete-20260906`, commit `7a0c80f5162b5ffabbd902bfd844b42a8ab5381c`.
+
+---
+
 ### 29/03/2026 — SEO: Meta descriptions + Textos de categoria + FAQs
 
 **O que foi feito:** Aplicadas meta descriptions, textos descritivos e FAQs (4 perguntas cada) em 20 categorias principais via API da E-com.plus.
