@@ -15,7 +15,7 @@ Implementação de 06/09/2026. Base anterior: `576c174554386d9e1c4de6cc5681e4037
 
 ## Configuração e desativação
 
-Arquivo: `template/public/pe-freight-config.json`, publicado em `/pe-freight-config.json` com `Cache-Control: no-store`.
+Arquivo: `template/public/pe-freight-config.json`, publicado em `/pe-freight-config.json` com `Cache-Control: no-store` e URL única por consulta, evitando recuperar configuração antiga pelo service worker em caso de falha de rede.
 
 Para desligar: mudar somente `enabled` para `false`, criar commit e enviar ao `master`. Aguardar o workflow **Build and deploy** concluir. Depois da publicação, abas abertas atualizam a configuração a cada 60 segundos; novas visitas já recebem a versão desligada. Se a configuração falhar ou não responder em 8 segundos, as sugestões ficam desativadas. A desativação restaura a recomendação genérica do carrinho e os avisos anteriores; as correções do calculador permanecem. Para retirá-las também, usar a reversão integral abaixo.
 
@@ -26,7 +26,7 @@ Outros campos: `maxCandidates` (até 24), `maxSimulations` (até 3), `maxAdditio
 ## Reversão integral sem apagar histórico
 
 1. Usar checkout limpo do `master` atualizado.
-2. Localizar o commit `feat: suggest cart additions for verified free shipping` no histórico.
+2. Localizar o commit `feat: suggest cart additions for verified free shipping` e os commits posteriores específicos desta entrega no histórico. Reverter primeiro os ajustes posteriores desta funcionalidade, do mais recente ao mais antigo.
 3. Executar `git revert <SHA_DO_COMMIT>` e conferir o diff. O revert deve retirar apenas esta entrega e manter alterações posteriores.
 4. Enviar ao `master` e acompanhar **Build and deploy** até sucesso.
 5. Abrir o carrinho e conferir produto, CEP, cálculo e botão de finalizar compra.

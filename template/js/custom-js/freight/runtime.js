@@ -18,7 +18,7 @@ export function refreshConfig () {
   if (pending) return pending
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 8000)
-  pending = fetch('/pe-freight-config.json', { cache: 'no-store', credentials: 'same-origin', signal: controller.signal })
+  pending = fetch('/pe-freight-config.json?v=' + Date.now(), { cache: 'no-store', credentials: 'same-origin', signal: controller.signal })
     .then(response => {
       if (!response.ok) throw new Error('config')
       return response.json()
