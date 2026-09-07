@@ -51,6 +51,31 @@ test('invalid app response and skipped app cannot promise a threshold', () => {
   assert.equal(core.parseQuote(results([service('PAC', 0)]), [1]).free, null)
   assert.equal(core.parseQuote([{ validated: true, response: {} }]).services.length, 0)
 })
+test('posting deadline is two working days only for JeT Standard and Loggi Express', () => {
+  const quoted = (carrier, name) => service(name, 10, {
+    carrier,
+    service_name: name,
+    shipping_line: {
+      price: 10,
+      total_price: 10,
+      delivery_time: { days: 4, working_days: true },
+      posting_deadline: { days: 1, working_days: true, after_approval: true }
+    }
+  })
+  const rawJet = quoted('JeT', 'Standard')
+  const parsed = core.parseQuote(results([
+    rawJet,
+    quoted('Loggi', 'Loggi Express'),
+    quoted('Loggi', 'Loggi Ponto'),
+    quoted('Correios', 'Sedex')
+  ])).services
+  const deadline = name => parsed.find(item => item.service_name === name).shipping_line.posting_deadline.days
+  assert.equal(deadline('Standard'), 2)
+  assert.equal(deadline('Loggi Express'), 2)
+  assert.equal(deadline('Loggi Ponto'), 1)
+  assert.equal(deadline('Sedex'), 1)
+  assert.equal(rawJet.shipping_line.posting_deadline.days, 1)
+})
 test('explicit express choice survives sorting, free availability and recalculation', () => {
   const express = service('Sedex', 20)
   const free = service('PAC', 0)

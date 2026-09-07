@@ -9,6 +9,28 @@ const serviceCost = service => {
   if (!line) return null
   return cents(line.total_price !== undefined ? line.total_price : line.price)
 }
+const normalizeServiceText = value => String(value || '').trim().toLowerCase()
+const hasTwoDayPostingDeadline = service => {
+  const carrier = normalizeServiceText(service && service.carrier)
+  const serviceName = normalizeServiceText(service && [service.service_name, service.label, service.service_code].filter(Boolean).join(' '))
+  return (carrier === 'jet' && /\bstandard\b/.test(serviceName)) ||
+    (carrier === 'loggi' && /\bexpress\b/.test(serviceName))
+}
+const applyPostingDeadline = service => {
+  if (!hasTwoDayPostingDeadline(service) || !service.shipping_line) return service
+  return {
+    ...service,
+    shipping_line: {
+      ...service.shipping_line,
+      posting_deadline: {
+        ...(service.shipping_line.posting_deadline || {}),
+        days: 2,
+        working_days: true,
+        after_approval: true
+      }
+    }
+  }
+}
 const isPickup = service => Boolean(service && (service.pickup || service.is_pickup || (service.shipping_line && (service.shipping_line.pickup || service.shipping_line.is_pickup)) || /retir|pickup|pick.up|buscar na loja/i.test([service.label, service.service_code, service.shipping_line && service.shipping_line.title].join(' '))))
 const isFreeDelivery = service => serviceCost(service) === 0 && !isPickup(service)
 const reduceItem = item => {
@@ -35,7 +57,7 @@ const parseQuote = (results, skipIds = []) => {
     if (!Array.isArray(response.shipping_services)) return
     valid = true
     response.shipping_services.forEach(service => {
-      const candidate = { ...service, app_id: result.app_id }
+      const candidate = applyPostingDeadline({ ...service, app_id: result.app_id })
       const cost = serviceCost(candidate)
       if (cost !== null && cost >= 0) services.push(candidate)
     })
@@ -68,4 +90,4 @@ const quantityFor = (gap, unitPrice, minimum, available) => {
 }
 const rank = (a, b) => Number(b.confirmed) - Number(a.confirmed) || Number(b.completes) - Number(a.completes) || a.additional - b.additional || b.relevance - a.relevance || a.key.localeCompare(b.key)
 
-export default { cents, zip, money, subtotal, serviceKey, serviceCost, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, canRecommend, quantityFor, rank }
+export default { cents, zip, money, subtotal, serviceKey, serviceCost, hasTwoDayPostingDeadline, applyPostingDeadline, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, canRecommend, quantityFor, rank }
