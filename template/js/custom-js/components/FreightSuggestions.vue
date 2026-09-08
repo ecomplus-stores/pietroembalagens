@@ -4,10 +4,10 @@
     <p class="pe-freight-suggestions__intro">Escolha uma opção para completar seu pedido.</p>
     <p v-if="message" role="status" class="pe-freight-suggestions__message">{{ message }}</p>
     <article v-for="candidate in displayed" :key="candidate.key" class="pe-freight-suggestions__item">
-      <a :href="productUrl(candidate)" tabindex="-1" aria-hidden="true"><img v-if="candidate.image" :src="candidate.image" alt="" width="64" height="64" loading="lazy"></a>
+      <a :href="productUrl(candidate)" tabindex="-1" aria-hidden="true" @click="trackClick(candidate, 'image')" @auxclick.middle="trackClick(candidate, 'image')"><img v-if="candidate.image" :src="candidate.image" alt="" width="64" height="64" loading="lazy"></a>
       <div class="pe-freight-suggestions__description">
         <small>{{ candidate.label }}</small>
-        <a :href="productUrl(candidate)" class="pe-freight-suggestions__name">{{ candidate.title }}</a>
+        <a :href="productUrl(candidate)" class="pe-freight-suggestions__name" @click="trackClick(candidate, 'name')" @auxclick.middle="trackClick(candidate, 'name')">{{ candidate.title }}</a>
         <p>{{ candidate.quantity }} × este anúncio · <strong>+ {{ formatMoney(candidate.additional / 100) }}</strong> em produtos</p>
         <p v-if="candidate.confirmed" class="pe-freight-suggestions__effect">Frete grátis disponível nesta simulação. <span v-if="deliveryDays(candidate)">Transporte: {{ deliveryDays(candidate) }} dias{{ workingDays(candidate) ? ' úteis' : '' }}, além da preparação.</span></p>
         <p v-else-if="candidate.remaining > 0" class="pe-freight-suggestions__effect">Após adicionar, faltarão {{ formatMoney(candidate.remaining / 100) }} em produtos. Frete sujeito a novo cálculo.</p>
@@ -43,6 +43,22 @@ export default {
   },
   methods: {
     formatMoney,
+    eventData (candidate, action) {
+      return {
+        pe_freight_surface: this.compact ? 'minicart' : 'cart',
+        pe_freight_action: action,
+        pe_freight_product_id: candidate.id,
+        pe_freight_variation_id: candidate.variationId || '',
+        pe_freight_quantity: candidate.quantity,
+        pe_freight_position: this.displayed.findIndex(item => item.key === candidate.key) + 1,
+        pe_freight_gap: Math.max(0, this.quote.threshold - this.quote.subtotal) / 100,
+        value: candidate.additional / 100, currency: 'BRL',
+        items: [{ item_id: candidate.id, item_variant: candidate.variationId || '', quantity: candidate.quantity, price: candidate.additional / candidate.quantity / 100, item_list_id: this.compact ? 'pe_freight_minicart' : 'pe_freight_cart' }]
+      }
+    },
+    trackClick (candidate, action) {
+      if (this.active && enabled()) track('pe_freight_suggestion_click', this.eventData(candidate, action))
+    },
     productUrl (candidate) { return '/' + String(candidate.slug || '').replace(/^\/+/, '') + (candidate.variationId ? '?variation_id=' + encodeURIComponent(candidate.variationId) : '') },
     deliveryDays (candidate) { return candidate.free && candidate.free.shipping_line.delivery_time && candidate.free.shipping_line.delivery_time.days },
     workingDays (candidate) { return candidate.free && candidate.free.shipping_line.delivery_time && candidate.free.shipping_line.delivery_time.working_days !== false },
@@ -75,6 +91,7 @@ export default {
     },
     async add (candidate) {
       if (runtime.busy || this.adding || !this.eligible) return
+      this.trackClick(candidate, 'add')
       runtime.busy = true
       this.adding = candidate.key
       this.message = ''
@@ -95,10 +112,10 @@ export default {
         const added = ecomCart.addItem(refreshed.parsed)
         if (!added || core.subtotal(ecomCart.data.items) - before !== refreshed.additional) throw new Error('addition')
         this.message = 'Produto adicionado. Atualizando o total e o frete.'
-        track('pe_freight_suggestion_add', { pe_freight_surface: this.compact ? 'minicart' : 'cart', value: refreshed.additional / 100, currency: 'BRL', items: [{ item_id: candidate.id, quantity: candidate.quantity }] })
+        track('pe_freight_suggestion_add', this.eventData(refreshed, 'add'))
       } catch (_) {
         this.message = 'As condições foram atualizadas. Confira as novas opções antes de adicionar.'
-        track('pe_freight_suggestion_refresh', { pe_freight_surface: this.compact ? 'minicart' : 'cart' })
+        track('pe_freight_suggestion_refresh', this.eventData(candidate, 'add'))
       } finally {
         this.adding = ''
         runtime.busy = false

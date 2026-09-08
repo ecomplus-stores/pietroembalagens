@@ -224,9 +224,10 @@ test('rapid double click adds only once; changed price refuses addition', async 
   let requests = 0
   let changed = false
   const lock = Vue.observable({ busy: false, enabled: true })
+  const events = []
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: lock, enabled: () => true, track: () => {}, init: () => {} },
+    '../freight/runtime': { runtime: lock, enabled: () => true, track: (event, data) => events.push({ event, data }), init: () => {} },
     '../freight/service': {
       recommendations: async () => [],
       fetchProduct: () => { requests++; return new Promise(resolve => { release = resolve }) },
@@ -238,15 +239,45 @@ test('rapid double click adds only once; changed price refuses addition', async 
   const first = instance.add(candidate)
   await instance.add(candidate)
   assert.equal(requests, 1)
+  assert.equal(events.filter(e => e.event === 'pe_freight_suggestion_click').length, 1)
+  assert.equal(events[0].data.pe_freight_surface, 'cart')
+  assert.equal(events[0].data.pe_freight_action, 'add')
   release(p)
   await first
   assert.equal(cart.data.items[0].quantity, 9)
   assert.equal(lock.busy, false)
+  assert.equal(events.filter(e => e.event === 'pe_freight_suggestion_add').length, 1)
   changed = true
   const second = instance.add(candidate)
   release(p)
   await second
   assert.equal(cart.data.items[0].quantity, 9)
   assert.match(instance.message, /condições foram atualizadas/)
+  assert.equal(events.filter(e => e.event === 'pe_freight_suggestion_click').length, 2)
+  assert.equal(events.filter(e => e.event === 'pe_freight_suggestion_add').length, 1)
+  instance.compact = true
+  instance.trackClick(candidate, 'name')
+  instance.trackClick(candidate, 'image')
+  assert.equal(events.at(-1).data.pe_freight_surface, 'minicart')
+  assert.equal(events.at(-1).data.pe_freight_action, 'image')
+  assert.equal(events.at(-2).data.pe_freight_action, 'name')
   instance.$destroy()
+})
+
+
+test('analytics clears previous item context and never calls GA4 twice', () => {
+  const layer = []
+  const storage = { getItem: () => '10', setItem: () => {} }
+  const module = load('template/js/custom-js/freight/runtime.js', {}, {
+    window: { localStorage: storage, dataLayer: layer, gtag: () => { throw new Error('Use GTM only') } }
+  })
+  module.track('pe_freight_suggestion_click', { pe_freight_surface: 'cart', pe_freight_action: 'image', pe_freight_product_id: 'product', items: [{ item_id: 'product' }] })
+  module.track('pe_freight_applied', { value: 299, currency: 'BRL' })
+  assert.equal(layer.length, 2)
+  assert.equal(layer[0].event, 'pe_freight_suggestion_click')
+  assert.equal(layer[0].ecommerce.items[0].item_id, 'product')
+  assert.equal(layer[1].pe_freight_surface, null)
+  assert.equal(layer[1].pe_freight_product_id, null)
+  assert.equal(layer[1].items, null)
+  assert.equal(layer[1].ecommerce.items.length, 0)
 })

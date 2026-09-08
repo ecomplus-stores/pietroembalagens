@@ -47,4 +47,6 @@ Teste local com APIs reais: 8 anúncios de R$ 33,90 (R$ 271,20) + 2 anúncios de
 
 ## Medição
 
-Eventos no `dataLayer`: `pe_freight_suggestions_view`, `pe_freight_suggestion_add`, `pe_freight_suggestion_refresh`, `pe_freight_available`, `pe_freight_applied`. Sem CEP, nome ou contato do cliente. Incluem versão/grupo e, conforme evento, superfície, valor e itens. A configuração de coleta no GTM/GA4 e a associação com compra/margem precisam ser conferidas antes de afirmar impacto comercial. Emitir eventos não garante que o analytics já os esteja armazenando.
+Eventos no `dataLayer` e GA4: `pe_freight_suggestions_view`, `pe_freight_suggestion_click`, `pe_freight_suggestion_add`, `pe_freight_suggestion_refresh`, `pe_freight_available`, `pe_freight_applied`. Sem CEP, nome ou contato do cliente. Incluem versão/grupo e, conforme evento, superfície, ação, valor e itens.
+
+O GTM usa a tag `GA4 - pe_freight`, acionada por `CE - pe_freight`, com o e-commerce do `dataLayer` habilitado. As dimensões de evento `pe_freight_surface` (`minicart` ou `cart`) e `pe_freight_action` (`image`, `name` ou `add`) permitem distinguir os cliques e as adições confirmadas. Os eventos permanecem associados à sessão e ao usuário no GA4, permitindo analisá-los antes de `begin_checkout`, `add_shipping_info`, `add_payment_info` e `purchase`. Para uma leitura por produto, use os itens de e-commerce enviados em cada evento.

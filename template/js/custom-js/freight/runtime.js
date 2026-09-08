@@ -54,6 +54,13 @@ export function setPreference (postalCode, key) {
 export function track (event, data = {}) {
   try {
     window.dataLayer = window.dataLayer || []
-    window.dataLayer.push({ event, pe_freight_version: 'v1', pe_freight_variant: enabled() ? 'treatment' : 'control', ...data })
+    // Clear optional fields on every event so GTM never reuses a previous item's data.
+    window.dataLayer.push({
+      pe_freight_surface: null, pe_freight_action: null, pe_freight_product_id: null,
+      pe_freight_variation_id: null, pe_freight_quantity: null, pe_freight_position: null,
+      pe_freight_gap: null, value: null, currency: null, items: null,
+      event, pe_freight_version: 'v1', pe_freight_variant: enabled() ? 'treatment' : 'control', ...data,
+      ecommerce: { currency: data.currency || 'BRL', value: data.value === undefined ? null : data.value, items: data.items || [] }
+    })
   } catch (_) {}
 }
