@@ -1,0 +1,12 @@
+{
+  "title": "Encontre sua embalagem",
+  "meta_title": "Encontre a caixa certa pro seu doce | Pietro Embalagens",
+  "meta_description": "Diga o que vai embalar e quantos vão em cada caixa. A gente mostra a caixa que serve e o que levar junto.",
+  "body": "",
+  "sections": [
+    {
+      "type": "custom-html",
+      "html": "<div id=\"pietro-emb-pagina\"></div>"
+    }
+  ]
+}
