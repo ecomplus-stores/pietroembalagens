@@ -12,6 +12,9 @@ Implementação de 06/09/2026. Base anterior: `576c174554386d9e1c4de6cc5681e4037
 - Simula o frete das opções que atingem o mínimo, com os mesmos campos enviados pelo calculador real. Revalida preço, estoque e frete confirmado no clique. O carrinho nativo recalcula descontos e total após a adição; a sugestão informa acréscimo em produtos, não uma promessa de total final líquido.
 - Frete zero de retirada não conta como entrega grátis. Prioriza uma modalidade realmente gratuita quando não existe escolha manual. Mantém a escolha explícita do cliente; modalidade desaparecida exige nova escolha.
 - Mudança de CEP/itens invalida respostas anteriores. Cliques concorrentes nas sugestões ficam bloqueados. Falha de consulta remove sugestões e mantém o fluxo nativo disponível.
+- Exibição progressiva (27/09/2026): o item do próprio carrinho aparece assim que o cálculo de frete responde; produtos relacionados entram em seguida; cada confirmação de frete grátis atualiza o card quando chega. Consultas de catálogo rodam em paralelo e requisições repetidas do mesmo produto são compartilhadas. Só o clique em Adicionar força leitura fresca (`pe_fresh`).
+- Cache de sessão (27/09/2026): a última lista calculada fica em `sessionStorage` (`pe-freight-suggestions`) por 10 minutos, chaveada pelo carrinho + CEP. Minicart e página do carrinho reaproveitam a mesma resposta, inclusive enquanto o calculador nativo ainda está respondendo. Carrinho ou CEP diferente ignora o cache. O clique continua revalidando preço, estoque e frete.
+- Cabeçalho do bloco mostra quanto falta para o frete grátis, barra de progresso e o mínimo do CEP. Card confirmado exibe "Frete grátis confirmado".
 
 ## Configuração e desativação
 
@@ -41,7 +44,7 @@ Não usar `reset --hard` seguido de push forçado. A branch de backup é referê
 
 O workflow de deploy executa os testes antes do build/publicação. Versão de Node do CI: 20.
 
-Cenários obrigatórios: sem CEP; troca rápida de CEP; falha da API; preço/estoque alterado; quantidade mínima; variação ausente; retirada; frete zero com cobrança final positiva; frete grátis em qualquer posição; escolha manual paga; clique repetido; carrinho sem sugestão válida; flag desligada; layout de celular.
+Cenários obrigatórios: cache reaproveitado entre minicart e carrinho; sem CEP; troca rápida de CEP; falha da API; preço/estoque alterado; quantidade mínima; variação ausente; retirada; frete zero com cobrança final positiva; frete grátis em qualquer posição; escolha manual paga; clique repetido; carrinho sem sugestão válida; flag desligada; layout de celular.
 
 Teste local com APIs reais: 8 anúncios de R$ 33,90 (R$ 271,20) + 2 anúncios de R$ 13,90 (R$ 27,80) atingiram R$ 299,00. Sedex manual foi mantido. Selecionar frete grátis atualizou o total de R$ 316,54 para R$ 284,61, já considerando desconto recalculado. Valores são evidência do teste, não regras fixas.
 

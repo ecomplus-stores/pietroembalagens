@@ -30,6 +30,14 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 27/09/2026 — Sugestões de frete grátis: resposta imediata e destaque
+
+- Bloco "Que tal aproveitar o frete?" demorava vários segundos: buscava produto por produto em lotes sequenciais e só exibia depois de simular o frete de até 3 opções.
+- Agora exibe progressivamente (item do carrinho → relacionados → confirmações de frete), busca catálogo em paralelo e guarda a última resposta em `sessionStorage` por 10 min, compartilhada entre minicart e página do carrinho.
+- Cabeçalho passa a dizer quanto falta para o **frete grátis**, com barra de progresso; card confirmado mostra "Frete grátis confirmado".
+- Arquivos: `template/js/custom-js/freight/service.js`, `freight/runtime.js`, `components/FreightSuggestions.vue`, `tests/freight.test.cjs`, `docs/FRETE-SUGESTOES.md`.
+- Validação: `node --test tests/freight.test.cjs` (22 testes) e build do storefront.
+
 ### 06/09/2026 — PDP: apresentação das informações de frete
 
 - Oculta a linha de prazo de produção na PDP.

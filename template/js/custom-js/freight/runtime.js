@@ -64,3 +64,16 @@ export function track (event, data = {}) {
     })
   } catch (_) {}
 }
+
+// Last computed suggestions, shared by the minicart and the cart page.
+// Valid only for the same cart and CEP (quote key) and for ten minutes; the click path revalidates anyway.
+const suggestionsKey = 'pe-freight-suggestions'
+export function readSuggestions (key) {
+  try {
+    const value = JSON.parse(window.sessionStorage.getItem(suggestionsKey) || 'null')
+    return value && value.key === key && Array.isArray(value.candidates) && Date.now() - value.at < 600000 ? value : null
+  } catch (_) { return null }
+}
+export function saveSuggestions (entry) {
+  try { window.sessionStorage.setItem(suggestionsKey, JSON.stringify(entry)) } catch (_) {}
+}

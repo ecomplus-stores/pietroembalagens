@@ -10,13 +10,16 @@ const clone = value => JSON.parse(JSON.stringify(value))
 const productKey = (id, variation) => `${id}:${variation || ''}`
 const safeId = value => /^[a-f0-9]{24}$/i.test(value || '')
 
-export async function fetchProduct (id, fresh = false) {
-  if (!safeId(id)) throw new Error('invalid-product')
+// Concurrent callers share one request. Only the click path (fresh) bypasses the edge cache.
+export function fetchProduct (id, fresh = false) {
+  if (!safeId(id)) return Promise.reject(new Error('invalid-product'))
   const cached = catalog.get(id)
-  if (!fresh && cached && Date.now() - cached.at < 30000) return cached.value
-  const response = await store({ url: `/products/${id}.json`, axiosConfig: { timeout: 8000, params: { pe_fresh: Date.now() } } })
-  catalog.set(id, { at: Date.now(), value: response.data })
-  return response.data
+  if (!fresh && cached && Date.now() - cached.at < 30000) return cached.promise
+  const params = fresh ? { pe_fresh: Date.now() } : {}
+  const entry = { at: Date.now(), promise: store({ url: `/products/${id}.json`, axiosConfig: { timeout: 8000, params } }).then(response => response.data) }
+  catalog.set(id, entry)
+  entry.promise.catch(() => { if (catalog.get(id) === entry) catalog.delete(id) })
+  return entry.promise
 }
 
 async function history (id) {
@@ -30,7 +33,10 @@ async function history (id) {
   } catch (_) { return [] }
 }
 
-export async function discover (items) {
+const sourcesOf = items => [...items].filter(item => item.quantity > 0 && !(item.flags || []).includes('freebie'))
+  .sort((a, b) => b.quantity * price(b) - a.quantity * price(a)).slice(0, 4)
+
+function collector () {
   const candidates = new Map()
   const excluded = runtime.config.excludedProductIds || []
   const add = (id, variationId, relation, relevance) => {
@@ -38,8 +44,19 @@ export async function discover (items) {
     const key = productKey(id, variationId)
     if (!candidates.has(key)) candidates.set(key, { id, variationId, key, relation, relevance })
   }
-  const sources = [...items].filter(item => item.quantity > 0 && !(item.flags || []).includes('freebie'))
-    .sort((a, b) => b.quantity * price(b) - a.quantity * price(a)).slice(0, 4)
+  return { candidates, add }
+}
+
+// Cart lines are known at once: no lookup is needed to name them.
+export function ownDescriptors (items) {
+  const { candidates, add } = collector()
+  sourcesOf(items).forEach(item => add(item.product_id, item.variation_id, 'same', 3))
+  return [...candidates.values()]
+}
+
+export async function discover (items) {
+  const { candidates, add } = collector()
+  const sources = sourcesOf(items)
   sources.forEach(item => add(item.product_id, item.variation_id, 'same', 3))
   ;(runtime.config.curatedPairs || []).forEach(pair => {
     if (sources.some(item => item.product_id === pair.sourceId && (!pair.sourceVariationId || pair.sourceVariationId === item.variation_id))) {
@@ -47,12 +64,10 @@ export async function discover (items) {
     }
   })
   const results = await Promise.all(sources.map(async item => {
+    const [product, past] = await Promise.all([fetchProduct(item.product_id).catch(() => null), history(item.product_id)])
     let related = []
-    try {
-      const product = await fetchProduct(item.product_id)
-      ;(product.related_products || []).forEach(group => { related = related.concat(group.product_ids || []) })
-    } catch (_) {}
-    return [...related, ...await history(item.product_id)]
+    ;((product && product.related_products) || []).forEach(group => { related = related.concat(group.product_ids || []) })
+    return [...related, ...past]
   }))
   results.forEach(ids => ids.forEach(id => {
     if (!items.some(item => item.product_id === id)) add(id, null, 'related', 1)
@@ -115,23 +130,34 @@ export async function simulate (candidate, quote) {
   return { ...candidate, confirmed: Boolean(parsed.free), free: parsed.free, simulatedAt: Date.now(), completes: Boolean(parsed.free) }
 }
 
-export async function recommendations (cart, quote, alive) {
-  const descriptors = await discover(cart.items)
-  if (!alive()) return []
-  // Bound concurrent catalog calls; quotation calls are only made for the shortlist.
-  const prepared = []
-  for (let i = 0; i < descriptors.length; i += 3) {
-    const batch = await Promise.all(descriptors.slice(i, i + 3).map(async descriptor => {
-      try { return prepare(descriptor, await fetchProduct(descriptor.id), cart, quote) } catch (_) { return null }
-    }))
-    prepared.push(...batch.filter(Boolean))
-    if (!alive()) return []
+// Progressive: cart lines first, then related products, then shipping confirmations.
+// `onUpdate` receives the ranked list every time it improves; the resolved value is the final list.
+export async function recommendations (cart, quote, alive, onUpdate = () => {}) {
+  const prepared = new Map()
+  const simulations = new Map()
+  const limit = Math.max(1, Math.min(3, runtime.config.maxSimulations || 3))
+  const ranked = () => [...prepared.values()].sort(core.rank)
+  const emit = () => { if (alive()) onUpdate(ranked()) }
+  const settle = descriptor => fetchProduct(descriptor.id)
+    .then(product => prepare(descriptor, product, cart, quote)).catch(() => null)
+    .then(candidate => { if (candidate) prepared.set(candidate.key, candidate) })
+  // Quotation calls are bounded by `limit`; each confirmation refreshes the list as soon as it lands.
+  const confirm = candidate => {
+    if (!candidate || !candidate.completes || simulations.has(candidate.key) || simulations.size >= limit || !alive()) return
+    simulations.set(candidate.key, simulate(candidate, quote)
+      .catch(() => ({ ...candidate, completes: false, uncertain: true }))
+      .then(result => { if (prepared.has(result.key)) prepared.set(result.key, result); emit() }))
   }
-  prepared.sort(core.rank)
-  const shortlist = prepared.slice(0, Math.max(1, Math.min(3, runtime.config.maxSimulations || 3)))
-  const result = await Promise.all(shortlist.map(async candidate => {
-    if (!candidate.completes) return candidate
-    try { return await simulate(candidate, quote) } catch (_) { return { ...candidate, completes: false, uncertain: true } }
-  }))
-  return alive() ? result.sort(core.rank) : []
+  const own = ownDescriptors(cart.items)
+  await Promise.all(own.map(settle))
+  if (!alive()) return []
+  emit()
+  confirm(ranked()[0])
+  const others = (await discover(cart.items)).filter(descriptor => !own.some(known => known.key === descriptor.key))
+  await Promise.all(others.map(settle))
+  if (!alive()) return []
+  emit()
+  ranked().slice(0, limit).forEach(confirm)
+  await Promise.all(simulations.values())
+  return alive() ? ranked() : []
 }

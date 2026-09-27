@@ -227,7 +227,7 @@ test('rapid double click adds only once; changed price refuses addition', async 
   const events = []
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: lock, enabled: () => true, track: (event, data) => events.push({ event, data }), init: () => {} },
+    '../freight/runtime': { runtime: lock, enabled: () => true, track: (event, data) => events.push({ event, data }), init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
     '../freight/service': {
       recommendations: async () => [],
       fetchProduct: () => { requests++; return new Promise(resolve => { release = resolve }) },
@@ -280,4 +280,85 @@ test('analytics clears previous item context and never calls GA4 twice', () => {
   assert.equal(layer[1].pe_freight_product_id, null)
   assert.equal(layer[1].items, null)
   assert.equal(layer[1].ecommerce.items.length, 0)
+})
+
+const graphsRow = id => ({ results: [{ columns: ['id'], data: [{ row: [id], meta: [null] }] }] })
+test('catalog shares one in-flight request per product; only fresh reads bypass the edge cache', async () => {
+  const requests = []
+  const svc = load('template/js/custom-js/freight/service.js', {
+    './runtime': { runtime },
+    '@ecomplus/client': { store: request => { requests.push(request); return Promise.resolve({ data: product() }) }, graphs: () => Promise.resolve({ data: {} }), modules: () => Promise.resolve({ data: { result: [] } }) }
+  })
+  const id = 'a'.repeat(24)
+  await Promise.all([svc.fetchProduct(id), svc.fetchProduct(id)])
+  assert.equal(requests.length, 1)
+  assert.equal(requests[0].axiosConfig.params.pe_fresh, undefined)
+  await svc.fetchProduct(id, true)
+  assert.equal(requests.length, 2)
+  assert.ok(requests[1].axiosConfig.params.pe_fresh > 0)
+})
+
+test('cart line is shown before related products resolve; shipping confirmations arrive afterwards', async () => {
+  const own = product()
+  const relatedId = 'b'.repeat(24)
+  const related = product({ _id: relatedId, sku: 'REL', name: 'Caixa relacionada', price: 300 })
+  let releaseRelated
+  const shipping = []
+  const svc = load('template/js/custom-js/freight/service.js', {
+    './runtime': { runtime },
+    '@ecomplus/client': {
+      store: ({ url }) => url.includes(relatedId) ? new Promise(resolve => { releaseRelated = () => resolve({ data: related }) }) : Promise.resolve({ data: own }),
+      graphs: () => Promise.resolve({ data: graphsRow(relatedId) }),
+      modules: request => { shipping.push(request); return Promise.resolve({ data: { result: results([service('Free', 0, { shipping_line: { price: 0, total_price: 0, delivery_time: { days: 3 } } })]) } }) }
+    }
+  })
+  const cart = cartWith(own, 8)
+  const quote = { key: 'k', zip: '01310100', status: 'ready', threshold: 29900, subtotal: 27120, services: [], request: {}, skipIds: [] }
+  const updates = []
+  const done = svc.recommendations(cart.data, quote, () => true, list => updates.push([...list.map(c => c.key + (c.confirmed ? '!' : ''))]))
+  await tick(20)
+  assert.deepEqual(updates[0], [own._id + ':'])
+  assert.ok(releaseRelated, 'related product is being fetched while the cart line is already shown')
+  releaseRelated()
+  const final = await done
+  assert.deepEqual([...final.map(c => c.key)].sort(), [own._id + ':', relatedId + ':'])
+  assert.ok(final.every(c => c.confirmed && c.free.shipping_line.delivery_time.days === 3))
+  assert.equal(shipping.length, 2)
+  assert.deepEqual(updates.at(-1), [...final.map(c => c.key + '!')])
+})
+
+test('stored suggestions render before the quote settles and are saved slim after loading', async () => {
+  const p = product()
+  const cart = cartWith(p, 8)
+  const full = serviceModule.prepare({ id: p._id, key: 'own', relation: 'same' }, p, cart.data, { threshold: 29900, subtotal: 27120 })
+  const entry = { key: 'k', threshold: 29900, at: Date.now(), candidates: [{ ...full, product: undefined, parsed: undefined, items: undefined, confirmed: true, free: { shipping_line: { delivery_time: { days: 3 } } } }] }
+  let stored = null
+  let computed = 0
+  const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
+    '@ecomplus/shopping-cart': { __esModule: true, default: cart },
+    '../freight/runtime': { runtime: Vue.observable({ busy: false, enabled: true }), enabled: () => true, track: () => {}, init: () => {}, readSuggestions: key => (stored || entry).key === key ? (stored || entry) : null, saveSuggestions: value => { stored = value } },
+    '../freight/service': { recommendations: async () => { computed++; return [full] }, fetchProduct: async () => p, prepare: () => full, simulate: async value => value }
+  }).default
+  const loading = { key: 'k', zip: '01310100', status: 'loading', threshold: null, subtotal: 27120, services: [] }
+  const instance = new (Vue.extend(component))({ propsData: { quote: loading } })
+  assert.equal(instance.visible, true)
+  assert.equal(instance.gap, 2780)
+  assert.equal(instance.progress, 90)
+  assert.equal(instance.displayed[0].confirmed, true)
+  assert.equal(computed, 0)
+  instance.quote = { ...loading, status: 'ready', threshold: 29900 }
+  await Vue.nextTick()
+  await tick(80)
+  assert.equal(computed, 0, 'same cart, CEP and threshold: nothing to recompute')
+  assert.equal(instance.visible, true)
+  instance.quote = { ...loading, key: 'k2', status: 'ready', threshold: 29900 }
+  await Vue.nextTick()
+  await tick(80)
+  assert.equal(computed, 1)
+  assert.equal(stored.key, 'k2')
+  assert.equal(stored.threshold, 29900)
+  assert.equal(stored.candidates.length, 1)
+  for (const heavy of ['product', 'parsed', 'items']) assert.equal(stored.candidates[0][heavy], undefined)
+  assert.equal(stored.candidates[0].quantity, 1)
+  instance.$destroy()
 })
