@@ -29,7 +29,7 @@ import {
   import { Portal } from '@linusborg/vue-simple-portal'
   import ABackdrop from '@ecomplus/storefront-components/src/ABackdrop.vue'
   import ProductCard from '@ecomplus/storefront-components/src/ProductCard.vue'
-  import { isMobile } from '@ecomplus/storefront-twbs'
+  import { isMobile, isScreenLg } from '@ecomplus/storefront-twbs'
   
   const resetEcomSearch = ({ ecomSearch, term, page, defaultSort }) => {
     ecomSearch.reset()
@@ -126,7 +126,9 @@ import {
         hasSetPopularItems: false,
         isAsideVisible: false,
         searchFilterId: 0,
-        isMobile: isMobile
+        // tela estreita também usa o filtro que abre por botão (iPad e navegador de computador estreito se
+        // apresentam como computador e caíam na lista de filtros aberta, empurrando os produtos pra baixo)
+        isMobile: isMobile || !isScreenLg
       }
     },
   
