@@ -10,12 +10,23 @@ if (affiliateLinkDiv) {
 
 if (screenWidth >= 992) {
     if (window.storefront && window.storefront.context && window.storefront.context.resource === 'categories') {
-        window.storefront.on('widget:@ecomplus/widget-tag-manager', function () {
-            setTimeout(() => {
-                $('#search-engine-snap, #search-engine-load').appendTo('#search-engine .col-md-9.col-12');
-                $('.search-engine__retail .row').appendTo('#search-engine .col-md-9.col-12');
-            }, 800)
-        })
+        // A grade pré-renderizada (#search-engine-snap) nasce fora da coluna de produtos. Assim que o
+        // SearchEngine monta a coluna (.col-md-9), move ela pra lá. Antes era um timer de 800 ms preso ao
+        // tag manager: quando disparava antes do Vue montar, a grade ficava embaixo da coluna de filtros
+        // e a categoria parecia vazia na primeira tela.
+        const $searchEngine = document.getElementById('search-engine')
+        const moveSnap = () => {
+            const $col = $searchEngine.querySelector('.search-engine .col-md-9.col-12')
+            if (!$col) return false
+            $('#search-engine-snap, #search-engine-load').appendTo($col)
+            return true
+        }
+        if ($searchEngine && !moveSnap()) {
+            const observer = new MutationObserver(() => {
+                if (moveSnap()) observer.disconnect()
+            })
+            observer.observe($searchEngine, { childList: true })
+        }
     }
     $('body').on('click','.search-engine__aside-open, .search-engine__aside .card-header .close, .search-engine__toggles > button',function(){
         $('body .search-engine__aside').toggleClass('active')

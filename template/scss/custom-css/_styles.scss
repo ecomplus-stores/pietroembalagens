@@ -72,6 +72,8 @@ body .search-engine__aside .custom-checkbox{padding:0}
     //     max-height: calc(100vh - 280px);
     // }
     .search-engine__aside-open{display:none;}
+    // grade que o Vue renderiza vem dentro de .container: sem o padding ela alinha com a grade pré-renderizada
+    #search-engine .col-md-9 .search-engine__results > .container{padding:0;}
 
     // body .search-engine__aside{
     //     position: sticky;
