@@ -30,7 +30,7 @@
     "socials": true
   },
   "pe_header_v2": {
-    "enabled": false,
+    "enabled": true,
     "promo_rotate_ms": 4000,
     "promos": [
       {
