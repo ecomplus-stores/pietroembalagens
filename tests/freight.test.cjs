@@ -721,3 +721,53 @@ test('painel: o admin da loja carrega as seções customizadas e o carrossel de 
   const ejs = fs.readFileSync(path.join(root, 'template/pages/@/sections/categories-carousel.ejs'), 'utf8')
   assert.match(ejs, /opt\.category_ids && opt\.category_ids\.length/)
 })
+test('quadros informativos: lista da cápsula do topo é saneada (ícone, links, tamanhos, máximo de 4)', () => {
+  const info = plain(boxes.normalizeInfo([
+    { icon: 'percent', title: '5% OFF na 1ª compra', text: 'Cupom BEMVINDO5', link: '/.' },
+    { icon: 'truck', title: 'Frete grátis', text: 'a partir de R$ 299*', link: '/pages/politica-de-frete-gratis' },
+    { icon: 'icone-inexistente', title: 'Sem ícone', text: 'x'.repeat(200), link: 'https://site-malicioso.com/x' },
+    { icon: 'layers', title: '   ', text: 'sem título não entra' },
+    { icon: 'tag', title: 'Etiqueta', link: '//evil.com' },
+    { icon: 'credit-card', title: 'Quinto item' },
+    null
+  ]))
+  assert.equal(info.length, 4)
+  assert.equal(info[0].link, '/.')
+  assert.equal(info[1].link, '/pages/politica-de-frete-gratis')
+  assert.equal(info[2].icon, '')
+  assert.equal(info[2].link, '')
+  assert.equal(info[2].text.length, 60)
+  assert.equal(info[3].link, '')
+  assert.deepEqual(plain(boxes.normalizeInfo(undefined)), [])
+  assert.equal(boxes.safeLink('https://www.pietroembalagens.com.br/caixas'), 'https://www.pietroembalagens.com.br/caixas')
+  assert.equal(boxes.safeLink('javascript:alert(1)'), '')
+})
+test('quadros informativos: botão por ícone e quadros entram sem produto, sem repetir nem passar do máximo', () => {
+  assert.deepEqual(plain(boxes.infoAction({ icon: 'percent' })), { label: 'Criar conta', login: true })
+  assert.deepEqual(plain(boxes.infoAction({ icon: 'truck', link: '/pages/politica-de-frete-gratis' })), { label: 'Ver política', href: '/pages/politica-de-frete-gratis' })
+  assert.equal(boxes.infoAction({ icon: 'truck', link: '' }), null)
+  assert.deepEqual(plain(boxes.infoAction({ icon: 'credit-card' })), { label: 'Ver produtos', href: '/search' })
+  assert.deepEqual(plain(boxes.infoAction({ icon: '' })), { label: 'Ver produtos', href: '/search' })
+  const candidates = [
+    { key: 'info-0', title: 'A', info: { icon: 'percent' } },
+    { key: 'info-1', title: 'B', info: { icon: 'truck' } },
+    { key: 'sales', title: 'Mais vendidos', items: [{ _id: hex(1) }, { _id: hex(2) }] },
+    { key: 'news', title: 'Novidades', items: [{ _id: hex(1) }, { _id: hex(3) }] }
+  ]
+  const composed = plain(boxes.composeBoxes(candidates, () => true))
+  assert.deepEqual(composed.map(box => [box.key, box.info ? 'info' : box.item._id]), [['info-0', 'info'], ['info-1', 'info'], ['sales', hex(1)], ['news', hex(3)]])
+  assert.equal(boxes.composeBoxes(candidates, () => true, 3).length, 3)
+})
+test('quadros informativos: padrão ligado, painel tem o campo e os ícones existem', () => {
+  assert.equal(boxes.normalizeConfig(undefined).showInfo, true)
+  assert.equal(boxes.normalizeConfig({ showInfo: false }).showInfo, false)
+  assert.deepEqual(plain(boxes.normalizeConfig({ info: 'lixo' }).info), [])
+  const cms = fs.readFileSync(path.join(root, 'template/js/cms/sections.js'), 'utf8')
+  assert.match(cms, /name: 'show_info_boxes'/)
+  const home = JSON.parse(fs.readFileSync(path.join(root, 'content/home.json'), 'utf8'))
+  assert.equal(home.sections.find(item => item.type === 'personalized-boxes').show_info_boxes, true)
+  const icons = load('template/js/custom-js/personalized-boxes/icons.js').default
+  for (const key of boxes.INFO_ICONS) assert.match(icons[key], /<(path|rect|circle|g)/)
+  const header = JSON.parse(fs.readFileSync(path.join(root, 'content/header.json'), 'utf8')).pe_header_v2
+  for (const promo of header.promos) assert.ok(boxes.INFO_ICONS.includes(promo.icon), `ícone ${promo.icon} da cápsula sem ilustração`)
+})

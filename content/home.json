@@ -28,6 +28,7 @@
     {
       "type": "personalized-boxes",
       "enabled": true,
+      "show_info_boxes": true,
       "max_boxes": 9,
       "title_viewed": "Visto recentemente",
       "title_search": "Sua busca",

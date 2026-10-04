@@ -60,6 +60,10 @@ export function composeBoxes (candidates, showable, max = MAX_BOXES) {
   const boxes = []
   for (const box of candidates) {
     if (boxes.length >= max) break
+    if (box.info) {
+      boxes.push({ key: box.key, title: box.title, info: box.info })
+      continue
+    }
     const item = (box.items || []).find(it => it && !used.has(it._id) && showable(it))
     if (!item) continue
     used.add(item._id)
@@ -108,9 +112,42 @@ export function normalizeConfig (raw) {
   for (const key in DEFAULT_TITLES) titles[key] = cleanTitle(config.titles && config.titles[key], DEFAULT_TITLES[key])
   return {
     max: Math.floor(Number(config.max)) >= 1 ? Math.min(12, Math.floor(Number(config.max))) : MAX_BOXES,
+    showInfo: config.showInfo !== false,
+    info: normalizeInfo(config.info),
     titles,
     categories: Array.isArray(config.categories)
       ? config.categories.map(item => parseCategory(item && item.category, item && item.title)).filter(Boolean).slice(0, 6)
       : DEFAULT_CATEGORIES
   }
+}
+
+// ---- Quadros informativos (quem não está logado): usam as mensagens da cápsula do topo (content/header.json -> pe_header_v2.promos).
+export const INFO_ICONS = ['percent', 'truck', 'credit-card', 'layers', 'tag']
+export const MAX_INFO = 4
+
+// Só caminhos do próprio site ("/pages/...") ou endereços https da loja; qualquer outra coisa vira "sem link".
+export const safeLink = value => {
+  const link = String(value || '').trim()
+  return /^\/(?!\/)[^\s]*$/.test(link) || /^https:\/\/(www\.)?pietroembalagens\.com\.br(\/[^\s]*)?$/.test(link) ? link : ''
+}
+
+export function normalizeInfo (list) {
+  if (!Array.isArray(list)) return []
+  return list.map(item => {
+    const title = cleanTitle(item && item.title, '')
+    return title && {
+      icon: INFO_ICONS.includes(item.icon) ? item.icon : '',
+      title,
+      text: String(item.text || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+      link: safeLink(item.link)
+    }
+  }).filter(Boolean).slice(0, MAX_INFO)
+}
+
+// O botão de cada quadro informativo depende do ícone (a cápsula do topo não tem texto de botão):
+// % abre o login; caminhão leva à política de frete (se houver link); os demais levam à página de produtos.
+export function infoAction (item) {
+  if (item.icon === 'percent') return { label: 'Criar conta', login: true }
+  if (item.icon === 'truck') return item.link ? { label: 'Ver política', href: item.link } : null
+  return { label: 'Ver produtos', href: '/search' }
 }
