@@ -55,6 +55,11 @@ Cartão branco com borda `#e9eef6` e raio 16 px; texto marrom `#3F2D25`; "% OFF"
 
 Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): cliente novo (3 quadros de reserva), cliente com histórico (produto aberto + busca "fita de cetim" → 6 quadros), seta do computador, rolagem no celular sem rolagem lateral da página, imagens carregando, preço do quadro "Promoções" igual ao da API da loja (R$ 1,00, base R$ 2,74, sem vigência), CLS 0.
 
+## Limitações conhecidas
+
+- **Parcelamento:** o card mostra preço, preço antigo e % OFF, como o print do Mercado Livre; não mostra parcelas (o `APrices` do tema não foi usado).
+- **Promoção vencida:** o índice de busca não devolve `price_effective_date`; então o quadro "Promoções" só testa `base_price > price`. Hoje não há esse caso (a ficha 18 limpou as vencidas), mas se voltar a existir, a correção é buscar o produto em `/products/<id>.json` antes de exibir.
+
 ## Fora do escopo
 
 "Compre novamente" (precisa de login/compras do cliente); botão de limpar histórico; qualquer mudança no checkout.
