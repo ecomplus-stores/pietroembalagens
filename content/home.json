@@ -27,7 +27,7 @@
     },
     {
       "type": "personalized-boxes",
-      "enabled": false
+      "enabled": true
     },
     {
       "type": "info-bar",
