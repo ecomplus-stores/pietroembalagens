@@ -14,6 +14,15 @@ export function enabled () {
   return runtime.enabled && window.peFreightSuggestionsEnabled !== false
 }
 
+// v2 only when the config says so AND the feature is on; any other value or a failed load stays on v1.
+export function uiVersion () {
+  return enabled() && runtime.config && runtime.config.ui === 'v2' ? 'v2' : 'v1'
+}
+
+export function autoSelectFree () {
+  return uiVersion() === 'v2' && runtime.config.autoSelectFree === true
+}
+
 export function refreshConfig () {
   if (pending) return pending
   const controller = new AbortController()
@@ -59,10 +68,28 @@ export function track (event, data = {}) {
       pe_freight_surface: null, pe_freight_action: null, pe_freight_product_id: null,
       pe_freight_variation_id: null, pe_freight_quantity: null, pe_freight_position: null,
       pe_freight_gap: null, value: null, currency: null, items: null,
-      event, pe_freight_version: 'v1', pe_freight_variant: enabled() ? 'treatment' : 'control', ...data,
+      event, pe_freight_version: uiVersion(), pe_freight_variant: enabled() ? 'treatment' : 'control', ...data,
       ecommerce: { currency: data.currency || 'BRL', value: data.value === undefined ? null : data.value, items: data.items || [] }
     })
   } catch (_) {}
+}
+
+// One-shot hint left by a successful suggestion add: pick the free service for this cart and CEP.
+// Valid for two minutes; any manual service choice or a different cart/CEP discards it.
+const autoKey = 'pe-freight-auto'
+export function markAutoSelect (key) {
+  try { window.sessionStorage.setItem(autoKey, JSON.stringify({ key, at: Date.now() })) } catch (_) {}
+}
+export function readAutoSelect () {
+  try {
+    const value = JSON.parse(window.sessionStorage.getItem(autoKey) || 'null')
+    if (value && Date.now() - value.at < 120000) return value
+  } catch (_) {}
+  clearAutoSelect()
+  return null
+}
+export function clearAutoSelect () {
+  try { window.sessionStorage.removeItem(autoKey) } catch (_) {}
 }
 
 // Last computed suggestions, shared by the minicart and the cart page.

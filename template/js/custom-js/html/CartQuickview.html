@@ -1,4 +1,4 @@
-<div class="minicart">
+<div class="minicart" :class="{ 'pe-fs2': peV2 }">
   <a-backdrop
     :is-visible="isVisible"
     @hide="toggle(false)"
@@ -25,6 +25,17 @@
           </button>
         </header>
       </slot>
+
+      <freight-status
+        v-if="peV2 && peQuote && cart.items.length"
+        :quote="peQuote"
+        :v2="true"
+        surface="minicart"
+        :items="cart.items"
+        @select-free="peCall('peSelectFree')"
+        @submit-zip="peSubmitZip"
+        @retry="peCall('fetchShippingServices')"
+      />
 
       <article class="minicart__body card-body">
         <transition-group enter-active-class="animated fadeIn slow">
@@ -77,6 +88,8 @@
           >
             <hr>
             <shipping-calculator
+              ref="peCalc"
+              :pe-surface="peV2 ? 'minicart' : null"
               class="minicart__shipping-calculator"
               :can-select-services="true"
               :shipped-items="cart.items"
@@ -94,7 +107,7 @@
           v-if="cart.subtotal || cart.items.length"
         >
           <div class="minicart__summary">
-            <span>{{ i19subtotal }}</span>
+            <span>{{ peV2 && peQuote && peQuote.selected ? 'Total com frete' : i19subtotal }}</span>
             <div class="minicart__subtotal">
               <a-prices
                 :product="{ price: total || cart.subtotal }"

@@ -1,6 +1,6 @@
-<div class="shipping-calculator" :data-pe-freight="peEnabled ? 'on' : null">
+<div class="shipping-calculator" :class="{ 'pe-fs2-calc': peV2, 'pe-fs2-quiet': peQuiet }" :data-pe-freight="peEnabled ? 'on' : null" :data-pe-ui="peV2 ? 'v2' : null">
   <form
-    v-if="canInputZip"
+    v-if="peShowForm"
     @submit.prevent="submitZipCode"
     class="shipping-calculator__form"
   >
@@ -43,6 +43,46 @@
         role="status"
       >
         <span class="sr-only">Loading...</span>
+      </div>
+
+      <div
+        v-else-if="peCompactLine"
+        key="pe-line"
+        class="pe-fs2-line"
+      >
+        <div class="pe-fs2-line__main">
+          <span>{{ peName(peSelected) }}<template v-if="peDate(peSelected)"> · <span>{{ peDate(peSelected) }}</span></template></span>
+          <strong>{{ peCost(peSelected) }}</strong>
+        </div>
+        <small class="pe-fs2-line__zip">CEP {{ peZipLabel }} · <button type="button" class="pe-fs2-link" @click="peEditing = true">alterar</button></small>
+      </div>
+
+      <div
+        v-else-if="peOptionsList"
+        key="pe-options"
+        class="pe-fs2-options"
+        role="radiogroup"
+        aria-label="Opções de entrega"
+      >
+        <label
+          v-for="{ service, index: i } in peVisibleOptions"
+          :key="i"
+          class="pe-fs2-option"
+          :class="{ 'is-active': selectedService === i, 'is-free': peName(service) === 'Frete grátis' }"
+        >
+          <input
+            type="radio"
+            name="pe-fs2-shipping"
+            :checked="selectedService === i"
+            @change="setSelectedService(i)"
+          />
+          <span class="pe-fs2-option__dot" aria-hidden="true"></span>
+          <span class="pe-fs2-option__body">
+            <span class="pe-fs2-option__name">{{ peName(service) }}</span>
+            <small v-if="peDate(service)">{{ peDate(service) }}</small>
+          </span>
+          <strong class="pe-fs2-option__price">{{ peCost(service) }}</strong>
+        </label>
       </div>
 
       <div
@@ -110,6 +150,12 @@
       </div>
     </transition-group>
 
+    <button v-if="peOptionsList && peMore > 0" type="button" class="pe-fs2-more" :aria-expanded="peExpanded ? 'true' : 'false'" @click="peExpanded = !peExpanded">{{ peExpanded ? 'Ver menos opções' : 'Ver mais ' + peMore + (peMore === 1 ? ' opção' : ' opções') + ' de entrega' }}</button>
+
+    <div v-if="peV2 && (peOptionsList || peEditing)" class="pe-fs2-cep">
+      CEP {{ peZipLabel }} · <button type="button" class="pe-fs2-link" @click="peEditing = !peEditing">{{ peEditing ? 'fechar' : 'alterar' }}</button>
+    </div>
+
     <transition
       enter-active-class="animated fadeInUp"
       leave-active-class="animated fadeOutDown"
@@ -150,5 +196,5 @@
       </div>
     </transition>
   </div>
-  <freight-status v-if="peEnabled" :quote="peSnapshot" @select-free="peSelectFree" @retry="fetchShippingServices" />
+  <freight-status v-if="peEnabled && !(peV2 && peSurface === 'minicart')" :quote="peSnapshot" :v2="peV2" :surface="peSurface || 'cart'" :items="shippedItems" @select-free="peSelectFree" @submit-zip="peSetZip" @retry="fetchShippingServices" />
 </div>

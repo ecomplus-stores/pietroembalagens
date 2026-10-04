@@ -1,4 +1,4 @@
-<div class="cart">
+<div class="cart" :class="{ 'pe-fs2': peV2 }">
   <transition-group enter-active-class="animated fadeInDown">
     <div
       class="row"
@@ -74,6 +74,7 @@
               </transition>
 
               <shipping-calculator
+                :pe-surface="peV2 ? 'cart' : null"
                 class="cart__shipping"
                 :can-select-services="true"
                 :shipped-items="cart.items"
@@ -99,7 +100,8 @@
             <slot name="checkout">
               <a
                 v-if="isValidCart"
-                class="cart__btn-checkout btn btn-lg btn-block btn-success"
+                class="cart__btn-checkout btn btn-lg btn-block"
+                :class="peV2 ? 'pe-fs2-checkout' : 'btn-success'"
                 role="button"
                 :href="checkoutUrl"
               >
@@ -108,6 +110,8 @@
                 </span>
                 {{ i19checkout }}
               </a>
+
+              <p v-if="peV2 && isValidCart" class="pe-fs2-pay">Até <b>5x sem juros</b> ou <b class="pe-fs2-pay__pix">desconto no PIX</b></p>
 
               <a
                 class="cart__btn-back btn btn-block btn-outline-secondary"

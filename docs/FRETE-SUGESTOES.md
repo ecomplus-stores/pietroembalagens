@@ -53,3 +53,37 @@ Teste local com APIs reais: 8 anúncios de R$ 33,90 (R$ 271,20) + 2 anúncios de
 Eventos no `dataLayer` e GA4: `pe_freight_suggestions_view`, `pe_freight_suggestion_click`, `pe_freight_suggestion_add`, `pe_freight_suggestion_refresh`, `pe_freight_available`, `pe_freight_applied`. Sem CEP, nome ou contato do cliente. Incluem versão/grupo e, conforme evento, superfície, ação, valor e itens.
 
 O GTM usa a tag `GA4 - pe_freight`, acionada por `CE - pe_freight`, com o e-commerce do `dataLayer` habilitado. As dimensões de evento `pe_freight_surface` (`minicart` ou `cart`) e `pe_freight_action` (`image`, `name` ou `add`) permitem distinguir os cliques e as adições confirmadas. Os eventos permanecem associados à sessão e ao usuário no GA4, permitindo analisá-los antes de `begin_checkout`, `add_shipping_info`, `add_payment_info` e `purchase`. Para uma leitura por produto, use os itens de e-commerce enviados em cada evento.
+
+## v2 (UI)
+
+Redesenho visual do bloco de frete grátis no minicart e na página do carrinho. O motor (`freight/core.js`, `service.js`, simulação, revalidação no clique, cache e eventos) não muda; só a apresentação.
+
+**Backup antes da v2:** branch `backup/antes-frete-v2-20261003`, SHA `176a94396a0b269df9ef6cac8a5854fe889286e4` (o `master` de 03/10/2026).
+
+### Flags (`template/public/pe-freight-config.json`)
+
+- `"ui": "v1" | "v2"`, padrão `"v1"`. `uiVersion()` (em `freight/runtime.js`) retorna `'v2'` somente quando `config.ui === 'v2'` **e** `enabled()` é verdadeiro. Qualquer outro valor (`"V2"`, `"v3"`, ausente), `enabled: false`, bucket fora do `rolloutPercent`, falha de rede ou JSON inválido cai na v1.
+- `"autoSelectFree": false`, padrão desligado. Com `ui: "v2"` e a flag ligada, depois de uma adição **vinda de uma sugestão com frete grátis confirmado**, o calculador seleciona o frete grátis sozinho. O marcador fica em `sessionStorage` (`pe-freight-auto`), vale 2 minutos e só para o mesmo carrinho e CEP (`core.fingerprint`); é descartado ao ser usado, por qualquer escolha manual da cliente, por outro carrinho/CEP ou ao expirar. Ao aplicar, a preferência explícita anterior do CEP é limpa (não fica fixada no frete grátis).
+- A v1 continua no código, sem alteração, atrás de `v-if`/`v-else` em `FreightStatus.vue`, `FreightSuggestions.vue`, `ShippingCalculator.html`, `CartQuickview.html` e `TheCart.html`.
+
+### Onde a v2 vale
+
+Só o minicart e a página do carrinho. O calculador só entra no ramo v2 quando recebe `pe-surface` (`minicart` ou `cart`), o que somente `CartQuickview` e `TheCart` fazem com `ui: "v2"`. Página de produto e checkout não recebem a prop e ficam como estão, mesmo com `ui: "v2"`.
+
+### Prazo "Chega até DD/MM (dia)"
+
+A regra de dias úteis e a lista de feriados continuam **só** em `content/code.json` (`html_head`), que agora expõe `window.peDeliveryDate = { somaUteis, textoData }`. `freight/delivery-date.js` usa esse global, somando postagem + transporte + produção, como o `ShippingLine` nativo. Dias corridos (`working_days: false`) mostram "Até N dias". Sem o global, o texto vira um nó isolado "N dias úteis", que o script do `code.json` converte.
+
+### Medição
+
+`pe_freight_version` do `track()` agora reflete `uiVersion()` (`'v1'` ou `'v2'`). `pe_freight_variant` (`treatment`/`control`) continua separando quem está dentro do bucket. Com a flag `autoSelectFree` ligada, `pe_freight_applied` também sobe quando a seleção foi automática.
+
+### Publicação e reversão
+
+1. Merge com `"ui": "v1"` (nada muda para a cliente). Esperar o **Build and deploy**.
+2. Trocar para `"ui": "v2"` (e, se quiser, `rolloutPercent`). O bucket persistido (`pe-freight-bucket-v1`) mantém cada navegador no mesmo grupo.
+3. **Rollback rápido, sem deploy de código:** mudar só `"ui"` para `"v1"`, commit e envio ao `master`. Abas abertas atualizam em até 60 segundos.
+4. **Desligar tudo:** `"enabled": false`.
+5. **Reversão integral:** `git revert` dos commits `feat(frete-v2):`, do mais recente para o mais antigo. Nunca `reset --hard` com push forçado.
+
+Validação: `node --test tests/freight.test.cjs` e o build do README, mais os cenários obrigatórios acima com `ui: "v1"` e com `ui: "v2"` (incluindo 375px).

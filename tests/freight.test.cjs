@@ -23,7 +23,12 @@ function load (file, mocks = {}, globals = {}) {
     if (id in mocks) return mocks[id]
     if (id === './core' || id === '../freight/core') return { __esModule: true, default: core }
     if (id.endsWith('.vue')) return {}
-    if (id.startsWith('.')) return require(path.resolve(path.dirname(filename), id))
+    if (id.startsWith('.')) {
+      const resolved = path.resolve(path.dirname(filename), id)
+      // Template sources are ES modules; CI runs Node 20, so transpile them instead of require()-ing them.
+      if (resolved.startsWith(path.join(root, 'template') + path.sep)) return load(path.relative(root, resolved.endsWith('.js') ? resolved : resolved + '.js'), mocks, globals)
+      return require(resolved)
+    }
     return require(id)
   }
   vm.runInNewContext(code, { module, exports: module.exports, require: localRequire, setTimeout, clearTimeout, console, ...globals }, { filename })
@@ -168,7 +173,7 @@ test('calculator ignores stale requests after CEP change and preserves explicit 
   const calls = []
   const preferences = new Map()
   const component = load('template/js/custom-js/js/ShippingCalculator.js', {
-    '../freight/runtime': { runtime, enabled: () => true, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
+    '../freight/runtime': { runtime, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, readAutoSelect: () => null, clearAutoSelect: () => {}, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
     '@ecomplus/client': { modules: request => new Promise(resolve => calls.push({ request, resolve })) },
     '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
     'vue-cleave-component': {}
@@ -227,7 +232,7 @@ test('rapid double click adds only once; changed price refuses addition', async 
   const events = []
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: lock, enabled: () => true, track: (event, data) => events.push({ event, data }), init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
+    '../freight/runtime': { runtime: lock, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, markAutoSelect: () => {}, track: (event, data) => events.push({ event, data }), init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
     '../freight/service': {
       recommendations: async () => [],
       fetchProduct: () => { requests++; return new Promise(resolve => { release = resolve }) },
@@ -336,7 +341,7 @@ test('stored suggestions render before the quote settles and are saved slim afte
   let computed = 0
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: Vue.observable({ busy: false, enabled: true }), enabled: () => true, track: () => {}, init: () => {}, readSuggestions: key => (stored || entry).key === key ? (stored || entry) : null, saveSuggestions: value => { stored = value } },
+    '../freight/runtime': { runtime: Vue.observable({ busy: false, enabled: true }), enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, markAutoSelect: () => {}, track: () => {}, init: () => {}, readSuggestions: key => (stored || entry).key === key ? (stored || entry) : null, saveSuggestions: value => { stored = value } },
     '../freight/service': { recommendations: async () => { computed++; return [full] }, fetchProduct: async () => p, prepare: () => full, simulate: async value => value }
   }).default
   const loading = { key: 'k', zip: '01310100', status: 'loading', threshold: null, subtotal: 27120, services: [] }
@@ -361,4 +366,204 @@ test('stored suggestions render before the quote settles and are saved slim afte
   for (const heavy of ['product', 'parsed', 'items']) assert.equal(stored.candidates[0][heavy], undefined)
   assert.equal(stored.candidates[0].quantity, 1)
   instance.$destroy()
+})
+
+test('uiVersion is v2 only for ui "v2" with the feature on; everything else falls back to v1', async () => {
+  const storage = bucket => ({ getItem: () => String(bucket), setItem: () => {} })
+  const versionFor = async (config, { bucket = 10, fail = false, kill = false } = {}) => {
+    const s = storage(bucket)
+    const module = load('template/js/custom-js/freight/runtime.js', {}, {
+      window: { localStorage: s, sessionStorage: s, peFreightSuggestionsEnabled: kill ? false : undefined }, AbortController,
+      fetch: async () => { if (fail) throw new Error('offline'); return { ok: true, json: async () => { if (config === 'bad') throw new Error('json'); return config } } }
+    })
+    await module.refreshConfig()
+    return module.uiVersion()
+  }
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }), 'v2')
+  assert.equal(await versionFor({ enabled: true, ui: 'v1' }), 'v1')
+  assert.equal(await versionFor({ enabled: true }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'V2' }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v3' }), 'v1')
+  assert.equal(await versionFor({ enabled: false, ui: 'v2' }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2', rolloutPercent: 50 }, { bucket: 80 }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }, { fail: true }), 'v1')
+  assert.equal(await versionFor('bad'), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }, { kill: true }), 'v1')
+})
+
+test('delivery text sums posting, transport and production like the native line; calendar days keep plain wording', () => {
+  const nodeWindow = extra => ({ window: extra })
+  const withScript = () => {
+    // The real head script, with a fixed clock: Saturday 03/10/2026.
+    const head = require(path.join(root, 'content/code.json')).html_head
+    const script = head.match(/<script>([\s\S]*?)<\/script>/)[1]
+    const RealDate = Date
+    class FixedDate extends RealDate { constructor (...args) { super(...(args.length ? args : ['2026-10-03T15:00:00Z'])) } }
+    const window = { addEventListener () {} }
+    const document = { readyState: 'loading', addEventListener () {}, createTreeWalker: () => ({ nextNode: () => null }), querySelector: () => null, querySelectorAll: () => [], getElementById: () => null, body: {} }
+    vm.runInNewContext(script, { window, document, Date: FixedDate, NodeFilter: { SHOW_TEXT: 4 }, MutationObserver: function () { this.observe = () => {} }, location: { hash: '' }, sessionStorage: {}, setTimeout, clearTimeout, console })
+    return window.peDeliveryDate
+  }
+  const shared = withScript()
+  assert.equal(shared.textoData(6), 'Chega até 13/10 (ter)')
+  assert.equal(shared.textoData(2), 'Chega até 06/10 (ter)')
+  const mod = load('template/js/custom-js/freight/delivery-date.js', {}, nodeWindow({ peDeliveryDate: shared }))
+  assert.equal(mod.deliveryText({ delivery_time: { days: 6, working_days: true } }), 'Chega até 13/10 (ter)')
+  // posting 2 + transport 4 + production 0 must equal 6 working days, not 4.
+  assert.equal(mod.deliveryText({ posting_deadline: { days: 2, working_days: true }, delivery_time: { days: 4, working_days: true } }), 'Chega até 13/10 (ter)')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 4, working_days: true } }, 2), 'Chega até 13/10 (ter)')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 3, working_days: false } }), 'Até 3 dias')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 1, working_days: false } }), 'Até 1 dia')
+  assert.equal(mod.deliveryText({}), '')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 0, working_days: true } }), '')
+  const bare = load('template/js/custom-js/freight/delivery-date.js', {}, nodeWindow({}))
+  assert.equal(bare.deliveryText({ delivery_time: { days: 6, working_days: true } }), '6 dias úteis')
+  assert.equal(bare.deliveryText({ delivery_time: { days: 1, working_days: true } }), '1 dia útil')
+  assert.equal(mod.productionDays([{ quantity: 2, production_time: { days: 3, cumulative: true } }, { quantity: 1, production_time: { days: 2 } }]), 6)
+})
+
+test('v2 suggestions: sorted by increase, effect text by rule, marker only for a confirmed add with the flag on', async () => {
+  const p = product()
+  const cart = cartWith(p, 8)
+  const quote = { key: 'q', zip: '05141000', status: 'ready', threshold: 29900, subtotal: 27120, services: [service('PAC', 29.9), service('Sedex', 45.34)], selected: service('PAC', 29.9) }
+  const marks = []
+  const flags = { auto: false }
+  const runtimeState = Vue.observable({ busy: false, enabled: true })
+  const make = candidatesList => {
+    const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
+      '@ecomplus/shopping-cart': { __esModule: true, default: cart },
+      '@ecomplus/utils': { formatMoney: value => 'R$ ' + value.toFixed(2).replace('.', ',') },
+      '../freight/runtime': { runtime: runtimeState, enabled: () => true, uiVersion: () => 'v2', autoSelectFree: () => flags.auto, markAutoSelect: key => marks.push(key), track: () => {}, init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
+      '../freight/service': { recommendations: async () => [], fetchProduct: async () => p, prepare: (d, pr, c, q, quantity) => candidatesList.find(x => x.quantity === quantity), simulate: async v => v }
+    }).default
+    return new (Vue.extend(component))({ propsData: { quote, compact: true } })
+  }
+  const a = { key: 'a', id: p._id, title: 'A', quantity: 3, additional: 2970, remaining: 0, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } }, parsed: { ...cart.data.items[0] } }
+  const b = { key: 'b', id: p._id, title: 'B', quantity: 2, additional: 2780, remaining: 0, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } }, parsed: { ...cart.data.items[0] } }
+  const c = { key: 'c', id: p._id, title: 'C', quantity: 1, additional: 3390, remaining: 0, confirmed: true, free: null, parsed: { ...cart.data.items[0] } }
+  const d = { key: 'd', id: p._id, title: 'D', quantity: 1, additional: 1000, remaining: 500, confirmed: false }
+  const e = { key: 'e', id: p._id, title: 'E', quantity: 1, additional: 2780, remaining: 0, confirmed: false }
+  const instance = make([a, b, c])
+  instance.candidates = [a, c, b]
+  assert.deepEqual(instance.displayed.map(x => x.key), ['a', 'c'], 'the ranking picks who is shown; v2 then orders that slice by increase')
+  instance.compact = false
+  assert.deepEqual(instance.displayed.map(x => x.key), ['b', 'a', 'c'])
+  assert.equal(instance.effectText(b), 'Custa menos que o frete de R$ 29,90')
+  assert.equal(instance.effectText(c), 'Só R$ 4,00 a mais que o frete, e o produto fica com você')
+  assert.equal(instance.effectText(d), 'Ainda faltarão R$ 5,00 depois de adicionar.')
+  instance.loading = false
+  assert.equal(instance.effectText(e), 'Atinge o mínimo do frete grátis')
+  instance.loading = true
+  assert.equal(instance.effectText(e), 'Atinge o mínimo do frete grátis · conferindo a entrega…')
+  instance.quote = { ...quote, selected: null }
+  assert.equal(instance.freightReference, 2990, 'no selection: cheapest paid service')
+  assert.equal(instance.deliveryFor(c), '', 'no confirmed free line, no delivery line')
+  instance.$destroy()
+
+  // marker: flag off → none; flag on + confirmed add → one, keyed by the cart after the addition
+  const real = serviceModule.prepare({ id: p._id, key: 'own', relation: 'same' }, p, cart.data, quote)
+  const confirmed = { ...real, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } } }
+  const addFlow = make([confirmed])
+  addFlow.quote = { ...quote, key: 'q' }
+  await addFlow.add(confirmed)
+  assert.equal(marks.length, 0, 'flag off: no marker')
+  flags.auto = true
+  await addFlow.add(confirmed)
+  assert.equal(marks.length, 1)
+  assert.equal(marks[0], core.fingerprint(cart.data.items, '05141000'))
+  addFlow.$destroy()
+})
+
+test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, one-shot and loses to a manual choice', async () => {
+  const preferences = new Map()
+  const flags = Vue.observable({ ui: 'v2', auto: true, mark: null, cleared: 0 })
+  const runtimeMock = {
+    runtime, enabled: () => true, uiVersion: () => flags.ui, autoSelectFree: () => flags.auto && flags.ui === 'v2', init: () => {},
+    readAutoSelect: () => flags.mark, clearAutoSelect: () => { flags.mark = null; flags.cleared++ },
+    getPreference: z => preferences.get(z) || '', setPreference: (z, key) => preferences.set(z, key)
+  }
+  const build = propsData => {
+    const component = load('template/js/custom-js/js/ShippingCalculator.js', {
+      '../freight/runtime': runtimeMock,
+      '@ecomplus/client': { modules: () => new Promise(() => {}) },
+      '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
+      'vue-cleave-component': {},
+      '@ecomplus/utils': { $ecomConfig: { get: () => 'BR' }, i18n: v => v.pt_br || v, price: item => item.price, formatMoney: v => 'R$ ' + v.toFixed(2).replace('.', ',') }
+    }, { window: { localStorage: { getItem: () => null, setItem: () => {} }, peDeliveryDate: { textoData: n => 'Chega até em ' + n } } }).default
+    const cart = cartWith(product(), 8)
+    return { cart, instance: new Vue({ ...component, propsData: { shippedItems: cart.data.items, zipCode: '05141000', canSelectServices: true, ...propsData } }) }
+  }
+  const pac = service('PAC', 29.9)
+  const free = service('FREE', 0)
+  const minicart = build({ peSurface: 'minicart' })
+  const plain = build({})
+  const checkout = build({ peSurface: undefined })
+  assert.equal(minicart.instance.peV2, true)
+  assert.equal(plain.instance.peV2, false, 'no surface (PDP, checkout): v1')
+  assert.equal(checkout.instance.peShowForm, true)
+  flags.ui = 'v1'
+  assert.equal(minicart.instance.peV2, false, 'ui v1 turns the branch off even with a surface')
+  flags.ui = 'v2'
+  // states
+  assert.equal(minicart.instance.peShowForm, false, 'minicart v2 hides the native zip form until "alterar"')
+  minicart.instance.peEditing = true
+  assert.equal(minicart.instance.peShowForm, true)
+  minicart.instance.peEditing = false
+  // auto selection: an earlier explicit PAC choice, then a confirmed suggestion add leaves a hint for this cart+CEP
+  const key = () => core.fingerprint(minicart.cart.data.items, '05141000')
+  const pacKey = core.serviceKey(pac)
+  preferences.set('05141000', pacKey)
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC', 'no hint: the explicit choice is kept')
+  flags.mark = { key: key(), at: Date.now() }
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'FREE', 'hint + free service: free is taken')
+  assert.equal(preferences.get('05141000'), '', 'the old explicit paid choice no longer pins')
+  assert.equal(flags.mark, null, 'used up: the hint is deleted once applied')
+  assert.equal(minicart.instance.peAutoAt > 0, true)
+  // one-shot per calculator: a manual choice afterwards wins and discards the hint
+  minicart.instance.setSelectedService(minicart.instance.shippingServices.findIndex(item => item.service_code === 'PAC'))
+  assert.equal(flags.mark, null)
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC')
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC', 'manual choice survives later recalculation')
+  // no free service: the hint stays, nothing changes
+  preferences.set('05141000', pacKey)
+  flags.mark = { key: key(), at: 5 }
+  minicart.instance.parseShippingOptions(results([pac]))
+  assert.equal(flags.mark.at, 5)
+  assert.equal(preferences.get('05141000'), pacKey, 'paid choice untouched when there is nothing free to take')
+  // different cart: hint discarded
+  flags.mark = { key: 'outro carrinho', at: 6 }
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(flags.mark, null)
+  // flag off, v1 UI, or no surface: never auto-selects
+  for (const [label, setup, target] of [['flag off', () => { flags.auto = false }, minicart], ['ui v1', () => { flags.ui = 'v1' }, minicart], ['no surface', () => {}, plain]]) {
+    flags.auto = true; flags.ui = 'v2'
+    setup()
+    preferences.set('05141000', pacKey)
+    flags.mark = { key: core.fingerprint(target.cart.data.items, '05141000'), at: 7 }
+    target.instance.parseShippingOptions(results([pac, free]))
+    assert.equal(target.instance.shippingServices[target.instance.selectedService].service_code, 'PAC', label)
+  }
+  // minicart lists up to three services (the selected one always among them) and says how many more exist
+  flags.mark = null
+  const many = ['A', 'B', 'C', 'D', 'E'].map((code, n) => service(code, 10 + n))
+  minicart.instance.isWaiting = false
+  minicart.instance.shippingServices = many
+  minicart.instance.selectedService = 0
+  assert.equal(minicart.instance.peOptionsList, true)
+  assert.deepEqual(minicart.instance.peVisibleOptions.map(o => o.index), [0, 1, 2])
+  assert.equal(minicart.instance.peMore, 2)
+  minicart.instance.selectedService = 4
+  assert.deepEqual(minicart.instance.peVisibleOptions.map(o => o.index), [0, 1, 4])
+  minicart.instance.peExpanded = true
+  assert.equal(minicart.instance.peVisibleOptions.length, 5, 'the button expands the list in place')
+  assert.equal(minicart.instance.peMore, 2, 'the button label still counts the hidden ones')
+  minicart.instance.peExpanded = false
+  minicart.instance.shippingServices = [many[0]]
+  minicart.instance.selectedService = 0
+  assert.equal(minicart.instance.peCompactLine, true)
+  assert.equal(minicart.instance.peOptionsList, false, 'a single service keeps the one-line summary')
+  for (const entry of [minicart, plain, checkout]) entry.instance.$destroy()
 })
