@@ -84,6 +84,8 @@ A regra de dias úteis e a lista de feriados continuam **só** em `content/code.
 
 `pe_freight_version` do `track()` agora reflete `uiVersion()` (`'v1'` ou `'v2'`). `pe_freight_variant` (`treatment`/`control`) continua separando quem está dentro do bucket. Com a flag `autoSelectFree` ligada, `pe_freight_applied` também sobe quando a seleção foi automática.
 
+GTM/GA4 (04/10/2026): a tag `GA4 - pe_freight` agora também envia `pe_freight_version` e `pe_freight_variant` (variáveis `DLV - pe_freight_*`). Dimensões de evento cadastradas no GA4: `pe_freight_version` ("Frete versão da UI") e `pe_freight_variant` ("Frete grupo do teste"), além de `pe_freight_surface` e `pe_freight_action`. Valem para eventos coletados depois do cadastro.
+
 ### Publicação e reversão
 
 1. Merge com `"ui": "v1"` (nada muda para a cliente). Esperar o **Build and deploy**.

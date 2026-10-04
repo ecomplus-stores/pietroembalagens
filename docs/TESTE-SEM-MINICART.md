@@ -20,7 +20,7 @@ Trocar `"minicart"` para `true`, commit e push no `master` (deploy em ~3 min). R
 
 ## Medição
 
-Eventos no `dataLayer` (sem dado pessoal): `pe_cart_ui`, `pe_cart_notice_view`, `pe_cart_notice_click` (`pe_cart_action`: `go` ou `keep`), todos com `pe_cart_ui: no_minicart | minicart`. Ainda sem tag no GTM.
+Eventos no `dataLayer` (sem dado pessoal): `pe_cart_ui`, `pe_cart_notice_view`, `pe_cart_notice_click` (`pe_cart_action`: `go` ou `keep`), todos com `pe_cart_ui: no_minicart | minicart`. GTM (container GTM-PC6LB8B, publicado em 04/10/2026): tag `GA4 - pe_cart`, acionador `CE - pe_cart` (regex `^pe_cart_(ui|notice_view|notice_click)$`) e variáveis `DLV - pe_cart_*`. No GA4, dimensões de evento cadastradas: `pe_cart_ui` ("Carrinho variante") e `pe_cart_action` ("Carrinho ação do aviso"). `pe_cart_count` chega ao GA4 mas não tem dimensão.
 
 ## Código
 
