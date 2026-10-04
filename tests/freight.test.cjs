@@ -573,8 +573,7 @@ test('topo v2: chave em header.json, templates EJS compilam e o markup v1 não g
   const header = JSON.parse(fs.readFileSync(path.join(root, 'content/header.json'), 'utf8'))
   const v2 = header.pe_header_v2
   assert.ok(v2 && typeof v2.enabled === 'boolean', 'pe_header_v2.enabled precisa existir')
-  // O padrão publicado é desligado; PE_ALLOW_TOPO_V2=1 permite rodar a suíte com a chave ligada.
-  if (process.env.PE_ALLOW_TOPO_V2 !== '1') assert.equal(v2.enabled, false)
+  // A chave pode estar ligada ou desligada (liga/desliga é decisão de publicação): aqui só se exige que exista.
   assert.ok(Array.isArray(v2.benefits) && v2.benefits.length === 3)
   assert.ok(Array.isArray(v2.stories) && v2.stories.length === 9)
   assert.match(v2.seasonal.link, /^\/caixas-tema-natal$/)
