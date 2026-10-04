@@ -1,6 +1,6 @@
 # Quadros personalizados da home
 
-Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livre, **com o mesmo tamanho** (medido nos prints do Rafael, 04/10): quadro de **184 × 286 px**, 16 px entre quadros, 6 visíveis em 1184 px; banner de **280 px** de altura no computador. **Celular** (print do Rafael): quadro de **149 × 225 px** com 13 px entre quadros (~2 visíveis, rola de lado) e banner em cartão de cantos arredondados, 16 px de margem, proporção 8:3 (358 × 134 em 390 px). Cada quadro mostra **1 produto** (título do quadro, foto, nome em 2 linhas, preço; com preço antigo riscado e % OFF quando está em promoção, e a linha "em até Nx de R$ X" + "sem juros" quando a loja não cobra juros). As parcelas usam a configuração de pagamento da loja (`window.storefront.info.list_payments.installments_option`, a mesma do tema: mínimo de R$ 5 por parcela e máximo da loja); sem ela, ou com preço baixo demais, a linha fica vazia. Seta para rolar de lado no computador; no celular, rola com o dedo. A linha "Frete grátis" **não existe de propósito**: o frete grátis depende do CEP e do mínimo do carrinho, e a home não sabe isso por produto.
+Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livre, **com o mesmo tamanho** (medido nos prints do Rafael, 04/10): quadro de **184 × 286 px**, 16 px entre quadros, 6 visíveis em 1184 px; banner de **283 px** de altura no computador, com 18 px até os quadros (do menu até os quadros são 301 px, como no ML). **Celular** (print do Rafael): quadro de **149 × 225 px** com 13 px entre quadros (~2 visíveis, rola de lado) e banner em cartão de cantos arredondados, 16 px de margem, proporção 8:3 (358 × 134 em 390 px). Cada quadro mostra **1 produto** (título do quadro, foto, nome em 2 linhas, preço; com preço antigo riscado e % OFF quando está em promoção, e a linha "em até Nx de R$ X" + "sem juros" quando a loja não cobra juros). As parcelas usam a configuração de pagamento da loja (`window.storefront.info.list_payments.installments_option`, a mesma do tema: mínimo de R$ 5 por parcela e máximo da loja); sem ela, ou com preço baixo demais, a linha fica vazia. Seta para rolar de lado no computador; no celular, rola com o dedo. A linha "Frete grátis" **não existe de propósito**: o frete grátis depende do CEP e do mínimo do carrinho, e a home não sabe isso por produto.
 
 **Status (04/10/2026):** código no ar desde `7efb2336`; artes novas dos banners (1920×380 e 1000×375) e **chave ligada** em seguida, no mesmo dia (commit `feat(quadros): liga quadros personalizados`). Banners: `banner-florzinhas-*` e `banner-caixas-bolos-premium-*` em `template/public/img/uploads/`, referenciados no `banner-slider` de `content/home.json` (`img` computador, `mobile_img` celular). Setas do banner reduzidas e coladas na borda (as do tema cobriam o texto das artes).
 
@@ -8,7 +8,7 @@ Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livr
 
 ## Quadros
 
-Até 6 quadros, nesta ordem; o que não tiver produto exibível é pulado e nenhum produto aparece em dois quadros.
+Até 9 quadros, nesta ordem; o que não tiver produto exibível é pulado e nenhum produto aparece em dois quadros.
 
 | Quadro | De onde vem | Aparece |
 |---|---|---|
@@ -18,8 +18,9 @@ Até 6 quadros, nesta ordem; o que não tiver produto exibível é pulado e nenh
 | Mais vendidos | `EcomSearch` com `sort: sales` | sempre |
 | Promoções | `EcomSearch` com `sort: offers`, só os que estão em promoção (`onPromotion`) | sempre |
 | Novidades | `EcomSearch` com `sort: news` (id decrescente) | sempre |
+| Caixas p/ Transporte, Caixas para presente, Forminhas | o mais vendido de cada categoria (mesmos ids e nomes das prateleiras da home) | sempre; completam a fileira em 6 quadros para o visitante novo, como no ML |
 
-Cliente novo vê os 3 últimos. Um produto só é exibido se estiver disponível, visível, com estoque, preço maior que zero, foto e slug. Se nada for exibível, a seção se esconde.
+Cliente novo vê os 6 de reserva (preenchem a largura; com mais de 6 aparece a seta). Um produto só é exibido se estiver disponível, visível, com estoque, preço maior que zero, foto e slug. Se nada for exibível, a seção se esconde.
 
 ## Privacidade
 
@@ -66,3 +67,8 @@ Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): 
 ## Fora do escopo
 
 "Compre novamente" (precisa de login/compras do cliente); botão de limpar histórico; linha "Frete grátis" e quadros informativos do visitante sem login; qualquer mudança no checkout.
+
+## Ajustes de 04/10/2026 (conferência com os prints do ML)
+- **Título espremido:** o quadro "Promoções" (uma linha a mais: preço antigo) estourava os 286 px e o título virava 3 px de altura. Agora o título nunca encolhe e quem cede espaço é a foto (`flex: 1 1 108px`, mínimo 56 px).
+- **Fileira que não preenchia a largura:** sem histórico eram 3 quadros (5 com histórico), deixando vazio à direita. Entraram 3 quadros de categoria como reserva (até 9 no total) e a fileira fica centralizada quando sobra espaço.
+- **Altura:** banner 283 px e margem de 18 px, somando 301 px do menu até os quadros (medido no ML).

@@ -22,6 +22,14 @@ if (/^\/search\/?$/.test(window.location.pathname)) {
 
 const $root = document.querySelector('.pe-boxes')
 
+// Reserva por categoria (o mais vendido de cada uma): os mesmos ids e nomes das prateleiras da home (content/home.json).
+// Com o histórico vazio, são eles que completam a fileira até 6 quadros, como no ML.
+const CATEGORY_BOXES = [
+  { key: 'cat-transporte', title: 'Caixas p/ Transporte', id: '64d032db2cd6b659590b9090' },
+  { key: 'cat-presente', title: 'Caixas para presente', id: '684f22a8578b5f79543fbdd6' },
+  { key: 'cat-forminhas', title: 'Forminhas', id: '6468b95ca0e875411e95fc22' }
+]
+
 const showable = item => item.available !== false && item.visible !== false && item.slug &&
   inStock(item) && getPrice(item) > 0 && Array.isArray(item.pictures) && item.pictures.length > 0
 
@@ -95,13 +103,14 @@ const setupArrows = $root => {
 const render = async $root => {
   const viewed = readViewed(storage)
   const term = readTerm(storage)
-  const [seen, searched, related, sales, offers, news] = await Promise.all([
+  const [seen, searched, related, sales, offers, news, ...categories] = await Promise.all([
     viewed.length ? fetchItems(search => search.setProductIds(viewed)) : [],
     term ? fetchItems(search => search.setSearchTerm(term), 8) : [],
     viewed.length ? fetchRelated(viewed) : [],
     fetchItems(search => search.setSortOrder('sales')),
     fetchItems(search => search.setSortOrder('offers'), 24).then(items => items.filter(onPromotion)),
-    fetchItems(search => search.setSortOrder('news'))
+    fetchItems(search => search.setSortOrder('news')),
+    ...CATEGORY_BOXES.map(({ id }) => fetchItems(search => { search.setCategoryIds([id]); search.setSortOrder('sales') }))
   ])
   const boxes = composeBoxes([
     { key: 'viewed', title: 'Visto recentemente', items: sortByViewed(seen, viewed) },
@@ -109,7 +118,8 @@ const render = async $root => {
     { key: 'related', title: 'Também te interessa', items: related },
     { key: 'sales', title: 'Mais vendidos', items: sales },
     { key: 'offers', title: 'Promoções', items: offers },
-    { key: 'news', title: 'Novidades', items: news }
+    { key: 'news', title: 'Novidades', items: news },
+    ...CATEGORY_BOXES.map(({ key, title }, i) => ({ key, title, items: categories[i] }))
   ], showable)
   if (!boxes.length) {
     $root.hidden = true
