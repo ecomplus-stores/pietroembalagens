@@ -68,9 +68,7 @@ export default {
       if (this.monthlyInterest) {
         return `ou ${n}x de ${this.formatMoney(this.installmentValue)}`
       }
-      return this.priceWithDiscount
-        ? `ou ${this.formatMoney(this.price)} em até ${n}x sem juros`
-        : `em até ${n}x de ${this.formatMoney(this.installmentValue)} sem juros`
+      return `${this.priceWithDiscount ? 'ou ' : ''}${n}x de ${this.formatMoney(this.installmentValue)} sem juros`
     }
   }
 }
