@@ -3,6 +3,7 @@ import AffiliateLink from './components/AffiliateLink.vue'
 import './cart-ui'
 import './header-v2'
 import './personalized-boxes'
+import './passport-oauth'
 // Add your custom JavaScript for storefront pages here.
 const screenWidth = document.body ? document.body.offsetWidth : window.screen.width
 
