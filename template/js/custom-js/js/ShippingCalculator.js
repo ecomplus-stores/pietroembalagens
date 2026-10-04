@@ -81,6 +81,7 @@ import {
       return {
         localZipCode: null,
         peEditing: false,
+        peExpanded: false,
         peAutoAt: 0,
         peSequence: 0,
         peFetchTimer: null,
@@ -122,12 +123,13 @@ import {
       },
       peVisibleOptions () {
         const all = this.shippingServices.map((service, index) => ({ service, index }))
-        if (this.peSurface !== 'minicart' || all.length <= 3) return all
+        if (this.peSurface !== 'minicart' || this.peExpanded || all.length <= 3) return all
         const shown = all.slice(0, 3)
         if (this.selectedService !== null && this.selectedService > 2) shown[2] = all[this.selectedService]
         return shown
       },
-      peMore () { return this.shippingServices.length - this.peVisibleOptions.length },
+      // Minicart only: how many services the "ver mais" button reveals (0 when everything already fits).
+      peMore () { return this.peSurface === 'minicart' && this.shippingServices.length > 3 ? this.shippingServices.length - 3 : 0 },
       peQuiet () { return this.peV2 && (this.peCompactLine || !this.shippingServices.length) },
       peZipLabel () {
         const digits = core.zip(this.localZipCode)

@@ -557,6 +557,10 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
   assert.equal(minicart.instance.peMore, 2)
   minicart.instance.selectedService = 4
   assert.deepEqual(minicart.instance.peVisibleOptions.map(o => o.index), [0, 1, 4])
+  minicart.instance.peExpanded = true
+  assert.equal(minicart.instance.peVisibleOptions.length, 5, 'the button expands the list in place')
+  assert.equal(minicart.instance.peMore, 2, 'the button label still counts the hidden ones')
+  minicart.instance.peExpanded = false
   minicart.instance.shippingServices = [many[0]]
   minicart.instance.selectedService = 0
   assert.equal(minicart.instance.peCompactLine, true)

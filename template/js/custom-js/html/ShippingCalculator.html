@@ -150,7 +150,7 @@
       </div>
     </transition-group>
 
-    <a v-if="peOptionsList && peMore > 0" class="pe-fs2-more" href="/app/#/cart">Ver mais {{ peMore }} {{ peMore === 1 ? 'opção' : 'opções' }} de entrega no carrinho</a>
+    <button v-if="peOptionsList && peMore > 0" type="button" class="pe-fs2-more" :aria-expanded="peExpanded ? 'true' : 'false'" @click="peExpanded = !peExpanded">{{ peExpanded ? 'Ver menos opções' : 'Ver mais ' + peMore + (peMore === 1 ? ' opção' : ' opções') + ' de entrega' }}</button>
 
     <div v-if="peV2 && (peOptionsList || peEditing)" class="pe-fs2-cep">
       CEP {{ peZipLabel }} · <button type="button" class="pe-fs2-link" @click="peEditing = !peEditing">{{ peEditing ? 'fechar' : 'alterar' }}</button>

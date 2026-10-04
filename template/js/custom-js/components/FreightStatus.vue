@@ -161,7 +161,7 @@ export default {
 .pe-fs2-line__main strong{flex:none;font-weight:700}
 .pe-fs2-line__zip,.pe-fs2-cep{display:block;margin-top:2px;font-size:13px;font-weight:400;color:#333}
 .pe-fs2-cep{margin:6px 0 12px}
-.pe-fs2-more{display:inline-block;margin:0 0 4px;font-size:13px;font-weight:700;color:#874015;text-decoration:underline}
+.pe-fs2-more{display:inline-block;margin:0 0 4px;padding:0;border:0;background:none;font:inherit;font-size:13px;font-weight:700;color:#874015;text-decoration:underline;cursor:pointer}
 .pe-fs2-more:focus-visible{outline:2px solid #874015;outline-offset:2px}
 .pe-fs2-link{padding:0;border:0;background:none;font:inherit;color:#874015;text-decoration:underline;cursor:pointer}
 .pe-fs2-link:focus-visible{outline:2px solid #874015;outline-offset:2px}
