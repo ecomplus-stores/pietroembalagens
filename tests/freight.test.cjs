@@ -385,3 +385,34 @@ test('uiVersion is v2 only for ui "v2" with the feature on; everything else fall
   assert.equal(await versionFor('bad'), 'v1')
   assert.equal(await versionFor({ enabled: true, ui: 'v2' }, { kill: true }), 'v1')
 })
+
+test('delivery text sums posting, transport and production like the native line; calendar days keep plain wording', () => {
+  const nodeWindow = extra => ({ window: extra })
+  const withScript = () => {
+    // The real head script, with a fixed clock: Saturday 03/10/2026.
+    const head = require(path.join(root, 'content/code.json')).html_head
+    const script = head.match(/<script>([\s\S]*?)<\/script>/)[1]
+    const RealDate = Date
+    class FixedDate extends RealDate { constructor (...args) { super(...(args.length ? args : ['2026-10-03T15:00:00Z'])) } }
+    const window = { addEventListener () {} }
+    const document = { readyState: 'loading', addEventListener () {}, createTreeWalker: () => ({ nextNode: () => null }), querySelector: () => null, querySelectorAll: () => [], getElementById: () => null, body: {} }
+    vm.runInNewContext(script, { window, document, Date: FixedDate, NodeFilter: { SHOW_TEXT: 4 }, MutationObserver: function () { this.observe = () => {} }, location: { hash: '' }, sessionStorage: {}, setTimeout, clearTimeout, console })
+    return window.peDeliveryDate
+  }
+  const shared = withScript()
+  assert.equal(shared.textoData(6), 'Chega até 13/10 (ter)')
+  assert.equal(shared.textoData(2), 'Chega até 06/10 (ter)')
+  const mod = load('template/js/custom-js/freight/delivery-date.js', {}, nodeWindow({ peDeliveryDate: shared }))
+  assert.equal(mod.deliveryText({ delivery_time: { days: 6, working_days: true } }), 'Chega até 13/10 (ter)')
+  // posting 2 + transport 4 + production 0 must equal 6 working days, not 4.
+  assert.equal(mod.deliveryText({ posting_deadline: { days: 2, working_days: true }, delivery_time: { days: 4, working_days: true } }), 'Chega até 13/10 (ter)')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 4, working_days: true } }, 2), 'Chega até 13/10 (ter)')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 3, working_days: false } }), 'Até 3 dias')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 1, working_days: false } }), 'Até 1 dia')
+  assert.equal(mod.deliveryText({}), '')
+  assert.equal(mod.deliveryText({ delivery_time: { days: 0, working_days: true } }), '')
+  const bare = load('template/js/custom-js/freight/delivery-date.js', {}, nodeWindow({}))
+  assert.equal(bare.deliveryText({ delivery_time: { days: 6, working_days: true } }), '6 dias úteis')
+  assert.equal(bare.deliveryText({ delivery_time: { days: 1, working_days: true } }), '1 dia útil')
+  assert.equal(mod.productionDays([{ quantity: 2, production_time: { days: 3, cumulative: true } }, { quantity: 1, production_time: { days: 2 } }]), 6)
+})
