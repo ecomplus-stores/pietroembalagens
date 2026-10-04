@@ -355,17 +355,21 @@
 
 // O banner continua o mesmo; só ganha margem lateral e raio quando o topo v2 está ligado.
 .pe-h2.banner-slider {
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  border-radius: 8px;
+  // De ponta a ponta, como hoje. A altura acompanha o slide que está na tela (header-v2.js); sem JS, a do 1º slide.
+  width: 100%;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0;
+  border-radius: 0;
   overflow: hidden;
+  height: calc(100vw * var(--pe-banner-ratio-mobile, var(--pe-banner-ratio, .26))) !important;
+  transition: height .3s ease;
 
-  @media (min-width: 992px) {
-    width: calc(100% - 40px);
-    max-width: 1200px !important; // o código customizado fixa `max-width:100%` no primeiro banner
-    margin: 20px auto 0;
-  }
+  @media (min-width: 576px) { height: calc(100vw * var(--pe-banner-ratio, .26)) !important; }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+
+  .glide__track, .glide__slides, .glide__slide { height: auto; }
+  .glide__slides { align-items: flex-start; }
 }
 
 // ---------- Categorias em "stories" ----------

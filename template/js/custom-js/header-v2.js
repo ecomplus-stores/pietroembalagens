@@ -30,3 +30,23 @@ document.addEventListener('click', event => {
   const $all = document.getElementById('cd-all')
   if ($all) $all.click()
 })
+
+// Banner: a altura acompanha o slide que está na tela. Slides com proporções diferentes (1920×500 e 1597×700, por
+// exemplo) deixavam um vazio branco embaixo do menor, porque a caixa tinha a altura do maior.
+const $banner = document.querySelector('.pe-h2.banner-slider')
+
+if ($banner) {
+  const fit = () => {
+    const slide = $banner.querySelector('.glide__slide--active') || $banner.querySelector('.glide__slide')
+    const img = slide && slide.querySelector('img')
+    if (!img || !img.complete || !img.clientWidth) return
+    const height = img.getBoundingClientRect().height
+    if (height > 40) $banner.style.setProperty('height', Math.round(height) + 'px', 'important')
+  }
+  $banner.addEventListener('load', fit, true)
+  window.addEventListener('resize', fit)
+  if (window.MutationObserver) {
+    new MutationObserver(fit).observe($banner, { attributes: true, attributeFilter: ['class'], subtree: true })
+  }
+  fit()
+}
