@@ -63,7 +63,8 @@ export default {
 
     installmentsLine () {
       const n = this.installmentsNumber
-      if (n < 2) return ''
+      // Produto barato não parcela: mostra o preço normal para quem não paga no Pix (como o Mercado Livre).
+      if (n < 2) return this.priceWithDiscount ? `ou ${this.formatMoney(this.price)} em outros meios` : ''
       if (this.monthlyInterest) {
         return `ou ${n}x de ${this.formatMoney(this.installmentValue)}`
       }
