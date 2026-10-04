@@ -2,7 +2,7 @@
 // Só funções puras; o que lê a página e chama a API fica em index.js.
 export const KEYS = { viewed: 'pe-boxes-viewed', term: 'pe-boxes-term' }
 export const MAX_VIEWED = 12
-export const MAX_BOXES = 6
+export const MAX_BOXES = 9
 
 export const safeId = value => /^[a-f0-9]{24}$/i.test(value || '')
 

@@ -13,7 +13,7 @@
   &.pe-boxes--ready { min-height: 0; }
 
   @media (min-width: 992px) {
-    margin-top: 24px;
+    margin-top: 16px;
     padding: 0 20px;
   }
 
@@ -28,6 +28,10 @@
 
     &::-webkit-scrollbar { display: none; }
   }
+
+  // Sobrando espaço (6 quadros de 184 px ocupam 1184 de 1196), a fileira fica centralizada; faltando, começa na esquerda e rola.
+  .pe-boxes__card:first-child { margin-left: auto; }
+  .pe-boxes__card:last-child { margin-right: auto; }
 
   // Tamanho do quadro igual ao do Mercado Livre (medido no site deles): 184 × 286 px, 16 px entre quadros, 6 visíveis
   // em 1184 px. Largura fixa em qualquer tela: no celular aparecem ~2 e a fileira rola; o resto rola com a seta.
@@ -51,6 +55,7 @@
   }
 
   .pe-boxes__title {
+    flex: 0 0 auto; // nunca espremido (o quadro "Promoções" tem uma linha a mais): quem cede espaço é a foto
     overflow: hidden;
     margin-bottom: 8px;
     font-size: 14px;
@@ -62,8 +67,9 @@
 
   .pe-boxes__pic {
     display: block;
-    flex: 0 0 auto;
-    height: 108px;
+    flex: 1 1 108px;
+    min-height: 56px;
+    max-height: 108px;
     margin-bottom: 12px;
     background: #fff;
 
@@ -123,7 +129,7 @@
     .pe-boxes__track { gap: 13px; }
     .pe-boxes__card { flex-basis: 149px; height: 225px; padding: 10px; border-radius: 12px; }
     .pe-boxes__title { margin-bottom: 4px; font-size: 12px; }
-    .pe-boxes__pic { height: 66px; margin-bottom: 6px; }
+    .pe-boxes__pic { flex-basis: 66px; min-height: 40px; max-height: 66px; margin-bottom: 6px; }
     .pe-boxes__name { min-height: 2.6em; font-size: 12px; }
     .pe-boxes__old { margin-top: 4px; font-size: 11px; }
     .pe-boxes__price { font-size: 17px; }
@@ -167,7 +173,7 @@
   }
 
   @media (min-width: 992px) {
-    height: 280px !important;
+    height: 283px !important;
     width: 100%;
     margin: 0;
     border-radius: 0;
