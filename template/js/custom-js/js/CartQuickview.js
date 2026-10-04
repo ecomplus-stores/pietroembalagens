@@ -3,10 +3,19 @@ import FreightSuggestions from '../components/FreightSuggestions.vue'
 import FreightStatus from '../components/FreightStatus.vue'
 import core from '../freight/core'
 import { runtime, enabled, uiVersion, init } from '../freight/runtime'
+import { noMinicart } from '../cart-ui'
 
 export default {
   ...Native,
   components: { ...Native.components, FreightSuggestions, FreightStatus },
+  methods: {
+    ...Native.methods,
+    // Teste sem minicart (cart-ui.js): nada abre o painel; fechar continua funcionando.
+    toggle (isVisible) {
+      if (noMinicart() && isVisible !== false) return undefined
+      return Native.methods.toggle.call(this, isVisible)
+    }
+  },
   mixins: [{
     data () { return { peQuote: null, peHasSuggestions: false } },
     computed: {
