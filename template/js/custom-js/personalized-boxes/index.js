@@ -6,7 +6,7 @@ import {
   formatMoney, img, inStock, name as getName, onPromotion, price as getPrice, recommendedIds
 } from '@ecomplus/utils'
 import {
-  addViewed, composeBoxes, escapeHtml, installmentsOf, readTerm, readViewed, safeId, saveTerm, sortByViewed
+  addViewed, composeBoxes, escapeHtml, installmentsOf, normalizeConfig, readTerm, readViewed, safeId, saveTerm, sortByViewed
 } from './core'
 
 const storage = (() => { try { return window.localStorage } catch (_) { return null } })()
@@ -21,14 +21,6 @@ if (/^\/search\/?$/.test(window.location.pathname)) {
 }
 
 const $root = document.querySelector('.pe-boxes')
-
-// Reserva por categoria (o mais vendido de cada uma): os mesmos ids e nomes das prateleiras da home (content/home.json).
-// Com o histórico vazio, são eles que completam a fileira até 6 quadros, como no ML.
-const CATEGORY_BOXES = [
-  { key: 'cat-transporte', title: 'Caixas p/ Transporte', id: '64d032db2cd6b659590b9090' },
-  { key: 'cat-presente', title: 'Caixas para presente', id: '684f22a8578b5f79543fbdd6' },
-  { key: 'cat-forminhas', title: 'Forminhas', id: '6468b95ca0e875411e95fc22' }
-]
 
 const showable = item => item.available !== false && item.visible !== false && item.slug &&
   inStock(item) && getPrice(item) > 0 && Array.isArray(item.pictures) && item.pictures.length > 0
@@ -101,6 +93,9 @@ const setupArrows = $root => {
 }
 
 const render = async $root => {
+  let rawConfig
+  try { rawConfig = JSON.parse($root.getAttribute('data-config')) } catch (_) {}
+  const { max, titles, categories: categoryBoxes } = normalizeConfig(rawConfig)
   const viewed = readViewed(storage)
   const term = readTerm(storage)
   const [seen, searched, related, sales, offers, news, ...categories] = await Promise.all([
@@ -110,17 +105,17 @@ const render = async $root => {
     fetchItems(search => search.setSortOrder('sales')),
     fetchItems(search => search.setSortOrder('offers'), 24).then(items => items.filter(onPromotion)),
     fetchItems(search => search.setSortOrder('news')),
-    ...CATEGORY_BOXES.map(({ id }) => fetchItems(search => { search.setCategoryIds([id]); search.setSortOrder('sales') }))
+    ...categoryBoxes.map(({ id }) => fetchItems(search => { search.setCategoryIds([id]); search.setSortOrder('sales') }))
   ])
   const boxes = composeBoxes([
-    { key: 'viewed', title: 'Visto recentemente', items: sortByViewed(seen, viewed) },
-    { key: 'search', title: 'Sua busca', items: searched },
-    { key: 'related', title: 'Também te interessa', items: related },
-    { key: 'sales', title: 'Mais vendidos', items: sales },
-    { key: 'offers', title: 'Promoções', items: offers },
-    { key: 'news', title: 'Novidades', items: news },
-    ...CATEGORY_BOXES.map(({ key, title }, i) => ({ key, title, items: categories[i] }))
-  ], showable)
+    { key: 'viewed', title: titles.viewed, items: sortByViewed(seen, viewed) },
+    { key: 'search', title: titles.search, items: searched },
+    { key: 'related', title: titles.related, items: related },
+    { key: 'sales', title: titles.sales, items: sales },
+    { key: 'offers', title: titles.offers, items: offers },
+    { key: 'news', title: titles.news, items: news },
+    ...categoryBoxes.map(({ id, title }, i) => ({ key: 'cat-' + id, title, items: categories[i] }))
+  ], showable, max)
   if (!boxes.length) {
     $root.hidden = true
     return

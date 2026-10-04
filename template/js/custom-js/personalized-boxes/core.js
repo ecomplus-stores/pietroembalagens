@@ -4,6 +4,22 @@ export const KEYS = { viewed: 'pe-boxes-viewed', term: 'pe-boxes-term' }
 export const MAX_VIEWED = 12
 export const MAX_BOXES = 9
 
+export const DEFAULT_TITLES = {
+  viewed: 'Visto recentemente',
+  search: 'Sua busca',
+  related: 'Também te interessa',
+  sales: 'Mais vendidos',
+  offers: 'Promoções',
+  news: 'Novidades'
+}
+
+// Quadros de reserva por categoria (o mais vendido de cada uma): ids e nomes das prateleiras da home (content/home.json).
+export const DEFAULT_CATEGORIES = [
+  { id: '64d032db2cd6b659590b9090', title: 'Caixas p/ Transporte' },
+  { id: '684f22a8578b5f79543fbdd6', title: 'Caixas para presente' },
+  { id: '6468b95ca0e875411e95fc22', title: 'Forminhas' }
+]
+
 export const safeId = value => /^[a-f0-9]{24}$/i.test(value || '')
 
 export function readViewed (storage) {
@@ -72,4 +88,29 @@ export function installmentsOf (price, option) {
   const interest = (option.monthly_interest || 0) / 100
   const value = interest ? price * interest / (1 - Math.pow(1 + interest, -number)) : price / number
   return { number, value, interestFree: !interest }
+}
+
+const cleanTitle = (value, fallback) => String(value || '').replace(/\s+/g, ' ').trim().slice(0, 40) || fallback
+
+// O painel guarda a categoria como "<id>:categories:<nome>:<caminho>" (o mesmo formato das prateleiras da home).
+export function parseCategory (value, title) {
+  const [id, , name] = String(value || '').split(':')
+  if (!safeId(id)) return null
+  const finalTitle = cleanTitle(title, cleanTitle(name, ''))
+  return finalTitle ? { id, title: finalTitle } : null
+}
+
+// Configuração vinda do painel (atributo data-config da seção). Qualquer campo ausente ou inválido cai no padrão,
+// então a seção sem configuração continua igual à de antes. Lista de categorias vazia ([]) é respeitada: sem reserva.
+export function normalizeConfig (raw) {
+  const config = raw && typeof raw === 'object' ? raw : {}
+  const titles = {}
+  for (const key in DEFAULT_TITLES) titles[key] = cleanTitle(config.titles && config.titles[key], DEFAULT_TITLES[key])
+  return {
+    max: Math.floor(Number(config.max)) >= 1 ? Math.min(12, Math.floor(Number(config.max))) : MAX_BOXES,
+    titles,
+    categories: Array.isArray(config.categories)
+      ? config.categories.map(item => parseCategory(item && item.category, item && item.title)).filter(Boolean).slice(0, 6)
+      : DEFAULT_CATEGORIES
+  }
 }

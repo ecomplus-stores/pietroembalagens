@@ -680,3 +680,35 @@ test('quadros: parcelas seguem a regra do tema (mínimo da parcela, máximo da l
   assert.ok(withInterest.value > 25 && withInterest.value < 27)
   assert.equal(boxes.installmentsOf(100, { max_number: 12 }).number, 12)
 })
+test('quadros: configuração do painel — padrões, limites e categorias inválidas', () => {
+  const padrao = plain(boxes.normalizeConfig(undefined))
+  assert.equal(padrao.max, 9)
+  assert.equal(padrao.titles.viewed, 'Visto recentemente')
+  assert.deepEqual(padrao.categories.map(c => c.title), ['Caixas p/ Transporte', 'Caixas para presente', 'Forminhas'])
+  assert.deepEqual(plain(boxes.normalizeConfig('lixo')), padrao)
+  assert.deepEqual(plain(boxes.normalizeConfig({ max: 'abc', titles: { sales: '   ' } })), padrao)
+  assert.equal(boxes.normalizeConfig({ max: 50 }).max, 12)
+  assert.equal(boxes.normalizeConfig({ max: -3 }).max, 9)
+  assert.equal(boxes.normalizeConfig({ max: 4.9 }).max, 4)
+  assert.equal(boxes.normalizeConfig({ titles: { news: '  Lançamentos   novos ' } }).titles.news, 'Lançamentos novos')
+  assert.equal(boxes.normalizeConfig({ titles: { news: 'x'.repeat(100) } }).titles.news.length, 40)
+  const id = 'a'.repeat(24)
+  const config = boxes.normalizeConfig({ categories: [
+    { category: `${id}:categories:Fitas de cetim:/fitas`, title: '' },
+    { category: `${id}:categories:Fitas:/fitas`, title: 'Fitas lindas' },
+    { category: 'id-invalido:categories:X:/x', title: 'X' },
+    { category: `${id}:categories::/x`, title: '' },
+    null
+  ] })
+  assert.deepEqual(plain(config.categories), [{ id, title: 'Fitas de cetim' }, { id, title: 'Fitas lindas' }])
+  assert.deepEqual(plain(boxes.normalizeConfig({ categories: [] }).categories), [])
+  assert.equal(boxes.normalizeConfig({ categories: Array.from({ length: 10 }, () => ({ category: `${id}:categories:A:/a` })) }).categories.length, 6)
+})
+test('quadros: o painel tem os campos de configuração e a home traz os valores atuais', () => {
+  const cms = fs.readFileSync(path.join(root, 'template/js/cms/sections.js'), 'utf8')
+  for (const field of ['max_boxes', 'title_viewed', 'title_search', 'title_related', 'title_sales', 'title_offers', 'title_news', 'category_boxes']) assert.match(cms, new RegExp(`name: '${field}'`))
+  const home = JSON.parse(fs.readFileSync(path.join(root, 'content/home.json'), 'utf8'))
+  const section = home.sections.find(item => item.type === 'personalized-boxes')
+  const fromHome = boxes.normalizeConfig({ max: section.max_boxes, titles: { viewed: section.title_viewed, search: section.title_search, related: section.title_related, sales: section.title_sales, offers: section.title_offers, news: section.title_news }, categories: section.category_boxes })
+  assert.deepEqual(plain(fromHome), plain(boxes.normalizeConfig(undefined)))
+})

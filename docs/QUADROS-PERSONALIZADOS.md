@@ -75,3 +75,8 @@ Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): 
 
 ## Quadros maiores (04/10/2026)
 Pedido do Rafael ("aumenta o tamanho dos quadros e joga as categorias um pouco mais pra baixo"): quadro do computador de 184 × 286 para **224 × 350 px** (5 por linha; título 16 px, nome 15 px, preço 22 px, foto até 140 px; reserva de altura 360 px) e margem de **40 px** abaixo da fileira (era 8 px), empurrando as bolinhas de categorias. O celular não mudou (149 × 225). Backup antes: `backup/antes-quadros-maiores-20261004` (`d2021f96`).
+
+## Configuração pelo painel (04/10/2026)
+Na home do painel, a seção "Quadros personalizados (histórico do navegador)" tem campos para: **máximo de quadros** (3 a 12, padrão 9), **o título de cada um dos 6 quadros automáticos** (vazio = padrão) e a lista **"Quadros de categoria"** (até 6; cada item = categoria da loja + título opcional, vazio = nome da categoria; mostra o mais vendido da categoria). O conteúdo em si continua automático (histórico do cliente, mais vendidos, promoções, novidades). Valores atuais gravados em `content/home.json` (iguais ao que estava no ar: nada muda ao salvar sem editar).
+
+Como funciona: `personalized-boxes.ejs` grava a configuração no atributo `data-config` da seção; `index.js` lê e passa por `normalizeConfig` (`core.js`, testada): campo ausente ou inválido cai no padrão, título limitado a 40 caracteres, máximo entre 1 e 12, lista de categorias vazia = sem quadros de categoria. Categoria do painel vem como `<id>:categories:<nome>:<caminho>` (mesmo formato das prateleiras). Mudança no painel gera commit no `master` e o deploy normal (~3 min).
