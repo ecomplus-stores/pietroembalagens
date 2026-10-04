@@ -591,3 +591,79 @@ test('topo v2: chave em header.json, templates EJS compilam e o markup v1 não g
   const topLevel = css.replace(/\/\/.*$/gm, '').match(/^[.#][^{]*\{/gm) || []
   assert.ok(topLevel.length > 0 && topLevel.every(selector => /\.pe-h2/.test(selector)), 'seletor fora de .pe-h2: ' + topLevel.filter(s => !/\.pe-h2/.test(s)).join(', '))
 })
+
+// ---- Quadros personalizados da home (docs/QUADROS-PERSONALIZADOS.md) ----
+const boxes = load('template/js/custom-js/personalized-boxes/core.js')
+const memoryStorage = (initial = {}) => {
+  const data = { ...initial }
+  return { data, getItem: key => (key in data ? data[key] : null), setItem: (key, value) => { data[key] = String(value) } }
+}
+const plain = value => JSON.parse(JSON.stringify(value))
+const hex = n => String(n).padStart(24, 'a')
+
+test('quadros: vistos recentes ficam no começo, sem repetir, até 12', () => {
+  const storage = memoryStorage()
+  for (let i = 1; i <= 14; i++) boxes.addViewed(storage, hex(i))
+  boxes.addViewed(storage, hex(5))
+  const list = plain(boxes.readViewed(storage))
+  assert.equal(list.length, 12)
+  assert.equal(list[0], hex(5))
+  assert.equal(new Set(list).size, 12)
+  assert.equal(list.includes(hex(1)), false)
+})
+test('quadros: id inválido, JSON quebrado e storage que falha não derrubam nada', () => {
+  const storage = memoryStorage({ 'pe-boxes-viewed': '{quebrado' })
+  assert.deepEqual(plain(boxes.readViewed(storage)), [])
+  boxes.addViewed(storage, 'nao-e-um-id')
+  boxes.addViewed(storage, '')
+  assert.equal(storage.data['pe-boxes-viewed'], '{quebrado')
+  const lixo = memoryStorage({ 'pe-boxes-viewed': JSON.stringify([hex(1), 'x', hex(1), 7, hex(2)]) })
+  assert.deepEqual(plain(boxes.readViewed(lixo)), [hex(1), hex(2)])
+  const quebrado = { getItem () { throw new Error('bloqueado') }, setItem () { throw new Error('bloqueado') } }
+  assert.deepEqual(plain(boxes.readViewed(quebrado)), [])
+  assert.doesNotThrow(() => { boxes.addViewed(quebrado, hex(1)); boxes.saveTerm(quebrado, 'caixa'); boxes.readTerm(quebrado) })
+  assert.doesNotThrow(() => { boxes.readViewed(null); boxes.saveTerm(null, 'caixa') })
+})
+test('quadros: o termo buscado é limpo, curto demais é ignorado e o último vale', () => {
+  const storage = memoryStorage()
+  boxes.saveTerm(storage, '  caixa   para   bolo  ')
+  assert.equal(boxes.readTerm(storage), 'caixa para bolo')
+  boxes.saveTerm(storage, 'a')
+  boxes.saveTerm(storage, null)
+  assert.equal(boxes.readTerm(storage), 'caixa para bolo')
+  boxes.saveTerm(storage, 'x'.repeat(200))
+  assert.equal(boxes.readTerm(storage).length, 80)
+})
+test('quadros: um produto por quadro, sem repetir entre quadros e só os exibíveis', () => {
+  const item = (id, ok = true) => ({ _id: hex(id), ok })
+  const showable = it => it.ok
+  const composed = boxes.composeBoxes([
+    { key: 'viewed', title: 'Visto recentemente', items: [item(1, false), item(2)] },
+    { key: 'search', title: 'Sua busca', items: [item(2), item(3)] },
+    { key: 'related', title: 'Também te interessa', items: [] },
+    { key: 'sales', title: 'Mais vendidos', items: [item(2), item(3), item(4)] }
+  ], showable)
+  assert.deepEqual(plain(composed.map(box => [box.key, box.item._id])), [['viewed', hex(2)], ['search', hex(3)], ['sales', hex(4)]])
+})
+test('quadros: nunca passa do máximo e devolve vazio quando não há nada exibível', () => {
+  const many = Array.from({ length: 10 }, (_, i) => ({ key: 'k' + i, title: 't', items: [{ _id: hex(i + 1) }] }))
+  assert.equal(boxes.composeBoxes(many, () => true).length, boxes.MAX_BOXES)
+  assert.equal(boxes.composeBoxes(many, () => true, 2).length, 2)
+  assert.deepEqual(plain(boxes.composeBoxes(many, () => false)), [])
+  assert.deepEqual(plain(boxes.composeBoxes([{ key: 'a', title: 't' }], () => true)), [])
+})
+test('quadros: a ordem dos vistos segue o histórico e o texto é escapado', () => {
+  const sorted = boxes.sortByViewed([{ _id: hex(1) }, { _id: hex(3) }, { _id: hex(2) }], [hex(3), hex(2), hex(1)])
+  assert.deepEqual(plain(sorted.map(it => it._id)), [hex(3), hex(2), hex(1)])
+  assert.equal(boxes.escapeHtml('<b a="1">&\'</b>'), '&lt;b a=&quot;1&quot;&gt;&amp;&#39;&lt;/b&gt;')
+  assert.equal(boxes.escapeHtml(undefined), '')
+})
+test('quadros: a seção entra desligada na home, logo depois do banner, e está registrada no CMS', () => {
+  const home = JSON.parse(fs.readFileSync(path.join(root, 'content/home.json'), 'utf8'))
+  const types = home.sections.map(section => section.type)
+  const at = types.indexOf('personalized-boxes')
+  assert.equal(at, types.indexOf('banner-slider') + 1)
+  assert.equal(types.filter(type => type === 'personalized-boxes').length, 1)
+  assert.equal(typeof home.sections[at].enabled, 'boolean')
+  assert.match(fs.readFileSync(path.join(root, 'template/js/cms/sections.js'), 'utf8'), /name: 'personalized-boxes'/)
+})
