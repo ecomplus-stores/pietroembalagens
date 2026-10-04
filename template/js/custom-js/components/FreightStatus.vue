@@ -173,4 +173,18 @@ export default {
 .pe-fs2-option__body small{font-size:12px;color:#333}
 .pe-fs2-option__price{flex:none;font-size:14px;font-weight:700;color:#000}
 .pe-fs2-option.is-free .pe-fs2-option__price{color:#1f7a45}
+/* v2 minicart and cart page chrome */
+.minicart.pe-fs2 .minicart__aside{display:flex;flex-direction:column}
+.minicart.pe-fs2 .minicart__body{flex:1 1 auto;min-height:0;overflow-y:auto}
+.minicart.pe-fs2 .minicart__shipping hr{margin:8px 0 0;border-top-color:#f2f2f2}
+.minicart.pe-fs2 .minicart__summary{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;font-size:14px;color:#000}
+.minicart.pe-fs2 .minicart__subtotal{font-size:18px;font-weight:700}
+.minicart.pe-fs2 .minicart__btn-checkout,.cart.pe-fs2 .pe-fs2-checkout{border:0;border-radius:50px;background:#fd8043;color:#fff;font-weight:700}
+.minicart.pe-fs2 .minicart__btn-checkout{height:46px;font-size:16px}
+.minicart.pe-fs2 .minicart__btn-cart{border:0;background:none;color:#000;font-weight:400;box-shadow:none}
+.cart.pe-fs2 .pe-fs2-checkout{padding:.8rem 1rem;font-size:18px}
+.cart.pe-fs2 .cart__total{font-size:18px;font-weight:700}
+.pe-fs2-pay{margin:12px 0 0;text-align:center;font-size:14px;font-weight:600;color:#333}
+.pe-fs2-pay b{color:#000}
+.pe-fs2-pay b.pe-fs2-pay__pix{color:#874015}
 </style>
