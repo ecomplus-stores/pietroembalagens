@@ -362,3 +362,26 @@ test('stored suggestions render before the quote settles and are saved slim afte
   assert.equal(stored.candidates[0].quantity, 1)
   instance.$destroy()
 })
+
+test('uiVersion is v2 only for ui "v2" with the feature on; everything else falls back to v1', async () => {
+  const storage = bucket => ({ getItem: () => String(bucket), setItem: () => {} })
+  const versionFor = async (config, { bucket = 10, fail = false, kill = false } = {}) => {
+    const s = storage(bucket)
+    const module = load('template/js/custom-js/freight/runtime.js', {}, {
+      window: { localStorage: s, sessionStorage: s, peFreightSuggestionsEnabled: kill ? false : undefined }, AbortController,
+      fetch: async () => { if (fail) throw new Error('offline'); return { ok: true, json: async () => { if (config === 'bad') throw new Error('json'); return config } } }
+    })
+    await module.refreshConfig()
+    return module.uiVersion()
+  }
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }), 'v2')
+  assert.equal(await versionFor({ enabled: true, ui: 'v1' }), 'v1')
+  assert.equal(await versionFor({ enabled: true }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'V2' }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v3' }), 'v1')
+  assert.equal(await versionFor({ enabled: false, ui: 'v2' }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2', rolloutPercent: 50 }, { bucket: 80 }), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }, { fail: true }), 'v1')
+  assert.equal(await versionFor('bad'), 'v1')
+  assert.equal(await versionFor({ enabled: true, ui: 'v2' }, { kill: true }), 'v1')
+})
