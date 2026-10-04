@@ -17,8 +17,10 @@ Fluxo de qualquer troca: `git pull --ff-only` (o painel da E-Com Plus também co
 ## Antes de começar (pré-requisitos)
 
 1. **Categoria da campanha** criada no admin da loja, com produtos. Hoje existe `Natal` (`/caixas-tema-natal`, filha de "Datas especiais"). **Não existe categoria de Black Friday**: criar uma (ex.: `/black-friday`) ou usar `Promoções` (`/caixas-em-promocao`).
-2. **Artes dos banners** (todas do mesmo tamanho, senão a altura do banner pula entre slides):
-   - computador: **1920×500** (WebP); celular: **1080×1080** (WebP). Slides sem `mobile_img` mostram a arte do computador no celular.
+2. **Artes dos banners** (sempre nos dois formatos novos; com os quadros personalizados ligados o banner é uma faixa baixa e artes nos tamanhos antigos saem cortadas):
+   - computador: **1920×380** (WebP, até ~200 KB), ancorada à esquerda; zona segura para título, subtítulo e botão: x de 60 a 1000 e y de 50 a 330 (a direita, x > 1000, é só fotografia/decoração). A caixa do site tem 283 px de altura.
+   - celular: **1000×375** (WebP, até ~120 KB), proporção 8:3, aparece inteira num cartão de cantos arredondados (16 px): margem de 60 px e título de até 6 palavras.
+   - Slide sem `mobile_img` mostra a arte do computador cortada no cartão do celular: sempre mandar as duas. Gabaritos e briefing: `site/Alteracoes visuais claude design /design_brief_banners_quadros_home/` (workspace ccos-ratos). Medidas e fundos aprovados também em `marca/design-guide.md`, seção "Banners da home".
 3. **Bolinha** da campanha: PNG com o círculo da arte no topo (as bolinhas atuais são 130×160); o texto embutido no PNG fica escondido pelo recorte.
 4. Texto e regras da oferta aprovados (cupom, data de fim, mínimo de frete) e o público: Ana Paula (B2C) ou Marcos (B2B).
 

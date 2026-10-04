@@ -35,6 +35,8 @@ Outras chaves do mesmo objeto: `promo_rotate_ms` (troca da cápsula, 4000), `pro
 
 Linha 1: logo, busca (cerca de 50% da largura, 600 px, 38 px de altura) e cápsula de promoções (320×38 px) encostada à direita. Linha 2: menu à esquerda e conta + sacola à direita. O cabeçalho todo tem cerca de 88 px (era 157 px com a tarja e o cabeçalho antigo). Entre 992 e 1199 px a cápsula some e os ícones sobem para a linha 1; abaixo de 1360 px o texto "Entrar ou cadastrar" vira só o ícone. O banner de ponta a ponta tem `clamp(420px, 35vw, 580px)` de altura no computador.
 
+**Com os quadros personalizados ligados** (`docs/QUADROS-PERSONALIZADOS.md`) o banner muda: 283 px de altura no computador (em vez do `clamp(420px, 35vw, 580px)` acima), cartão de cantos arredondados 8:3 no celular, e as setas do slider encolhem para 40 px coladas na borda (as do tema cobriam o texto das artes). Isso vale só quando a seção `personalized-boxes` está na página (`.pe-h2.banner-slider:has(~ .pe-boxes)`); sem ela, valem as medidas acima. As artes passam a ser 1920×380 e 1000×375.
+
 ## Menu no computador (como no site atual)
 
 O `<nav>` do computador leva as classes `header__nav header__nav--full`, que são as que as regras de submenu do site esperam. Resultado, igual ao v1: ao passar o mouse numa categoria em destaque, cai um dropdown vertical compacto (220 px); "Ver todas" **não abre ao passar o mouse**, só ao clicar, e abre a gaveta vertical (340 px) do script de drill-down do `code.json`. A única mudança visual é a linha de cima dos submenus, marrom em vez de laranja.
