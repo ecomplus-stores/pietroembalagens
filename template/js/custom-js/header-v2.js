@@ -1,4 +1,21 @@
+import ecomPassport from '@ecomplus/passport-client'
+
 // Topo da home v2: só faz algo se o markup v2 (.pe-h2) estiver na página (content/header.json -> pe_header_v2).
+// Conta: com o cliente logado, "Entrar ou cadastrar" vira "Olá, <primeiro nome>"; ao sair, volta o texto original.
+const $userLabel = document.querySelector('.pe-h2__user-text strong')
+
+if ($userLabel) {
+  const loggedOutText = $userLabel.textContent
+  const showUser = () => {
+    const name = ecomPassport.checkLogin() ? ecomPassport.getCustomerName().trim().split(/\s+/)[0] : ''
+    $userLabel.textContent = name ? `Olá, ${name}` : loggedOutText
+  }
+  showUser()
+  ecomPassport.on('login', showUser)
+  ecomPassport.on('logout', showUser)
+  ecomPassport.on('change', showUser)
+}
+
 // Cápsula de promoções: alterna as mensagens (todas ficam no DOM) a cada promo_rotate_ms.
 const $promo = document.querySelector('.pe-h2__promo')
 
