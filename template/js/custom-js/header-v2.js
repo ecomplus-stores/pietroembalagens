@@ -43,6 +43,11 @@ const $banner = document.querySelector('.pe-h2.banner-slider')
 
 if ($banner) {
   const fit = () => {
+    // Com os quadros personalizados na página (docs/QUADROS-PERSONALIZADOS.md) a altura do banner é fixa pelo CSS.
+    if (document.querySelector('.pe-boxes')) {
+      $banner.style.removeProperty('height')
+      return
+    }
     // No computador a altura é fixa (CSS); aqui só se acompanha o slide em telas menores.
     if (window.matchMedia('(min-width: 992px)').matches) {
       $banner.style.removeProperty('height')

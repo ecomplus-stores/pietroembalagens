@@ -667,3 +667,16 @@ test('quadros: a seção entra desligada na home, logo depois do banner, e está
   assert.equal(typeof home.sections[at].enabled, 'boolean')
   assert.match(fs.readFileSync(path.join(root, 'template/js/cms/sections.js'), 'utf8'), /name: 'personalized-boxes'/)
 })
+test('quadros: parcelas seguem a regra do tema (mínimo da parcela, máximo da loja, juros)', () => {
+  const option = { max_number: 6, min_installment: 5, monthly_interest: 0 }
+  assert.deepEqual(plain(boxes.installmentsOf(18.99, option)), { number: 3, value: 18.99 / 3, interestFree: true })
+  assert.equal(boxes.installmentsOf(100, option).number, 6)
+  assert.equal(boxes.installmentsOf(9.99, option), null)
+  assert.equal(boxes.installmentsOf(0, option), null)
+  assert.equal(boxes.installmentsOf(50, null), null)
+  assert.equal(boxes.installmentsOf(50, { max_number: 1, min_installment: 5 }), null)
+  const withInterest = boxes.installmentsOf(100, { max_number: 4, min_installment: 5, monthly_interest: 2 })
+  assert.equal(withInterest.interestFree, false)
+  assert.ok(withInterest.value > 25 && withInterest.value < 27)
+  assert.equal(boxes.installmentsOf(100, { max_number: 12 }).number, 12)
+})

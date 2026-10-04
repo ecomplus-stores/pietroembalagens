@@ -63,7 +63,7 @@
   .pe-boxes__pic {
     display: block;
     flex: 0 0 auto;
-    height: 130px;
+    height: 108px;
     margin-bottom: 12px;
     background: #fff;
 
@@ -85,6 +85,9 @@
   .pe-boxes__old { margin-top: 6px; font-size: 12px; color: #6b5a52; text-decoration: line-through; }
 
   .pe-boxes__price { margin-top: 2px; font-size: 20px; font-weight: 700; line-height: 1.2; }
+
+  // Parcelas ("em até 6x de R$ 3,15 / sem juros"): a linha tem altura reservada para o preço não pular quando ela chega.
+  .pe-boxes__inst { min-height: 30px; margin-top: 2px; font-size: 12px; font-weight: 500; line-height: 15px; color: #3F2D25; }
 
   .pe-boxes__off { margin-left: 4px; font-size: 13px; font-weight: 700; color: #874015; }
 
@@ -112,10 +115,41 @@
 
   .pe-boxes__arrow--prev { left: 4px; }
   .pe-boxes__arrow--next { right: 4px; }
+
+  // Celular: quadro do Mercado Livre no celular (medido no print do Rafael): 149 × 225 px, 13 px entre quadros.
+  @media (max-width: 575.98px) {
+    min-height: 235px;
+
+    .pe-boxes__track { gap: 13px; }
+    .pe-boxes__card { flex-basis: 149px; height: 225px; padding: 10px; border-radius: 12px; }
+    .pe-boxes__title { margin-bottom: 4px; font-size: 12px; }
+    .pe-boxes__pic { height: 66px; margin-bottom: 6px; }
+    .pe-boxes__name { min-height: 2.6em; font-size: 12px; }
+    .pe-boxes__old { margin-top: 4px; font-size: 11px; }
+    .pe-boxes__price { font-size: 17px; }
+    .pe-boxes__off { font-size: 11px; }
+    .pe-boxes__inst { min-height: 28px; font-size: 11px; line-height: 14px; }
+  }
 }
 
-// Banner do topo v2 com o tamanho do Mercado Livre (280 px de altura no computador), só quando os quadros estão na
-// página (o banner é irmão anterior da seção). Sem os quadros, ou em navegador sem :has(), vale a altura do topo v2.
-@media (min-width: 992px) {
-  .pe-h2.banner-slider:has(~ .pe-boxes) { height: 280px !important; }
+// Banner do topo v2 com o tamanho do Mercado Livre, só quando os quadros estão na página (o banner é irmão anterior
+// da seção). Computador: 280 px de altura. Celular: cartão de cantos arredondados com ~8:3 (328 × 123 no ML), com a arte
+// cobrindo a caixa. Sem os quadros, ou em navegador sem :has(), vale a altura do topo v2.
+.pe-h2.banner-slider:has(~ .pe-boxes) {
+  width: auto;
+  height: calc((100vw - 32px) * .375) !important;
+  margin: 12px 16px 0;
+  border-radius: 16px;
+
+  .glide, .glide__track, .glide__slides, .glide__slide, .glide__slide .banner, .glide__slide a, .glide__slide picture { height: 100%; }
+  .glide__slide .banner, .glide__slide a, .glide__slide picture { display: block; }
+  .glide__slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
+  @media (min-width: 992px) {
+    height: 280px !important;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    .glide__slide img { object-position: left center; }
+  }
 }

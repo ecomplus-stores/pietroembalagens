@@ -1,6 +1,6 @@
 # Quadros personalizados da home
 
-Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livre, **com o mesmo tamanho** (medido nos prints do Rafael, 04/10): quadro de **184 × 286 px**, 16 px entre quadros, 6 visíveis em 1184 px; banner de **280 px** de altura no computador. Cada quadro mostra **1 produto** (título do quadro, foto grande, nome em 2 linhas, preço; com preço antigo riscado e % OFF quando está em promoção). Seta para rolar de lado no computador; no celular, rola com o dedo. A linha "Frete grátis" **não existe de propósito**: o frete grátis depende do CEP e do mínimo do carrinho, e a home não sabe isso por produto.
+Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livre, **com o mesmo tamanho** (medido nos prints do Rafael, 04/10): quadro de **184 × 286 px**, 16 px entre quadros, 6 visíveis em 1184 px; banner de **280 px** de altura no computador. **Celular** (print do Rafael): quadro de **149 × 225 px** com 13 px entre quadros (~2 visíveis, rola de lado) e banner em cartão de cantos arredondados, 16 px de margem, proporção 8:3 (358 × 134 em 390 px). Cada quadro mostra **1 produto** (título do quadro, foto, nome em 2 linhas, preço; com preço antigo riscado e % OFF quando está em promoção, e a linha "em até Nx de R$ X" + "sem juros" quando a loja não cobra juros). As parcelas usam a configuração de pagamento da loja (`window.storefront.info.list_payments.installments_option`, a mesma do tema: mínimo de R$ 5 por parcela e máximo da loja); sem ela, ou com preço baixo demais, a linha fica vazia. Seta para rolar de lado no computador; no celular, rola com o dedo. A linha "Frete grátis" **não existe de propósito**: o frete grátis depende do CEP e do mínimo do carrinho, e a home não sabe isso por produto.
 
 **Backup antes da entrega:** branch `backup/antes-quadros-20261004`, SHA `70194aeffd905e8cd9a91d57257d4421ce6a2d04` (o `master` de 04/10/2026).
 
@@ -21,7 +21,7 @@ Cliente novo vê os 3 últimos. Um produto só é exibido se estiver disponível
 
 ## Privacidade
 
-Tudo fica só no navegador (`localStorage`): `pe-boxes-viewed` (até 12 ids de produto) e `pe-boxes-term` (último termo, até 80 caracteres). Nada é enviado a servidor e nenhum evento de analytics leva dado pessoal. Não há botão de "limpar histórico" (decisão do Rafael). **O registro vale em todas as páginas mesmo com a seção desligada** (para quem já navegou chegar à home personalizada no dia em que ligar); só a exibição depende da chave.
+Tudo fica só no navegador (`localStorage`): `pe-boxes-viewed` (até 12 ids de produto) e `pe-boxes-term` (último termo, até 80 caracteres). Nada é enviado a servidor e nenhum evento de analytics leva dado pessoal. Não há botão de "limpar histórico" (decisão do Rafael). **O registro vale em todas as páginas mesmo com a seção desligada** (decisão do Rafael, 04/10: quem já navegou chega à home personalizada no dia em que ligar); só a exibição depende da chave.
 
 ## Chave liga/desliga
 
@@ -58,9 +58,9 @@ Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): 
 ## Limitações conhecidas
 
 - **Banner mais baixo corta a arte.** Com os quadros ligados o banner do computador cai de ~504 para 280 px (como o ML). As artes atuais (1920×500 e 1597×700) são cortadas embaixo (o botão "Ver coleção" some). O ideal é refazer as artes em ~1920×380 (1410×280 de caixa), com o texto no meio vertical.
-- **Parcelamento:** o card mostra preço, preço antigo e % OFF, como o print do Mercado Livre; não mostra parcelas (o `APrices` do tema não foi usado).
+- **Banner do celular sem o "espiar" do próximo slide:** o ML mostra um pedaço do slide seguinte; aqui o banner é um cartão único (o carrossel é o do tema).
 - **Promoção vencida:** o índice de busca não devolve `price_effective_date`; então o quadro "Promoções" só testa `base_price > price`. Hoje não há esse caso (a ficha 18 limpou as vencidas), mas se voltar a existir, a correção é buscar o produto em `/products/<id>.json` antes de exibir.
 
 ## Fora do escopo
 
-"Compre novamente" (precisa de login/compras do cliente); botão de limpar histórico; qualquer mudança no checkout.
+"Compre novamente" (precisa de login/compras do cliente); botão de limpar histórico; linha "Frete grátis" e quadros informativos do visitante sem login; qualquer mudança no checkout.

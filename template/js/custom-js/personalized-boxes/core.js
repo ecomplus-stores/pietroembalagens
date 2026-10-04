@@ -62,3 +62,14 @@ export function escapeHtml (value) {
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]
   ))
 }
+
+// Parcelas do jeito do tema (APrices): nº de parcelas = menor entre preço / parcela mínima (padrão R$ 5) e o máximo
+// da loja; com juros mensais usa a tabela Price. `option` é window.storefront.info.list_payments.installments_option.
+export function installmentsOf (price, option) {
+  if (!option || !(price > 0)) return null
+  const number = Math.min(Math.floor(price / (option.min_installment || 5)), option.max_number || 0)
+  if (number < 2) return null
+  const interest = (option.monthly_interest || 0) / 100
+  const value = interest ? price * interest / (1 - Math.pow(1 + interest, -number)) : price / number
+  return { number, value, interestFree: !interest }
+}

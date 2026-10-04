@@ -6,7 +6,7 @@ import {
   formatMoney, img, inStock, name as getName, onPromotion, price as getPrice, recommendedIds
 } from '@ecomplus/utils'
 import {
-  addViewed, composeBoxes, escapeHtml, readTerm, readViewed, safeId, saveTerm, sortByViewed
+  addViewed, composeBoxes, escapeHtml, installmentsOf, readTerm, readViewed, safeId, saveTerm, sortByViewed
 } from './core'
 
 const storage = (() => { try { return window.localStorage } catch (_) { return null } })()
@@ -54,7 +54,22 @@ const cardHtml = ({ title, item }) => {
     (discount > 0 ? `<span class="pe-boxes__old">${escapeHtml(formatMoney(item.base_price))}</span>` : '') +
     `<span class="pe-boxes__price">${escapeHtml(formatMoney(current))}` +
     (discount > 0 ? ` <span class="pe-boxes__off">${discount}% OFF</span>` : '') +
-    '</span></a>'
+    `</span><span class="pe-boxes__inst" data-price="${current}"></span></a>`
+}
+
+// As parcelas dependem da configuração de pagamento da loja, que o tema carrega por conta própria (pode chegar depois
+// dos quadros). Sem ela os quadros ficam sem a linha de parcelas; nada quebra.
+const fillInstallments = $root => {
+  const option = window.storefront && window.storefront.info && window.storefront.info.list_payments &&
+    window.storefront.info.list_payments.installments_option
+  if (!option) return false
+  $root.querySelectorAll('.pe-boxes__inst').forEach($inst => {
+    const inst = installmentsOf(Number($inst.getAttribute('data-price')), option)
+    $inst.innerHTML = inst
+      ? `em até ${inst.number}x de ${escapeHtml(formatMoney(inst.value))}` + (inst.interestFree ? '<br>sem juros' : '')
+      : ''
+  })
+  return true
 }
 
 const setupArrows = $root => {
@@ -103,6 +118,9 @@ const render = async $root => {
   $root.querySelector('.pe-boxes__track').innerHTML = boxes.map(cardHtml).join('')
   $root.classList.add('pe-boxes--ready')
   setupArrows($root)
+  if (!fillInstallments($root) && window.storefront && typeof window.storefront.on === 'function') {
+    window.storefront.on('info:list_payments', () => { fillInstallments($root) })
+  }
 }
 
 if ($root) render($root).catch(() => { $root.hidden = true })
