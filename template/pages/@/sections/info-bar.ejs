@@ -2,11 +2,6 @@
 const info = _.cms('info')
 const peHeaderV2 = (_.cms('header') || {}).pe_header_v2
 const peV2 = Boolean(peHeaderV2 && peHeaderV2.enabled)
-const peIcons = {
-  truck: '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
-  'credit-card': '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
-  layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'
-}
 const barCols = []
 ;[
   ['shipping', 'shipping-fast'],
@@ -22,21 +17,7 @@ const barCols = []
 %>
 
 <%_ if (peV2) { _%>
-<section class="pe-h2 pe-h2__benefits" aria-label="Vantagens da loja">
-  <div class="pe-h2__benefits-list">
-    <% (peHeaderV2.benefits || []).forEach(({ icon, title, text, link }) => { %>
-      <<%- link ? 'a href="' + link + '"' : 'div' %> class="pe-h2__benefit">
-        <span class="pe-h2__benefit-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%- peIcons[icon] || '' %></svg>
-        </span>
-        <span class="pe-h2__benefit-text">
-          <strong><%= title %></strong>
-          <small><%= text %></small>
-        </span>
-      </<%- link ? 'a' : 'div' %>>
-    <% }) %>
-  </div>
-</section>
+<%# Com o topo v2 os benefícios são renderizados logo abaixo do cabeçalho (inc/header-v2.ejs). %>
 <%_ } else if (barCols.length) { _%>
   <section class="info-bar">
     <div class="info-bar__inner">

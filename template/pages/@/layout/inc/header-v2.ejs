@@ -16,6 +16,11 @@ const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
 })
 const storeName = _.settings.name || _.store.name
 const searchLabel = 'Buscar caixas, fitas, forminhas…'
+const benefitIcons = {
+  truck: '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  'credit-card': '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'
+}
 %>
 <div id="overlay" class="fade"></div>
 
@@ -54,7 +59,7 @@ const searchLabel = 'Buscar caixas, fitas, forminhas…'
       </a>
 
       <% if (header.search_input) { %>
-        <div class="pe-h2__search-block collapse show" id="search-bar">
+        <div class="pe-h2__search-block d-lg-block collapse show" id="search-bar">
           <form class="header__search pe-h2__search" id="search-form" action="/search" method="get">
             <input
               type="search"
@@ -270,3 +275,22 @@ const searchLabel = 'Buscar caixas, fitas, forminhas…'
     <% } %>
   </div>
 </header>
+
+<%# Benefícios: logo abaixo do cabeçalho, só na home. Substituem a faixa azul (info-bar), que não renderiza com a v2. %>
+<% if (_.pageName === 'home' && (v2.benefits || []).length) { %>
+  <section class="pe-h2 pe-h2__benefits" aria-label="Vantagens da loja">
+    <div class="pe-h2__benefits-list">
+      <% v2.benefits.forEach(({ icon, title, text, link }) => { %>
+        <<%- link ? 'a href="' + link + '"' : 'div' %> class="pe-h2__benefit">
+          <span class="pe-h2__benefit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%- benefitIcons[icon] || '' %></svg>
+          </span>
+          <span class="pe-h2__benefit-text">
+            <strong><%= title %></strong>
+            <small><%= text %></small>
+          </span>
+        </<%- link ? 'a' : 'div' %>>
+      <% }) %>
+    </div>
+  </section>
+<% } %>

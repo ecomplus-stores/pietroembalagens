@@ -17,6 +17,9 @@ if (slides && slides.length) {
   const isBannerFullWidth = opt.full_width
   let style = ''
   let className = 'banner-slider'
+  if (((_.cms('header') || {}).pe_header_v2 || {}).enabled) {
+    className += ' pe-h2'
+  }
   if (isBannerFullWidth) {
     className += ' banner-slider--full-width'
   }

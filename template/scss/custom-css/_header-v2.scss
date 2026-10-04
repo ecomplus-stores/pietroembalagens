@@ -21,6 +21,7 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity .2s ease, visibility .2s;
+    transition-delay: 0s;
     color: #FFF8DC;
     font-size: 13px;
     font-weight: 600;
@@ -28,7 +29,7 @@
     text-decoration: none;
 
     @media (min-width: 992px) { font-size: 14px; }
-    &.is-active { opacity: 1; visibility: visible; }
+    &.is-active { opacity: 1; visibility: visible; transition-delay: .2s; } // entra só depois de a outra sair
     &:hover, &:focus { color: #FFF8DC; text-decoration: underline; }
     @media (prefers-reduced-motion: reduce) { transition: none; }
   }
@@ -220,7 +221,7 @@
     text-transform: uppercase;
     pointer-events: none;
 
-    @media (min-width: 992px) { font-size: 10px; }
+    @media (min-width: 992px) { top: -9px; font-size: 10px; }
   }
 
   // Celular: menu em rolagem lateral
@@ -345,13 +346,18 @@
 }
 
 // O banner continua o mesmo; só ganha margem lateral e raio quando o topo v2 está ligado.
-.pe-h2.header ~ .banner-slider {
+.pe-h2.banner-slider {
+  width: calc(100% - 32px);
   margin-left: 16px;
   margin-right: 16px;
   border-radius: 8px;
   overflow: hidden;
 
-  @media (min-width: 992px) { margin-top: 20px; }
+  @media (min-width: 992px) {
+    width: calc(100% - 40px);
+    max-width: 1200px !important; // o código customizado fixa `max-width:100%` no primeiro banner
+    margin: 20px auto 0;
+  }
 }
 
 // ---------- Categorias em "stories" ----------
