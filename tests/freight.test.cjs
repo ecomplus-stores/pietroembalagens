@@ -168,7 +168,7 @@ test('calculator ignores stale requests after CEP change and preserves explicit 
   const calls = []
   const preferences = new Map()
   const component = load('template/js/custom-js/js/ShippingCalculator.js', {
-    '../freight/runtime': { runtime, enabled: () => true, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
+    '../freight/runtime': { runtime, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, readAutoSelect: () => null, clearAutoSelect: () => {}, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
     '@ecomplus/client': { modules: request => new Promise(resolve => calls.push({ request, resolve })) },
     '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
     'vue-cleave-component': {}
@@ -227,7 +227,7 @@ test('rapid double click adds only once; changed price refuses addition', async 
   const events = []
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: lock, enabled: () => true, track: (event, data) => events.push({ event, data }), init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
+    '../freight/runtime': { runtime: lock, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, markAutoSelect: () => {}, track: (event, data) => events.push({ event, data }), init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
     '../freight/service': {
       recommendations: async () => [],
       fetchProduct: () => { requests++; return new Promise(resolve => { release = resolve }) },
@@ -336,7 +336,7 @@ test('stored suggestions render before the quote settles and are saved slim afte
   let computed = 0
   const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
     '@ecomplus/shopping-cart': { __esModule: true, default: cart },
-    '../freight/runtime': { runtime: Vue.observable({ busy: false, enabled: true }), enabled: () => true, track: () => {}, init: () => {}, readSuggestions: key => (stored || entry).key === key ? (stored || entry) : null, saveSuggestions: value => { stored = value } },
+    '../freight/runtime': { runtime: Vue.observable({ busy: false, enabled: true }), enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, markAutoSelect: () => {}, track: () => {}, init: () => {}, readSuggestions: key => (stored || entry).key === key ? (stored || entry) : null, saveSuggestions: value => { stored = value } },
     '../freight/service': { recommendations: async () => { computed++; return [full] }, fetchProduct: async () => p, prepare: () => full, simulate: async value => value }
   }).default
   const loading = { key: 'k', zip: '01310100', status: 'loading', threshold: null, subtotal: 27120, services: [] }
@@ -415,4 +415,56 @@ test('delivery text sums posting, transport and production like the native line;
   assert.equal(bare.deliveryText({ delivery_time: { days: 6, working_days: true } }), '6 dias úteis')
   assert.equal(bare.deliveryText({ delivery_time: { days: 1, working_days: true } }), '1 dia útil')
   assert.equal(mod.productionDays([{ quantity: 2, production_time: { days: 3, cumulative: true } }, { quantity: 1, production_time: { days: 2 } }]), 6)
+})
+
+test('v2 suggestions: sorted by increase, effect text by rule, marker only for a confirmed add with the flag on', async () => {
+  const p = product()
+  const cart = cartWith(p, 8)
+  const quote = { key: 'q', zip: '05141000', status: 'ready', threshold: 29900, subtotal: 27120, services: [service('PAC', 29.9), service('Sedex', 45.34)], selected: service('PAC', 29.9) }
+  const marks = []
+  const flags = { auto: false }
+  const runtimeState = Vue.observable({ busy: false, enabled: true })
+  const make = candidatesList => {
+    const component = load('template/js/custom-js/components/FreightSuggestions.vue', {
+      '@ecomplus/shopping-cart': { __esModule: true, default: cart },
+      '@ecomplus/utils': { formatMoney: value => 'R$ ' + value.toFixed(2).replace('.', ',') },
+      '../freight/runtime': { runtime: runtimeState, enabled: () => true, uiVersion: () => 'v2', autoSelectFree: () => flags.auto, markAutoSelect: key => marks.push(key), track: () => {}, init: () => {}, readSuggestions: () => null, saveSuggestions: () => {} },
+      '../freight/service': { recommendations: async () => [], fetchProduct: async () => p, prepare: (d, pr, c, q, quantity) => candidatesList.find(x => x.quantity === quantity), simulate: async v => v }
+    }).default
+    return new (Vue.extend(component))({ propsData: { quote, compact: true } })
+  }
+  const a = { key: 'a', id: p._id, title: 'A', quantity: 3, additional: 2970, remaining: 0, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } }, parsed: { ...cart.data.items[0] } }
+  const b = { key: 'b', id: p._id, title: 'B', quantity: 2, additional: 2780, remaining: 0, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } }, parsed: { ...cart.data.items[0] } }
+  const c = { key: 'c', id: p._id, title: 'C', quantity: 1, additional: 3390, remaining: 0, confirmed: true, free: null, parsed: { ...cart.data.items[0] } }
+  const d = { key: 'd', id: p._id, title: 'D', quantity: 1, additional: 1000, remaining: 500, confirmed: false }
+  const e = { key: 'e', id: p._id, title: 'E', quantity: 1, additional: 2780, remaining: 0, confirmed: false }
+  const instance = make([a, b, c])
+  instance.candidates = [a, c, b]
+  assert.deepEqual(instance.displayed.map(x => x.key), ['a', 'c'], 'the ranking picks who is shown; v2 then orders that slice by increase')
+  instance.compact = false
+  assert.deepEqual(instance.displayed.map(x => x.key), ['b', 'a', 'c'])
+  assert.equal(instance.effectText(b), 'Custa menos que o frete de R$ 29,90')
+  assert.equal(instance.effectText(c), 'Só R$ 4,00 a mais que o frete, e o produto fica com você')
+  assert.equal(instance.effectText(d), 'Ainda faltarão R$ 5,00 depois de adicionar.')
+  instance.loading = false
+  assert.equal(instance.effectText(e), 'Atinge o mínimo do frete grátis')
+  instance.loading = true
+  assert.equal(instance.effectText(e), 'Atinge o mínimo do frete grátis · conferindo a entrega…')
+  instance.quote = { ...quote, selected: null }
+  assert.equal(instance.freightReference, 2990, 'no selection: cheapest paid service')
+  assert.equal(instance.deliveryFor(c), '', 'no confirmed free line, no delivery line')
+  instance.$destroy()
+
+  // marker: flag off → none; flag on + confirmed add → one, keyed by the cart after the addition
+  const real = serviceModule.prepare({ id: p._id, key: 'own', relation: 'same' }, p, cart.data, quote)
+  const confirmed = { ...real, confirmed: true, free: { shipping_line: { delivery_time: { days: 6, working_days: true } } } }
+  const addFlow = make([confirmed])
+  addFlow.quote = { ...quote, key: 'q' }
+  await addFlow.add(confirmed)
+  assert.equal(marks.length, 0, 'flag off: no marker')
+  flags.auto = true
+  await addFlow.add(confirmed)
+  assert.equal(marks.length, 1)
+  assert.equal(marks[0], core.fingerprint(cart.data.items, '05141000'))
+  addFlow.$destroy()
 })
