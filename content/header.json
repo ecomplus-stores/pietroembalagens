@@ -28,5 +28,93 @@
     "pages": [],
     "phone_wpp": false,
     "socials": true
+  },
+  "pe_header_v2": {
+    "enabled": false,
+    "stripe_rotate_ms": 4000,
+    "stripe_alt": {
+      "text": "Frete grátis a partir de R$ 299 · veja seu estado",
+      "link": "/pages/politica-de-frete-gratis"
+    },
+    "seasonal": {
+      "enabled": true,
+      "label": "Natal",
+      "tag": "Novo",
+      "link": "/caixas-tema-natal",
+      "bolinha": "/img/uploads/desktop_bolinha_linha-tematicas.png"
+    },
+    "mobile_nav": [
+      "/caixas-embalagens-para-doces-e-brigadeiro?Caixas p/ doces",
+      "/caixas-com-berco?Com berço",
+      "/caixas-para-presente?Presentes",
+      "/embalagem-para-transporte-delivery-doces-macarons?Transporte",
+      "/caixa-de-acetato?Acetato",
+      "/embalagem-para-biscoitos?Biscoitos"
+    ],
+    "benefits": [
+      {
+        "icon": "truck",
+        "title": "Frete grátis",
+        "text": "a partir de R$ 299*",
+        "link": "/pages/politica-de-frete-gratis"
+      },
+      {
+        "icon": "credit-card",
+        "title": "5x sem juros",
+        "text": "ou desconto no PIX"
+      },
+      {
+        "icon": "layers",
+        "title": "Desconto progressivo",
+        "text": "por quantidade do item"
+      }
+    ],
+    "stories": [
+      {
+        "label": "Caixas p/ doces",
+        "link": "/caixa-com-visor-para-doces-brigadeiros",
+        "img": "/img/uploads/desktop_bolinha_linha-visor.png"
+      },
+      {
+        "label": "Com berço",
+        "link": "/caixas-com-berco",
+        "img": "/img/uploads/desktop_bolinha_linha-com-berc-o.png"
+      },
+      {
+        "label": "Acetato",
+        "link": "/caixa-de-acetato",
+        "img": "/img/uploads/desktop_bolinha_linha-acetato.png"
+      },
+      {
+        "label": "Biscoitos",
+        "link": "/embalagem-para-biscoitos",
+        "img": "/img/uploads/desktop_bolinha_linha_biscoito.png"
+      },
+      {
+        "label": "Brownie",
+        "link": "/embalagem-para-brownies",
+        "img": "/img/uploads/desktop_bolinha_linha_brownie.png"
+      },
+      {
+        "label": "Forminhas",
+        "link": "/forminhas-para-doces",
+        "img": "/img/uploads/desktop_bolinha_linha-forminhas.png"
+      },
+      {
+        "label": "Fitas de cetim",
+        "link": "/fita-de-cetim",
+        "img": "/img/uploads/desktop_bolinha_linha-fita-cetim.png"
+      },
+      {
+        "label": "Formas BWB",
+        "link": "/formas-para-chocolate",
+        "img": "/img/uploads/desktop_bolinha_linha-formas-bwb.png"
+      },
+      {
+        "label": "Sacolas",
+        "link": "/sacola-kraft",
+        "img": "/img/uploads/desktop_bolinhas_sacola.png"
+      }
+    ]
   }
 }
