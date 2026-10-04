@@ -148,4 +148,29 @@ export default {
 .pe-fs2-zip button,.pe-fs2-status__use{height:44px;padding:0 20px;border:0;border-radius:50px;font:inherit;font-size:14px;font-weight:700;color:#fff;background:#fd8043;cursor:pointer}
 .pe-fs2-status__use{width:100%;margin-top:12px;background:#1f7a45}
 .pe-fs2-zip button:focus-visible,.pe-fs2-status__use:focus-visible{outline:2px solid #874015;outline-offset:2px}
+/* v2 shipping calculator rows (minicart line and cart options) */
+.pe-fs2-calc{display:flex;flex-direction:column}
+.pe-fs2-calc>.pe-fs2-status{order:-2}
+.pe-fs2-calc>.pe-fs2-status.is-applied{order:1}
+.pe-fs2-quiet .shipping-calculator__services::after{display:none}
+.pe-fs2-line{margin:16px 0 4px}
+.pe-fs2-line__main{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;line-height:1.35;color:#000}
+.pe-fs2-line__main strong{flex:none;font-weight:700}
+.pe-fs2-line__zip,.pe-fs2-cep{display:block;margin-top:2px;font-size:13px;font-weight:400;color:#333}
+.pe-fs2-cep{margin:6px 0 12px}
+.pe-fs2-link{padding:0;border:0;background:none;font:inherit;color:#874015;text-decoration:underline;cursor:pointer}
+.pe-fs2-link:focus-visible{outline:2px solid #874015;outline-offset:2px}
+.pe-fs2-options{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.pe-fs2-option{position:relative;display:flex;align-items:center;gap:10px;margin:0;cursor:pointer;font-weight:400}
+.pe-fs2-option input{position:absolute;opacity:0;pointer-events:none}
+.pe-fs2-option__dot{flex:none;width:20px;height:20px;box-sizing:border-box;border:2px solid #8f8f8f;border-radius:50%;background:#fff}
+.pe-fs2-option.is-active .pe-fs2-option__dot{border:6px solid #fd8043}
+.pe-fs2-option.is-active.is-free .pe-fs2-option__dot{border-color:#1f7a45}
+.pe-fs2-option input:focus-visible+.pe-fs2-option__dot{outline:2px solid #874015;outline-offset:2px}
+.pe-fs2-option__body{display:flex;flex-direction:column;flex:1;min-width:0;line-height:1.3}
+.pe-fs2-option__name{font-size:14px;color:#000}
+.pe-fs2-option.is-active.is-free .pe-fs2-option__name{font-weight:700}
+.pe-fs2-option__body small{font-size:12px;color:#333}
+.pe-fs2-option__price{flex:none;font-size:14px;font-weight:700;color:#000}
+.pe-fs2-option.is-free .pe-fs2-option__price{color:#1f7a45}
 </style>

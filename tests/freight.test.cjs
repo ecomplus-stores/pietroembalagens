@@ -23,7 +23,12 @@ function load (file, mocks = {}, globals = {}) {
     if (id in mocks) return mocks[id]
     if (id === './core' || id === '../freight/core') return { __esModule: true, default: core }
     if (id.endsWith('.vue')) return {}
-    if (id.startsWith('.')) return require(path.resolve(path.dirname(filename), id))
+    if (id.startsWith('.')) {
+      const resolved = path.resolve(path.dirname(filename), id)
+      // Template sources are ES modules; CI runs Node 20, so transpile them instead of require()-ing them.
+      if (resolved.startsWith(path.join(root, 'template') + path.sep)) return load(path.relative(root, resolved.endsWith('.js') ? resolved : resolved + '.js'), mocks, globals)
+      return require(resolved)
+    }
     return require(id)
   }
   vm.runInNewContext(code, { module, exports: module.exports, require: localRequire, setTimeout, clearTimeout, console, ...globals }, { filename })
@@ -467,4 +472,78 @@ test('v2 suggestions: sorted by increase, effect text by rule, marker only for a
   assert.equal(marks.length, 1)
   assert.equal(marks[0], core.fingerprint(cart.data.items, '05141000'))
   addFlow.$destroy()
+})
+
+test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, one-shot and loses to a manual choice', async () => {
+  const preferences = new Map()
+  const flags = Vue.observable({ ui: 'v2', auto: true, mark: null, cleared: 0 })
+  const runtimeMock = {
+    runtime, enabled: () => true, uiVersion: () => flags.ui, autoSelectFree: () => flags.auto && flags.ui === 'v2', init: () => {},
+    readAutoSelect: () => flags.mark, clearAutoSelect: () => { flags.mark = null; flags.cleared++ },
+    getPreference: z => preferences.get(z) || '', setPreference: (z, key) => preferences.set(z, key)
+  }
+  const build = propsData => {
+    const component = load('template/js/custom-js/js/ShippingCalculator.js', {
+      '../freight/runtime': runtimeMock,
+      '@ecomplus/client': { modules: () => new Promise(() => {}) },
+      '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
+      'vue-cleave-component': {},
+      '@ecomplus/utils': { $ecomConfig: { get: () => 'BR' }, i18n: v => v.pt_br || v, price: item => item.price, formatMoney: v => 'R$ ' + v.toFixed(2).replace('.', ',') }
+    }, { window: { localStorage: { getItem: () => null, setItem: () => {} }, peDeliveryDate: { textoData: n => 'Chega até em ' + n } } }).default
+    const cart = cartWith(product(), 8)
+    return { cart, instance: new Vue({ ...component, propsData: { shippedItems: cart.data.items, zipCode: '05141000', canSelectServices: true, ...propsData } }) }
+  }
+  const pac = service('PAC', 29.9)
+  const free = service('FREE', 0)
+  const minicart = build({ peSurface: 'minicart' })
+  const plain = build({})
+  const checkout = build({ peSurface: undefined })
+  assert.equal(minicart.instance.peV2, true)
+  assert.equal(plain.instance.peV2, false, 'no surface (PDP, checkout): v1')
+  assert.equal(checkout.instance.peShowForm, true)
+  flags.ui = 'v1'
+  assert.equal(minicart.instance.peV2, false, 'ui v1 turns the branch off even with a surface')
+  flags.ui = 'v2'
+  // states
+  assert.equal(minicart.instance.peShowForm, false, 'minicart v2 hides the native zip form until "alterar"')
+  minicart.instance.peEditing = true
+  assert.equal(minicart.instance.peShowForm, true)
+  minicart.instance.peEditing = false
+  // auto selection: an earlier explicit PAC choice, then a confirmed suggestion add leaves a hint for this cart+CEP
+  const key = () => core.fingerprint(minicart.cart.data.items, '05141000')
+  const pacKey = core.serviceKey(pac)
+  preferences.set('05141000', pacKey)
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC', 'no hint: the explicit choice is kept')
+  flags.mark = { key: key(), at: Date.now() }
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'FREE', 'hint + free service: free is taken')
+  assert.equal(preferences.get('05141000'), '', 'the old explicit paid choice no longer pins')
+  assert.equal(minicart.instance.peAutoAt, flags.mark.at)
+  // one-shot per calculator: a manual choice afterwards wins and discards the hint
+  minicart.instance.setSelectedService(minicart.instance.shippingServices.findIndex(item => item.service_code === 'PAC'))
+  assert.equal(flags.mark, null)
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC')
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'PAC', 'manual choice survives later recalculation')
+  // no free service: the hint stays, nothing changes
+  preferences.set('05141000', pacKey)
+  flags.mark = { key: key(), at: 5 }
+  minicart.instance.parseShippingOptions(results([pac]))
+  assert.equal(flags.mark.at, 5)
+  assert.equal(preferences.get('05141000'), pacKey, 'paid choice untouched when there is nothing free to take')
+  // different cart: hint discarded
+  flags.mark = { key: 'outro carrinho', at: 6 }
+  minicart.instance.parseShippingOptions(results([pac, free]))
+  assert.equal(flags.mark, null)
+  // flag off, v1 UI, or no surface: never auto-selects
+  for (const [label, setup, target] of [['flag off', () => { flags.auto = false }, minicart], ['ui v1', () => { flags.ui = 'v1' }, minicart], ['no surface', () => {}, plain]]) {
+    flags.auto = true; flags.ui = 'v2'
+    setup()
+    preferences.set('05141000', pacKey)
+    flags.mark = { key: core.fingerprint(target.cart.data.items, '05141000'), at: 7 }
+    target.instance.parseShippingOptions(results([pac, free]))
+    assert.equal(target.instance.shippingServices[target.instance.selectedService].service_code, 'PAC', label)
+  }
+  for (const entry of [minicart, plain, checkout]) entry.instance.$destroy()
 })

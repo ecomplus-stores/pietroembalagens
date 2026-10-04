@@ -1,5 +1,6 @@
 import core from '../freight/core'
-import { runtime, enabled, init, getPreference, setPreference } from '../freight/runtime'
+import { runtime, enabled, uiVersion, autoSelectFree, readAutoSelect, clearAutoSelect, init, getPreference, setPreference } from '../freight/runtime'
+import { deliveryText } from '../freight/delivery-date'
 import FreightStatus from '../components/FreightStatus.vue'
 import {
     i19add$1ToEarn,
@@ -36,6 +37,9 @@ import {
   
     props: {
       zipCode: String,
+      // Set only by the minicart ('minicart') and the cart page ('cart') when they run the v2 UI.
+      // Product page and checkout never pass it, so they keep the v1 markup.
+      peSurface: String,
       canSelectServices: Boolean,
       canAutoSelectService: { type: Boolean, default: true },
       canInputZip: {
@@ -76,6 +80,8 @@ import {
     data () {
       return {
         localZipCode: null,
+        peEditing: false,
+        peAutoAt: 0,
         peSequence: 0,
         peFetchTimer: null,
         peSettledKey: null,
@@ -103,6 +109,16 @@ import {
       i19zipCode: () => i18n(i19zipCode),
       i19selectShippingMsg: () => 'Selecione uma opção de entrega',
       peEnabled () { return runtime.ready && enabled() && this.canSelectServices },
+      peV2 () { return Boolean(this.peSurface) && uiVersion() === 'v2' },
+      peSelected () { return this.selectedService !== null ? this.shippingServices[this.selectedService] || null : null },
+      peShowForm () { return this.canInputZip && (!this.peV2 || this.peEditing) },
+      peCompactLine () { return this.peV2 && this.peSurface === 'minicart' && !this.peEditing && !this.isWaiting && Boolean(this.peSelected) },
+      peOptionsList () { return this.peV2 && this.peSurface === 'cart' && !this.isWaiting && this.shippingServices.length > 0 },
+      peQuiet () { return this.peV2 && (this.peCompactLine || !this.shippingServices.length) },
+      peZipLabel () {
+        const digits = core.zip(this.localZipCode)
+        return digits.length === 8 ? digits.slice(0, 5) + '-' + digits.slice(5) : digits
+      },
       peCurrentKey () {
         return core.fingerprint(this.shippedItems, this.localZipCode, { shippingData: this.shippingData, skipIds: this.skipAppIds, country: this.countryCode })
       },
@@ -168,7 +184,27 @@ import {
         const index = core.chooseService(this.shippingServices, preferred, this.canAutoSelectService)
         if (index >= 0) this.setSelectedService(index, false)
         else if (this.canSelectServices) this.$emit('select-service', {})
+        this.peAutoSelect()
       },
+
+      // v2 + autoSelectFree: after a suggestion add, take the free service for this exact cart and CEP.
+      // Each calculator applies a given hint once; a manual choice or another cart/CEP discards it.
+      peAutoSelect () {
+        if (!this.peV2 || !autoSelectFree()) return
+        const mark = readAutoSelect()
+        if (!mark || mark.at === this.peAutoAt) return
+        if (mark.key !== core.fingerprint(this.shippedItems, this.localZipCode)) { clearAutoSelect(); return }
+        const free = this.shippingServices.findIndex(core.isFreeDelivery)
+        if (free < 0) return
+        this.peAutoAt = mark.at
+        // An earlier explicit paid choice must not pin the old service again on the next recalculation.
+        setPreference(core.zip(this.localZipCode), '')
+        this.setSelectedService(free, false)
+      },
+      peName (service) { return core.isFreeDelivery(service) ? 'Frete grátis' : service.label },
+      peCost (service) { return formatMoney((core.serviceCost(service) || 0) / 100) },
+      peDate (service) { return deliveryText(service.shipping_line, this.productionDeadline) },
+      peSetZip (zip) { this.localZipCode = zip },
   
       scheduleRetry (timeout = 10000) {
         clearTimeout(this.retryTimer)
@@ -244,7 +280,11 @@ import {
         if (explicit && this.isWaiting) return
         const service = this.shippingServices[i]
         if (this.canSelectServices && service) {
-          if (explicit) setPreference(core.zip(this.localZipCode), core.serviceKey(service))
+          if (explicit) {
+            setPreference(core.zip(this.localZipCode), core.serviceKey(service))
+            clearAutoSelect()
+            this.peEditing = false
+          }
           this.selectedService = i
           this.$emit('select-service', service)
         }
