@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "ui": "v1",
+  "ui": "v2",
   "autoSelectFree": false,
   "rolloutPercent": 100,
   "maxCandidates": 12,
