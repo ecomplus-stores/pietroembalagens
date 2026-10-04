@@ -2,12 +2,14 @@
 // O histórico (produtos vistos e último termo buscado) fica só no localStorage do navegador; nada vai ao servidor.
 import EcomSearch from '@ecomplus/search-engine'
 import { graphs } from '@ecomplus/client'
+import ecomPassport from '@ecomplus/passport-client'
 import {
   formatMoney, img, inStock, name as getName, onPromotion, price as getPrice, recommendedIds
 } from '@ecomplus/utils'
 import {
-  addViewed, composeBoxes, escapeHtml, installmentsOf, normalizeConfig, readTerm, readViewed, safeId, saveTerm, sortByViewed
+  addViewed, composeBoxes, escapeHtml, infoAction, installmentsOf, normalizeConfig, readTerm, readViewed, safeId, saveTerm, sortByViewed
 } from './core'
+import ICONS from './icons'
 
 const storage = (() => { try { return window.localStorage } catch (_) { return null } })()
 const body = document.body
@@ -42,7 +44,28 @@ const fetchRelated = async viewed => {
   return ids.length ? fetchItems(search => search.setProductIds(ids)) : []
 }
 
-const cardHtml = ({ title, item }) => {
+const isLoggedIn = () => {
+  try { return Boolean(ecomPassport.checkAuthorization()) } catch (_) { return false }
+}
+
+const infoCardHtml = ({ title, info }) => {
+  const action = infoAction(info)
+  const icon = ICONS[info.icon]
+  return '<div class="pe-boxes__card pe-boxes__card--info">' +
+    `<span class="pe-boxes__title">${escapeHtml(title)}</span>` +
+    (icon ? `<span class="pe-boxes__ico"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">${icon}</svg></span>` : '') +
+    `<span class="pe-boxes__itext">${escapeHtml(info.text)}</span>` +
+    (action
+      ? (action.login
+        ? `<button type="button" class="pe-boxes__btn" data-pe-login>${escapeHtml(action.label)}</button>`
+        : `<a class="pe-boxes__btn" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>`)
+      : '<span class="pe-boxes__nobtn"></span>') +
+    '</div>'
+}
+
+const cardHtml = box => {
+  if (box.info) return infoCardHtml(box)
+  const { title, item } = box
   const picture = img(item, null, 'big') || img(item)
   const current = getPrice(item)
   const discount = onPromotion(item) ? Math.round(((item.base_price - current) * 100) / item.base_price) : 0
@@ -95,7 +118,8 @@ const setupArrows = $root => {
 const render = async $root => {
   let rawConfig
   try { rawConfig = JSON.parse($root.getAttribute('data-config')) } catch (_) {}
-  const { max, titles, categories: categoryBoxes } = normalizeConfig(rawConfig)
+  const { max, titles, categories: categoryBoxes, info, showInfo } = normalizeConfig(rawConfig)
+  const infoBoxes = showInfo && !isLoggedIn() ? info.map((item, i) => ({ key: 'info-' + i, title: item.title, info: item })) : []
   const viewed = readViewed(storage)
   const term = readTerm(storage)
   const [seen, searched, related, sales, offers, news, ...categories] = await Promise.all([
@@ -111,6 +135,7 @@ const render = async $root => {
     { key: 'viewed', title: titles.viewed, items: sortByViewed(seen, viewed) },
     { key: 'search', title: titles.search, items: searched },
     { key: 'related', title: titles.related, items: related },
+    ...infoBoxes,
     { key: 'sales', title: titles.sales, items: sales },
     { key: 'offers', title: titles.offers, items: offers },
     { key: 'news', title: titles.news, items: news },
@@ -123,6 +148,13 @@ const render = async $root => {
   $root.querySelector('.pe-boxes__track').innerHTML = boxes.map(cardHtml).join('')
   $root.classList.add('pe-boxes--ready')
   setupArrows($root)
+  $root.addEventListener('click', event => {
+    if (!event.target.closest || !event.target.closest('[data-pe-login]')) return
+    event.preventDefault()
+    const $user = document.getElementById('user-button')
+    if ($user) $user.click()
+    else window.location.href = '/app/#/account/'
+  })
   if (!fillInstallments($root) && window.storefront && typeof window.storefront.on === 'function') {
     window.storefront.on('info:list_payments', () => { fillInstallments($root) })
   }

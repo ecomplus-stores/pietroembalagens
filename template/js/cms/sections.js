@@ -112,6 +112,14 @@ export default ({ state }) => {
         default: false
       },
       {
+        label: 'Mostrar quadros informativos para quem não está logado',
+        name: 'show_info_boxes',
+        widget: 'boolean',
+        default: true,
+        required: false,
+        hint: 'Usa as mensagens da cápsula do topo (cupom, frete grátis, 5x/PIX, desconto progressivo): editando lá, o quadro muda junto. Cliente logado não vê.'
+      },
+      {
         label: 'Máximo de quadros na fileira',
         name: 'max_boxes',
         widget: 'number',
