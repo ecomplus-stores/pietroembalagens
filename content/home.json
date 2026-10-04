@@ -27,7 +27,28 @@
     },
     {
       "type": "personalized-boxes",
-      "enabled": true
+      "enabled": true,
+      "max_boxes": 9,
+      "title_viewed": "Visto recentemente",
+      "title_search": "Sua busca",
+      "title_related": "Também te interessa",
+      "title_sales": "Mais vendidos",
+      "title_offers": "Promoções",
+      "title_news": "Novidades",
+      "category_boxes": [
+        {
+          "category": "64d032db2cd6b659590b9090:categories:Caixas p/ Transporte:/embalagem-para-transporte-delivery-doces-macarons",
+          "title": "Caixas p/ Transporte"
+        },
+        {
+          "category": "684f22a8578b5f79543fbdd6:categories:Caixas para presente:/caixas-para-presente",
+          "title": "Caixas para presente"
+        },
+        {
+          "category": "6468b95ca0e875411e95fc22:categories:Forminha para doces:/forminhas-para-doces",
+          "title": "Forminhas"
+        }
+      ]
     },
     {
       "type": "info-bar",

@@ -1,6 +1,17 @@
 <%_ /* Quadros personalizados (docs/QUADROS-PERSONALIZADOS.md): o servidor só imprime o contêiner; o JS (personalized-boxes/index.js) monta os quadros no navegador. */ _%>
 <noscript><style>.pe-boxes{display:none}</style></noscript>
-<section class="pe-boxes" aria-label="Produtos em destaque">
+<%_
+// Configuração do painel (content/home.json); campos ausentes caem no padrão do JS (personalized-boxes/core.js).
+const peConfig = {
+  max: opt.max_boxes,
+  titles: {
+    viewed: opt.title_viewed, search: opt.title_search, related: opt.title_related,
+    sales: opt.title_sales, offers: opt.title_offers, news: opt.title_news
+  },
+  categories: opt.category_boxes
+}
+_%>
+<section class="pe-boxes" aria-label="Produtos em destaque" data-config="<%= JSON.stringify(peConfig) %>">
   <button type="button" class="pe-boxes__arrow pe-boxes__arrow--prev" aria-label="Anterior" hidden>
     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
