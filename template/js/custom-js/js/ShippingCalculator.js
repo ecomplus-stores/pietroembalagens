@@ -112,8 +112,22 @@ import {
       peV2 () { return Boolean(this.peSurface) && uiVersion() === 'v2' },
       peSelected () { return this.selectedService !== null ? this.shippingServices[this.selectedService] || null : null },
       peShowForm () { return this.canInputZip && (!this.peV2 || this.peEditing) },
-      peCompactLine () { return this.peV2 && this.peSurface === 'minicart' && !this.peEditing && !this.isWaiting && Boolean(this.peSelected) },
-      peOptionsList () { return this.peV2 && this.peSurface === 'cart' && !this.isWaiting && this.shippingServices.length > 0 },
+      peMiniReady () { return this.peV2 && this.peSurface === 'minicart' && !this.peEditing && !this.isWaiting && Boolean(this.peSelected) },
+      // Minicart with a single service keeps the one-line summary; with several it lists up to three
+      // (the selected one always included) plus a link, so the shopper knows there are more.
+      peCompactLine () { return this.peMiniReady && this.shippingServices.length === 1 },
+      peOptionsList () {
+        if (!this.peV2 || this.isWaiting || !this.shippingServices.length) return false
+        return this.peSurface === 'cart' || (this.peMiniReady && this.shippingServices.length > 1)
+      },
+      peVisibleOptions () {
+        const all = this.shippingServices.map((service, index) => ({ service, index }))
+        if (this.peSurface !== 'minicart' || all.length <= 3) return all
+        const shown = all.slice(0, 3)
+        if (this.selectedService !== null && this.selectedService > 2) shown[2] = all[this.selectedService]
+        return shown
+      },
+      peMore () { return this.shippingServices.length - this.peVisibleOptions.length },
       peQuiet () { return this.peV2 && (this.peCompactLine || !this.shippingServices.length) },
       peZipLabel () {
         const digits = core.zip(this.localZipCode)

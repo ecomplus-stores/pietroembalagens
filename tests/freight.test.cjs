@@ -545,5 +545,20 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
     target.instance.parseShippingOptions(results([pac, free]))
     assert.equal(target.instance.shippingServices[target.instance.selectedService].service_code, 'PAC', label)
   }
+  // minicart lists up to three services (the selected one always among them) and says how many more exist
+  flags.mark = null
+  const many = ['A', 'B', 'C', 'D', 'E'].map((code, n) => service(code, 10 + n))
+  minicart.instance.isWaiting = false
+  minicart.instance.shippingServices = many
+  minicart.instance.selectedService = 0
+  assert.equal(minicart.instance.peOptionsList, true)
+  assert.deepEqual(minicart.instance.peVisibleOptions.map(o => o.index), [0, 1, 2])
+  assert.equal(minicart.instance.peMore, 2)
+  minicart.instance.selectedService = 4
+  assert.deepEqual(minicart.instance.peVisibleOptions.map(o => o.index), [0, 1, 4])
+  minicart.instance.shippingServices = [many[0]]
+  minicart.instance.selectedService = 0
+  assert.equal(minicart.instance.peCompactLine, true)
+  assert.equal(minicart.instance.peOptionsList, false, 'a single service keeps the one-line summary')
   for (const entry of [minicart, plain, checkout]) entry.instance.$destroy()
 })

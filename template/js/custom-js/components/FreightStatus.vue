@@ -124,19 +124,19 @@ export default {
 /* ===== v2 (ui: "v2"): status strip, shipping rows and page layout. Everything is under pe-fs2 so v1 never sees it. ===== */
 .pe-fs2-status{background:#fff7f3;border:0 solid #fd8043;color:#000;font-size:14px;line-height:1.4;text-align:left}
 .pe-fs2-status--ok{background:#eaf6ef;border-color:#1f7a45;color:#14532d}
-.pe-fs2-status--minicart{padding:20px 14px;border-bottom-width:3px}
-.pe-fs2-status--cart{padding:20px 14px;border-top-width:3px;border-radius:8px;margin:12px 0}
+.pe-fs2-status--minicart{padding:20px;border-bottom-width:3px}
+.pe-fs2-status--cart{padding:20px;border-top-width:3px;border-radius:8px;margin:12px 0}
 .pe-fs2-status p{margin:0}
-.pe-fs2-status__title{font-size:18px;font-weight:700;line-height:1.3;color:#000}
+.pe-fs2-status__title{font-size:15px;font-weight:700;line-height:1.3;color:#000}
 .pe-fs2-status--ok .pe-fs2-status__title{color:#14532d}
-.pe-fs2-status__text{margin-top:6px;font-size:14px;color:#333}
+.pe-fs2-status__text{margin-top:6px;font-size:13px;color:#333}
 .pe-fs2-status--ok .pe-fs2-status__text{color:#14532d}
-.pe-fs2-status__lead{font-size:18px;line-height:1.3;color:#000}
+.pe-fs2-status__lead{font-size:15px;line-height:1.3;color:#000}
 .pe-fs2-status__lead strong{font-weight:700}
 .pe-fs2-status__accent{color:#874015;font-weight:700}
 .pe-fs2-status__error{margin-top:6px;font-size:13px;font-weight:600;color:#b42318}
 .pe-fs2-status.is-applied.pe-fs2-status--cart{padding:12px 14px;border-top-width:0}
-.pe-fs2-status.is-applied.pe-fs2-status--cart .pe-fs2-status__title,.pe-fs2-status.is-applied.pe-fs2-status--cart .pe-fs2-status__text{display:inline;font-size:14px;margin:0}
+.pe-fs2-status.is-applied.pe-fs2-status--cart .pe-fs2-status__title,.pe-fs2-status.is-applied.pe-fs2-status--cart .pe-fs2-status__text{display:inline;font-size:13px;margin:0}
 .pe-fs2-status.is-applied.pe-fs2-status--cart .pe-fs2-status__title::after{content:". ";font-weight:700}
 .pe-fs2-progress{display:flex;align-items:center;gap:12px;margin-top:12px}
 .pe-fs2-track{flex:1;height:8px;background:#f0e2d8;border-radius:9px;overflow:hidden}
@@ -158,6 +158,8 @@ export default {
 .pe-fs2-line__main strong{flex:none;font-weight:700}
 .pe-fs2-line__zip,.pe-fs2-cep{display:block;margin-top:2px;font-size:13px;font-weight:400;color:#333}
 .pe-fs2-cep{margin:6px 0 12px}
+.pe-fs2-more{display:inline-block;margin:0 0 4px;font-size:13px;font-weight:700;color:#874015;text-decoration:underline}
+.pe-fs2-more:focus-visible{outline:2px solid #874015;outline-offset:2px}
 .pe-fs2-link{padding:0;border:0;background:none;font:inherit;color:#874015;text-decoration:underline;cursor:pointer}
 .pe-fs2-link:focus-visible{outline:2px solid #874015;outline-offset:2px}
 .pe-fs2-options{display:flex;flex-direction:column;gap:12px;margin:12px 0}
@@ -180,9 +182,12 @@ export default {
 .minicart.pe-fs2 .minicart__summary{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;font-size:14px;color:#000}
 .minicart.pe-fs2 .minicart__subtotal{font-size:18px;font-weight:700}
 .minicart.pe-fs2 .minicart__btn-checkout,.cart.pe-fs2 .pe-fs2-checkout{border:0;border-radius:50px;background:#fd8043;color:#fff;font-weight:700}
-.minicart.pe-fs2 .minicart__btn-checkout{height:46px;font-size:16px}
+.minicart.pe-fs2 .minicart__btn-checkout{height:46px}
+.minicart.pe-fs2 .card-footer{background:#fff}
+.minicart.pe-fs2 .minicart__subtotal .prices__value,.cart.pe-fs2 .cart__total .prices__value{color:#000}
+.cart.pe-fs2 .cart__total>span{color:#000}
 .minicart.pe-fs2 .minicart__btn-cart{border:0;background:none;color:#000;font-weight:400;box-shadow:none}
-.cart.pe-fs2 .pe-fs2-checkout{padding:.8rem 1rem;font-size:18px}
+.cart.pe-fs2 .pe-fs2-checkout{padding:.8rem 1rem}
 .cart.pe-fs2 .cart__total{font-size:18px;font-weight:700}
 .pe-fs2-pay{margin:12px 0 0;text-align:center;font-size:14px;font-weight:600;color:#333}
 .pe-fs2-pay b{color:#000}
