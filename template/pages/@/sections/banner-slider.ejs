@@ -17,6 +17,9 @@ if (slides && slides.length) {
   const isBannerFullWidth = opt.full_width
   let style = ''
   let className = 'banner-slider'
+  if (((_.cms('header') || {}).pe_header_v2 || {}).enabled) {
+    className += ' pe-h2'
+  }
   if (isBannerFullWidth) {
     className += ' banner-slider--full-width'
   }
@@ -32,6 +35,11 @@ if (slides && slides.length) {
         style += `:${Math.ceil(height / width * 1000) / 1000};`
       }
     }
+  }
+  if (className.includes('pe-h2')) {
+    // topo v2: guarda a razão real do 1º slide em variáveis próprias (a regra do código customizado
+    // força --banner-aspect-ratio: 1 com !important); o CSS e o JS da v2 usam estas.
+    style += style.replace(/--banner-aspect-ratio/g, '--pe-banner-ratio')
   }
   %>
 

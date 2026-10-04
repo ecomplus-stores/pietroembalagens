@@ -1,0 +1,300 @@
+<%
+// Topo da home v2 (content/header.json -> pe_header_v2). Só é incluído com enabled: true.
+// Mantém os IDs e as funções de que o JS do tema e o código customizado dependem (ver docs/TOPO-V2.md).
+const v2 = header.pe_header_v2
+const promos = (v2.promos || []).filter(promo => promo && promo.title)
+const seasonal = v2.seasonal && v2.seasonal.enabled ? v2.seasonal : null
+const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
+  const [path, name] = pathAndName.split('?')
+  return { path, name }
+})
+const storeName = _.settings.name || _.store.name
+const searchLabel = 'Buscar caixas, fitas, forminhas…'
+const promoIcons = {
+  percent: '<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  tag: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'
+}
+const benefitIcons = {
+  truck: '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+  'credit-card': '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'
+}
+%>
+<div id="overlay" class="fade"></div>
+
+<header class="header pe-h2" id="header">
+  <div class="pe-h2__container">
+    <div class="pe-h2__row1">
+      <button
+        class="pe-h2__burger"
+        type="button"
+        onclick="toggleSidenav()"
+        aria-label="Toggle side navigation"
+      >
+        <i class="i-bars"></i>
+      </button>
+
+      <a class="pe-h2__logo" href="/">
+        <img
+          id="logo"
+          src="<%= (_.assetsPrefix || '') + '/img/uploads/logo-creme-220.png' %>"
+          alt="<%= storeName %>"
+          width="220"
+          height="104"
+        >
+      </a>
+
+      <% if (header.search_input) { %>
+        <div class="pe-h2__search-block d-lg-block collapse show" id="search-bar">
+          <form class="header__search pe-h2__search" id="search-form" action="/search" method="get">
+            <input
+              type="search"
+              name="term"
+              placeholder="<%= searchLabel %>"
+              aria-label="<%= _.dictionary('searchProducts') %>"
+              class="header__search-input form-control pe-h2__search-input"
+              id="search-input"
+            >
+            <button
+              type="submit"
+              class="header__search-btn pe-h2__search-btn"
+              aria-label="<%= _.dictionary('searchProducts') %>"
+            >
+              <i class="i-search"></i>
+            </button>
+            <div id="instant-search">
+              <!--
+                `InstantSearch` should be open on input focus:
+                https://developers.e-com.plus/storefront/@ecomplus/storefront-components/docs/InstantSearch.html
+              -->
+            </div>
+          </form>
+
+          <% if (_.settings.domain) { %>
+            <script type="application/ld+json"><%-
+              JSON.stringify({
+                '@context': 'http://schema.org',
+                '@type': 'WebSite',
+                name: _.settings.name || _.store.name,
+                url: `https://${_.settings.domain}/`,
+                inLanguage: 'pt-BR',
+                potentialAction: {
+                  '@type': 'SearchAction',
+                  target: `https://${_.settings.domain}/search?term={search_term_string}`,
+                  'query-input': 'required name=search_term_string'
+                }
+              })
+            %></script>
+          <% } %>
+        </div>
+      <% } %>
+
+      <%# Promoções: cápsula à direita da busca, alterna as mensagens de header.json -> pe_header_v2.promos (todas ficam no DOM) %>
+      <% if (promos.length) { %>
+        <div class="pe-h2__promo" data-rotate-ms="<%= v2.promo_rotate_ms || 4000 %>" aria-live="off">
+          <% promos.forEach((promo, index) => { %>
+            <<%- promo.link ? 'a href="' + promo.link + '"' : 'div' %> class="pe-h2__promo-msg<%= index === 0 ? ' is-active' : '' %>">
+              <span class="pe-h2__promo-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%- promoIcons[promo.icon] || benefitIcons[promo.icon] || promoIcons.tag %></svg>
+              </span>
+              <span class="pe-h2__promo-text">
+                <strong class="pe-h2__promo-title"><%= promo.title %></strong>
+                <% if (promo.text) { %><small class="pe-h2__promo-sub"><%= promo.text %></small><% } %>
+                <% if (promo.short) { %><span class="pe-h2__promo-short"><%= promo.short %></span><% } %>
+              </span>
+            </<%- promo.link ? 'a' : 'div' %>>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <div class="pe-h2__buttons" role="group" aria-label="<%= _.dictionary('myAccount') %>">
+        <button
+          class="pe-h2__hidden"
+          id="mobile-search-btn"
+          type="button"
+          data-toggle="collapse"
+          data-target="#search-bar"
+          aria-expanded="true"
+          aria-controls="search-bar"
+          title="<%= _.dictionary('searchProducts') %>"
+          tabindex="-1"
+          aria-hidden="true"
+        >
+          <i class="i-search"></i>
+        </button>
+
+        <a
+          id="user-button"
+          class="pe-h2__user"
+          role="button"
+          href="/app/#/account/"
+          title="<%= _.dictionary('myAccount') %>"
+        >
+          <i class="i-user"></i>
+          <span class="pe-h2__user-text">
+            <small>Olá, bem-vinda</small>
+            <strong>Entrar ou cadastrar</strong>
+          </span>
+        </a>
+        <a
+          id="cart-button"
+          class="pe-h2__cart"
+          role="button"
+          href="/app/#/cart"
+          title="<%= _.dictionary('openCart') %>"
+        >
+          <i class="i-shopping-bag"></i>
+          <span id="cart-count" class="badge badge-primary"></span>
+        </a>
+
+        <div id="login-modal">
+          <!--
+            `LoginModal` should be rendered here:
+            https://developers.e-com.plus/storefront/@ecomplus/storefront-components/docs/LoginModal.html
+          -->
+        </div>
+        <div id="cart-quickview">
+          <!--
+            `CartQuickview` should be rendered here:
+            https://developers.e-com.plus/storefront/@ecomplus/storefront-components/docs/CartQuickview.html
+          -->
+        </div>
+      </div>
+    </div>
+
+    <%# Celular: menu em rolagem lateral com links diretos para as categorias %>
+    <nav class="pe-h2__mnav" aria-label="Categorias">
+      <% if (seasonal) { %>
+        <a class="pe-h2__mitem pe-h2__mitem--natal" href="<%= seasonal.link %>">
+          <% if (seasonal.tag) { %><span class="pe-h2__new"><%= seasonal.tag %></span><% } %>
+          <%= seasonal.label %>
+        </a>
+      <% } %>
+      <% mobileNav.forEach(({ path, name }) => { %>
+        <a class="pe-h2__mitem" href="<%= path %>"><%= name %></a>
+      <% }) %>
+    </nav>
+
+    <%# Computador: Ver todas (megamenu #s-all), Natal e as categorias em destaque, cada uma com o seu submenu %>
+    <% if (categories && categories.length) { %>
+      <div class="pe-h2__nav-block d-none d-lg-block">
+        <%# header__nav header__nav--full: as regras de submenu do site (dropdown vertical e gaveta do "Ver todas") dependem dessas classes %>
+        <nav class="pe-h2__nav header__nav header__nav--full">
+          <% if (hasAllDepartments) { %>
+            <div class="d-inline-block">
+              <a
+                href="javascript:;"
+                class="pe-h2__cat pe-h2__cat--all"
+                id="cd-all"
+                onclick="toggleSubmenu('all', this)"
+              >
+                <i class="i-bars"></i>
+                <%= header.name_all_departments || _.dictionary('all') %>
+              </a>
+              <nav class="header__submenu header__submenu--full" id="s-all">
+                <div class="row">
+                  <% _.categories.forEach(({ name, slug, parent, _id }) => { %>
+                    <% if (!parent) { %>
+                      <div class="col-12 col-lg-<%- isCategoriesNavFull ? '2' : '4' %>">
+                        <a id="sd-all-<%= _id %>" href="/<%= slug %>">
+                          <%= name %>
+                        </a>
+                        <% const subcategories = _.categories.filter(({ parent }) => parent && parent.slug === slug) %>
+                        <% if (subcategories.length) { %>
+                          <div id="header__submenu-<%= slug %>">
+                            <ul class="header__links">
+                              <% subcategories.forEach(subcategory => { %>
+                                <li>
+                                  <a id="td-all-<%= subcategory._id %>" class="header__submenu-subcategory" href="/<%= subcategory.slug %>">
+                                    <%= subcategory.name %>
+                                  </a>
+                                </li>
+                              <% }) %>
+                            </ul>
+                          </div>
+                        <% } %>
+                      </div>
+                    <% } %>
+                  <% }) %>
+                </div>
+              </nav>
+            </div>
+          <% } %>
+          <% if (seasonal) { %>
+            <div class="d-inline-block">
+              <a class="pe-h2__cat pe-h2__cat--natal" href="<%= seasonal.link %>">
+                <% if (seasonal.tag) { %><span class="pe-h2__new"><%= seasonal.tag %></span><% } %>
+                <%= seasonal.label %>
+              </a>
+            </div>
+          <% } %>
+          <% categories.forEach(({ slug, name, _id }) => { %>
+            <div class="d-inline-block">
+              <a
+                href="javascript:;"
+                class="pe-h2__cat"
+                id="cd-<%= _id %>"
+                <%- hasMegamenu
+                  ? `onmouseover="toggleSubmenu('${slug}', this)" onclick="toggleSubmenu('${slug}', this, true)"`
+                  : `onclick="toggleSidenav('${slug}')"` %>
+              >
+                <%= name %>
+              </a>
+              <% if (slug && hasMegamenu) { %>
+                <% const subcategories = _.categories.filter(({ parent }) => parent && parent.slug === slug) %>
+                <% if (subcategories.length) { %>
+                  <%
+                    if (isAlphabeticalOrderSubmenu) {
+                      subcategories.sort((a, b) => {
+                        return b.name > a.name ? -1 : 1
+                      })
+                    }
+                  %>
+                  <nav class="header__submenu<%= fullWidthSubmenu ? ' header__submenu--full' : '' %>" id="<%= `s-${slug.replace(/\//g, '_')}` %>">
+                    <% subcategories.forEach(subcategory => { %>
+                      <div>
+                        <a id="sd-<%= subcategory._id %>" href="/<%= subcategory.slug %>"><%= subcategory.name %></a>
+                        <% const thirdCategories = _.categories.filter(({ parent }) => parent && parent.slug === subcategory.slug) %>
+                        <%
+                          if (isAlphabeticalOrderSubmenu) {
+                            thirdCategories.sort((a, b) => {
+                              return b.name > a.name ? -1 : 1
+                            })
+                          }
+                        %>
+                        <% thirdCategories.forEach(thirdCategory => { %>
+                          <a id="td-<%= thirdCategory._id %>" class="header__submenu-subcategory" href="/<%= thirdCategory.slug %>">
+                            <%= thirdCategory.name %>
+                          </a>
+                        <% }) %>
+                      </div>
+                    <% }) %>
+                  </nav>
+                <% } %>
+              <% } %>
+            </div>
+          <% }) %>
+        </nav>
+      </div>
+    <% } %>
+  </div>
+</header>
+
+<%# Benefícios: logo abaixo do cabeçalho, só na home. Substituem a faixa azul (info-bar), que não renderiza com a v2. %>
+<% if (_.pageName === 'home' && v2.show_benefits !== false && (v2.benefits || []).length) { %>
+  <section class="pe-h2 pe-h2__benefits" aria-label="Vantagens da loja">
+    <div class="pe-h2__benefits-list">
+      <% v2.benefits.forEach(({ icon, title, text, link }) => { %>
+        <<%- link ? 'a href="' + link + '"' : 'div' %> class="pe-h2__benefit">
+          <span class="pe-h2__benefit-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%- benefitIcons[icon] || '' %></svg>
+          </span>
+          <span class="pe-h2__benefit-text">
+            <strong><%= title %></strong>
+            <small><%= text %></small>
+          </span>
+        </<%- link ? 'a' : 'div' %>>
+      <% }) %>
+    </div>
+  </section>
+<% } %>

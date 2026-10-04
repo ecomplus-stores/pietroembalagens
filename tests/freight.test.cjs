@@ -567,3 +567,28 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
   assert.equal(minicart.instance.peOptionsList, false, 'a single service keeps the one-line summary')
   for (const entry of [minicart, plain, checkout]) entry.instance.$destroy()
 })
+
+test('topo v2: chave em header.json, templates EJS compilam e o markup v1 não ganha classes da v2', async () => {
+  const ejs = require('ejs')
+  const header = JSON.parse(fs.readFileSync(path.join(root, 'content/header.json'), 'utf8'))
+  const v2 = header.pe_header_v2
+  assert.ok(v2 && typeof v2.enabled === 'boolean', 'pe_header_v2.enabled precisa existir')
+  // O padrão publicado é desligado; PE_ALLOW_TOPO_V2=1 permite rodar a suíte com a chave ligada.
+  if (process.env.PE_ALLOW_TOPO_V2 !== '1') assert.equal(v2.enabled, false)
+  assert.ok(Array.isArray(v2.benefits) && v2.benefits.length === 3)
+  assert.ok(Array.isArray(v2.stories) && v2.stories.length === 9)
+  assert.match(v2.seasonal.link, /^\/caixas-tema-natal$/)
+  assert.ok(Array.isArray(v2.promos) && v2.promos.length >= 2 && v2.promos.every(promo => promo.title && promo.short), 'promos precisam de title e short')
+  assert.ok(v2.promos.some(promo => promo.link === '/pages/politica-de-frete-gratis'))
+  for (const file of ['layout/inc/header-v2.ejs', 'layout/header.ejs', 'sections/info-bar.ejs', 'sections/categories-carousel.ejs', 'sections/banner-slider.ejs']) {
+    const source = fs.readFileSync(path.join(root, 'template/pages/@', file), 'utf8')
+    assert.doesNotThrow(() => ejs.compile(source, { async: true, filename: file }), file)
+  }
+  // Os ramos v1 não podem conter classes da v2: ela só nasce dentro do ramo ligado.
+  const headerV1 = fs.readFileSync(path.join(root, 'template/pages/@/layout/header.ejs'), 'utf8').split('<%_ } else { _%>')[1]
+  assert.doesNotMatch(headerV1, /pe-h2/)
+  // Todo o CSS da v2 fica sob .pe-h2.
+  const css = fs.readFileSync(path.join(root, 'template/scss/custom-css/_header-v2.scss'), 'utf8')
+  const topLevel = css.replace(/\/\/.*$/gm, '').match(/^[.#][^{]*\{/gm) || []
+  assert.ok(topLevel.length > 0 && topLevel.every(selector => /\.pe-h2/.test(selector)), 'seletor fora de .pe-h2: ' + topLevel.filter(s => !/\.pe-h2/.test(s)).join(', '))
+})

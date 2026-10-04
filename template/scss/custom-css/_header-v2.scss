@@ -1,0 +1,503 @@
+// Topo da home v2 (content/header.json -> pe_header_v2.enabled). Só existe com o markup v2, que carrega a
+// classe .pe-h2: toda regra deste arquivo fica sob .pe-h2, então o site atual (v1) não é afetado.
+// Cores do handoff: laranja #FD8043 · marrom #3F2D25 · creme #FFF8DC · azul do anel #37B8F7 ·
+// fundo do selo #EAF7FE · texto do selo #0B4F6C · ícone do selo #1C8FC9 · texto #333 · placeholder #777.
+
+// ---------- Bloco laranja ----------
+#header.pe-h2 {
+  background: #FD8043 !important; // vence o `#header{background:#fff!important}` do código customizado
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+
+  a:focus-visible, button:focus-visible { outline: 2px solid #3F2D25; outline-offset: 2px; }
+
+  .pe-h2__container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 16px 0;
+
+    // Computador (como o Mercado Livre): linha 1 = logo, busca e promoções; linha 2 = menu à esquerda, conta e sacola à direita
+    @media (min-width: 992px) {
+      display: grid;
+      grid-template-columns: auto minmax(0, 600px) minmax(0, 1fr) auto;
+      grid-template-areas: "logo search promo promo" "nav nav nav buttons";
+      column-gap: 24px;
+      row-gap: 4px;
+      align-items: center;
+      padding: 8px 20px 6px;
+    }
+
+    // Tablet na horizontal (992 a 1199 px): o menu não cabe ao lado dos ícones; eles sobem para a linha 1 e a cápsula some
+    @media (min-width: 992px) and (max-width: 1199px) {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas: "logo search buttons" "nav nav nav";
+
+      .pe-h2__promo { display: none; }
+    }
+  }
+
+  .pe-h2__row1 {
+    display: grid;
+    align-items: center;
+    gap: 12px;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "burger logo promo buttons" "search search search search";
+
+    @media (min-width: 992px) { display: contents; }
+  }
+
+  .pe-h2__burger {
+    grid-area: burger;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #3F2D25;
+    font-size: 24px;
+    cursor: pointer;
+
+    @media (min-width: 992px) { display: none; }
+  }
+
+  .pe-h2__logo {
+    grid-area: logo;
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+    img { height: 36px; width: auto; max-width: none; }
+    @media (min-width: 992px) { height: 40px; img { height: 40px; } }
+  }
+
+  // Busca sempre visível. `#search-bar` ganha `display:block!important` do código customizado, o que serve aqui.
+  .pe-h2__search-block { grid-area: search; min-width: 0; }
+
+  .pe-h2__search {
+    position: relative;
+    overflow: visible;
+    margin: 0;
+  }
+
+  #search-input.pe-h2__search-input {
+    display: block !important;
+    width: 100%;
+    height: 38px;
+    padding: 0 64px 0 16px;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 3px rgba(63, 45, 37, .25) !important;
+    color: #333;
+    font-size: 15px !important;
+    line-height: 1.2;
+    text-transform: none !important;
+    font-family: inherit !important;
+
+    &::placeholder { color: #777; opacity: 1; }
+    &::-webkit-search-cancel-button { display: none; }
+    &:focus { outline: 2px solid #3F2D25; outline-offset: 2px; box-shadow: 0 1px 3px rgba(63, 45, 37, .25) !important; }
+
+    @media (min-width: 992px) { height: 38px; font-size: 14px !important; }
+  }
+
+  .pe-h2__search-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    width: 52px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #333;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before { content: ""; position: absolute; left: 0; top: 50%; width: 1px; height: 24px; margin-top: -12px; background: #eee; }
+    @media (min-width: 992px) { font-size: 20px; }
+  }
+
+  // Promoções: cápsula marrom que alterna as mensagens (ao lado da busca no computador, entre o logo e os ícones no celular)
+  .pe-h2__promo {
+    grid-area: promo;
+    display: grid;
+    align-self: center;
+    justify-self: stretch;
+    min-width: 0;
+    height: 32px;
+
+    @media (min-width: 992px) { height: 38px; justify-self: end; width: 320px; }
+  }
+  .pe-h2__promo-msg {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 0 12px 0 5px;
+    border-radius: 50px;
+    background: #3F2D25;
+    color: #FFF8DC;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s;
+    transition-delay: 0s;
+
+    &.is-active { opacity: 1; visibility: visible; transition-delay: .2s; }
+    &:hover, &:focus { color: #FFF8DC; text-decoration: none; }
+    @media (min-width: 992px) { gap: 10px; padding: 0 16px 0 6px; }
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+  }
+  .pe-h2__promo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #FFF8DC;
+    color: #3F2D25;
+
+    svg { width: 13px; height: 13px; }
+    @media (min-width: 992px) { width: 28px; height: 28px; svg { width: 15px; height: 15px; } }
+  }
+  .pe-h2__promo-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+  // No celular só cabe uma linha curta; no computador, título e subtítulo
+  .pe-h2__promo-title, .pe-h2__promo-sub { display: none; }
+  .pe-h2__promo-short { overflow: hidden; font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+  @media (min-width: 992px) {
+    .pe-h2__promo-short { display: none; }
+    .pe-h2__promo-title { display: block; overflow: hidden; font-size: 12.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .pe-h2__promo-sub { display: block; overflow: hidden; font-size: 10.5px; opacity: .9; text-overflow: ellipsis; white-space: nowrap; }
+  }
+
+  // Conta e sacola
+  .pe-h2__buttons {
+    grid-area: buttons;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #3F2D25;
+
+    @media (min-width: 992px) { justify-self: end; gap: 18px; }
+  }
+
+  #login-modal, #cart-quickview { position: absolute; }
+  .pe-h2__hidden { display: none !important; }
+
+  .pe-h2__user, .pe-h2__cart {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #3F2D25;
+    text-decoration: none;
+    font-size: 24px;
+    line-height: 1;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; }
+    @media (min-width: 992px) { font-size: 20px; }
+  }
+  .pe-h2__cart { position: relative; @media (min-width: 992px) { font-size: 22px; } }
+
+  .pe-h2__user-text {
+    display: none;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+
+    small { display: none; }
+    strong { font-size: 13px; font-weight: 700; }
+    @media (max-width: 1359px) { display: none; }
+    @media (min-width: 992px) { display: flex; }
+  }
+
+  #cart-count.badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 50px;
+    background: #3F2D25;
+    color: #FFF8DC;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+
+    &:empty { display: none; }
+    @media (min-width: 992px) { top: -6px; right: -8px; min-width: 16px; height: 16px; font-size: 10px; line-height: 16px; }
+  }
+
+  // Etiqueta "NOVO"
+  .pe-h2__new {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1px 6px;
+    border-radius: 50px;
+    background: #3F2D25;
+    color: #FFF8DC;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    pointer-events: none;
+
+    @media (min-width: 992px) { position: static; display: inline-block; margin-left: 6px; transform: none; vertical-align: middle; font-size: 9px; }
+  }
+
+  // Celular: menu em rolagem lateral
+  .pe-h2__mnav {
+    display: flex;
+    gap: 18px;
+    margin: 0 -16px;
+    padding: 12px 16px 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { display: none; }
+  }
+  .pe-h2__mitem {
+    position: relative;
+    flex: none;
+    padding-top: 8px;
+    color: #3F2D25;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; }
+  }
+  .pe-h2__mitem--natal { font-weight: 700; .pe-h2__new { top: -4px; } }
+
+  // Computador: Ver todas, Natal e categorias em destaque
+  .pe-h2__nav-block { grid-area: nav; min-width: 0; padding-right: 12px; }
+  .pe-h2__nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0;
+    color: #3F2D25;
+    font-size: 13px;
+
+    // laptops estreitos: o menu e os ícones da conta dividem a mesma linha
+    @media (max-width: 1359px) { gap: 13px; font-size: 12.5px; }
+    white-space: nowrap;
+
+    > div { flex-shrink: 0; }
+  }
+  .pe-h2__cat {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 0;
+    border-bottom: 2px solid transparent;
+    color: #3F2D25;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: none;
+    transition: border-color .15s;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; border-bottom-color: #3F2D25; }
+  }
+  .pe-h2__cat--all { font-weight: 700; i { font-size: 16px; } }
+
+  // O nav reaproveita as classes do site para manter o dropdown vertical e a gaveta do "Ver todas" como hoje;
+  // aqui só se desfazem a linha laranja na base e a quebra de linha, que no bloco laranja não fazem sentido.
+  .pe-h2__nav.header__nav {
+    border-bottom: 0 !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 0;
+    text-align: left;
+  }
+
+  // Submenus: estilo atual, com a linha de cima marrom (o laranja some sobre o laranja)
+  .header__nav .header__submenu {
+    border-top-color: #3F2D25 !important;
+  }
+}
+
+// ---------- Benefícios (substituem a faixa azul na home) ----------
+.pe-h2.pe-h2__benefits {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px 16px;
+
+  @media (min-width: 992px) { padding: 12px 20px 0; }
+
+  .pe-h2__benefits-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; overflow: visible; }
+  }
+
+  .pe-h2__benefit {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border-radius: 50px;
+    background: #EAF7FE;
+    color: #0B4F6C;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover, &:focus { color: #0B4F6C; text-decoration: none; }
+    @media (min-width: 992px) { gap: 10px; padding: 8px 16px 8px 8px; }
+  }
+  .pe-h2__benefit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    color: #1C8FC9;
+
+    svg { width: 14px; height: 14px; }
+    @media (min-width: 992px) { width: 32px; height: 32px; svg { width: 17px; height: 17px; } }
+  }
+  .pe-h2__benefit-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+
+    strong { font-size: 11.5px; font-weight: 700; }
+    small { font-size: 10.5px; }
+    @media (min-width: 992px) { strong { font-size: 13px; } small { font-size: 11.5px; } }
+  }
+}
+
+// O banner continua o mesmo; só ganha margem lateral e raio quando o topo v2 está ligado.
+.pe-h2.banner-slider {
+  // De ponta a ponta, como hoje. A altura acompanha o slide que está na tela (header-v2.js); sem JS, a do 1º slide.
+  width: 100%;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  height: calc(100vw * var(--pe-banner-ratio-mobile, var(--pe-banner-ratio, .26))) !important;
+  transition: height .3s ease;
+
+  @media (min-width: 576px) { height: calc(100vw * var(--pe-banner-ratio, .26)) !important; }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
+
+  .glide__track, .glide__slides, .glide__slide { height: auto; }
+  .glide__slides { align-items: flex-start; }
+
+  // Computador: altura fixa, maior que a da arte (1920×500). A imagem cobre a caixa e fica ancorada à esquerda,
+  // onde ficam os textos das artes; o corte é na lateral direita (e um pouco em cima e embaixo nas artes mais altas).
+  @media (min-width: 992px) {
+    height: clamp(420px, 35vw, 580px) !important;
+
+    .glide, .glide__track, .glide__slides, .glide__slide, .glide__slide .banner, .glide__slide a, .glide__slide picture { height: 100%; }
+    .glide__slide .banner, .glide__slide a, .glide__slide picture { display: block; }
+    .glide__slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left center; }
+  }
+}
+
+// ---------- Categorias em "stories" ----------
+.pe-h2.pe-h2__stories {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 16px;
+
+  @media (min-width: 992px) { padding: 16px 20px 18px; }
+
+  .pe-h2__stories-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    h2 { margin: 0; color: #000; font-size: 16px; font-weight: 700; @media (min-width: 992px) { font-size: 20px; } }
+    a { color: #874015; font-size: 12px; font-weight: 600; text-decoration: underline; @media (min-width: 992px) { font-size: 13px; } }
+  }
+
+  .pe-h2__stories-list {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 8px 0 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { justify-content: space-between; padding-top: 10px; }
+
+    li { flex: none; width: 66px; @media (min-width: 992px) { width: 84px; } }
+  }
+
+  .pe-h2__story {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+
+    &:hover, &:focus { color: #333; text-decoration: none; }
+    &:focus-visible { outline: 2px solid #3F2D25; outline-offset: 4px; border-radius: 8px; }
+  }
+  .pe-h2__ring {
+    display: block;
+    width: 66px;
+    height: 66px;
+    padding: 3px;
+    border: 2px solid #37B8F7;
+    border-radius: 50%;
+    box-sizing: border-box;
+
+    @media (min-width: 992px) { width: 84px; height: 84px; border-width: 2.5px; }
+  }
+  .pe-h2__story--natal .pe-h2__ring { border-color: #FD8043; }
+  .pe-h2__disc {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #00B4F0;
+
+    // 80px de largura e altura automática, alinhada ao topo: mostra só o círculo da arte e esconde o texto do PNG
+    img { flex-shrink: 0; width: 70px; max-width: none; height: auto; @media (min-width: 992px) { width: 88px; } }
+  }
+  .pe-h2__label {
+    margin-top: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+
+    @media (min-width: 992px) { font-size: 12.5px; }
+  }
+}

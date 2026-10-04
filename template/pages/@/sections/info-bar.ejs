@@ -1,5 +1,7 @@
 <%
 const info = _.cms('info')
+const peHeaderV2 = (_.cms('header') || {}).pe_header_v2
+const peV2 = Boolean(peHeaderV2 && peHeaderV2.enabled)
 const barCols = []
 ;[
   ['shipping', 'shipping-fast'],
@@ -14,7 +16,9 @@ const barCols = []
 })
 %>
 
-<% if (barCols.length) { %>
+<%_ if (peV2) { _%>
+<%# Com o topo v2 os benefícios são renderizados logo abaixo do cabeçalho (inc/header-v2.ejs). %>
+<%_ } else if (barCols.length) { _%>
   <section class="info-bar">
     <div class="info-bar__inner">
       <div class="info-bar__nav">

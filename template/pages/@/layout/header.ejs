@@ -52,6 +52,9 @@ const isCentralizedLogo = header.centralized_logo
 const hasAllDepartments = header.menu_all_departments
 %>
 
+<%_ if (header.pe_header_v2 && header.pe_header_v2.enabled) { _%>
+<%- await include('@/layout/inc/header-v2', { _, header, categories, isCategoriesNavFull, hasMegamenu, isAlphabeticalOrderSubmenu, fullWidthSubmenu, hasAllDepartments }) %>
+<%_ } else { _%>
 <div id="overlay" class="fade"></div>
 
 <div class="top-bar">
@@ -369,6 +372,7 @@ const hasAllDepartments = header.menu_all_departments
     </div>
   </div>
 </header>
+<%_ } _%>
 <% if (header.popup) { %>
   <div class="modal fade" id="popup-modal" tabindex="-1" role="dialog" aria-labelledby="modal-popup" aria-hidden="true">
     <div class="modal-dialog" role="document">
