@@ -1,3 +1,34 @@
+<%_
+const peHeaderV2 = (_.cms('header') || {}).pe_header_v2
+const peV2 = Boolean(peHeaderV2 && peHeaderV2.enabled)
+const peSeasonal = peV2 && peHeaderV2.seasonal && peHeaderV2.seasonal.enabled ? peHeaderV2.seasonal : null
+_%>
+<%_ if (peV2) { _%>
+<section class="pe-h2 pe-h2__stories" id="category-carousel">
+  <div class="pe-h2__stories-head">
+    <h2>Categorias</h2>
+    <a href="javascript:;" data-pe-see-all>Ver todas</a>
+  </div>
+  <ul class="pe-h2__stories-list">
+    <% if (peSeasonal) { %>
+      <li>
+        <a class="pe-h2__story pe-h2__story--natal" href="<%= peSeasonal.link %>">
+          <span class="pe-h2__ring"><span class="pe-h2__disc"><img src="<%= peSeasonal.bolinha %>" alt="" width="130" height="160" loading="lazy"></span></span>
+          <span class="pe-h2__label"><%= peSeasonal.label %></span>
+        </a>
+      </li>
+    <% } %>
+    <% (peHeaderV2.stories || []).forEach(({ label, link, img }) => { %>
+      <li>
+        <a class="pe-h2__story" href="<%= link %>">
+          <span class="pe-h2__ring"><span class="pe-h2__disc"><img src="<%= img %>" alt="" width="130" height="160" loading="lazy"></span></span>
+          <span class="pe-h2__label"><%= label %></span>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+<%_ } else { _%>
 <%
 let brands
 const params = {}
@@ -89,3 +120,4 @@ if (brands && brands.length && hasImage) {
   <%
 }
 %>
+<%_ } _%>
