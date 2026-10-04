@@ -1,0 +1,72 @@
+// Card de produto no modelo do Mercado Livre (site/alteracoes-no-site/25-card-produto-ml.md).
+// Cores: azul da marca #37B8F7 (marca/design-guide.md), azul dos preços da loja #4698CA e marrom do topo v2 #3F2D25.
+
+// Nome inteiro, sem corte em linhas: as medidas ficam no fim do nome e não podem sumir.
+// Alinhado à esquerda como no Mercado Livre (o tema centraliza nome e preço do card).
+.product-card .product-card__name {
+  text-align: left;
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  color: #3F2D25;
+  font-weight: 500;
+}
+
+.product-card .product-card__prices.pe-card-prices {
+  text-align: left;
+  align-items: flex-start;
+}
+
+.pe-card-prices {
+  color: #3F2D25;
+  line-height: 1;
+
+  &__off {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  &__tag {
+    background: #37B8F7;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 3px;
+  }
+
+  &__from {
+    color: #888;
+    font-size: 14px;
+  }
+
+  &__varied {
+    font-size: 12px;
+    color: #6a6a57;
+    margin-bottom: 2px;
+  }
+
+  &__main {
+    display: flex;
+    align-items: flex-start;
+    font-weight: 500;
+  }
+
+  &__cur { font-size: 20px; margin-right: 4px; margin-top: 3px; }
+  &__int { font-size: 26px; }
+  &__cents { font-size: 13px; margin-left: 2px; margin-top: 2px; }
+
+  &__pix {
+    color: #4698CA;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 4px 0 3px;
+  }
+
+  &__inst {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+}
