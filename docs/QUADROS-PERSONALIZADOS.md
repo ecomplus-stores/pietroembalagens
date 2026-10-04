@@ -2,6 +2,8 @@
 
 Fileira de quadros brancos logo abaixo do banner da home, como a do Mercado Livre, **com o mesmo tamanho** (medido nos prints do Rafael, 04/10): quadro de **184 × 286 px**, 16 px entre quadros, 6 visíveis em 1184 px; banner de **280 px** de altura no computador. **Celular** (print do Rafael): quadro de **149 × 225 px** com 13 px entre quadros (~2 visíveis, rola de lado) e banner em cartão de cantos arredondados, 16 px de margem, proporção 8:3 (358 × 134 em 390 px). Cada quadro mostra **1 produto** (título do quadro, foto, nome em 2 linhas, preço; com preço antigo riscado e % OFF quando está em promoção, e a linha "em até Nx de R$ X" + "sem juros" quando a loja não cobra juros). As parcelas usam a configuração de pagamento da loja (`window.storefront.info.list_payments.installments_option`, a mesma do tema: mínimo de R$ 5 por parcela e máximo da loja); sem ela, ou com preço baixo demais, a linha fica vazia. Seta para rolar de lado no computador; no celular, rola com o dedo. A linha "Frete grátis" **não existe de propósito**: o frete grátis depende do CEP e do mínimo do carrinho, e a home não sabe isso por produto.
 
+**Status (04/10/2026):** código no ar desde `7efb2336`; artes novas dos banners (1920×380 e 1000×375) e **chave ligada** em seguida, no mesmo dia (commit `feat(quadros): liga quadros personalizados`). Banners: `banner-florzinhas-*` e `banner-caixas-bolos-premium-*` em `template/public/img/uploads/`, referenciados no `banner-slider` de `content/home.json` (`img` computador, `mobile_img` celular). Setas do banner reduzidas e coladas na borda (as do tema cobriam o texto das artes).
+
 **Backup antes da entrega:** branch `backup/antes-quadros-20261004`, SHA `70194aeffd905e8cd9a91d57257d4421ce6a2d04` (o `master` de 04/10/2026).
 
 ## Quadros
@@ -57,7 +59,7 @@ Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): 
 
 ## Limitações conhecidas
 
-- **Banner mais baixo corta a arte.** Com os quadros ligados o banner do computador cai de ~504 para 280 px (como o ML). As artes atuais (1920×500 e 1597×700) são cortadas embaixo (o botão "Ver coleção" some). O ideal é refazer as artes em ~1920×380 (1410×280 de caixa), com o texto no meio vertical.
+- **Banner novo precisa de arte própria.** Com os quadros ligados o banner do computador tem 280 px e do celular é um cartão 8:3. Artes antigas (1920×500, 1597×700, 1080×1080) ficam cortadas; as novas (1920×380 e 1000×375, zona segura x 60–1000 / y 50–330 e margem de 60 px) já foram feitas para esses formatos. Qualquer banner novo deve seguir os gabaritos.
 - **Banner do celular sem o "espiar" do próximo slide:** o ML mostra um pedaço do slide seguinte; aqui o banner é um cartão único (o carrossel é o do tema).
 - **Promoção vencida:** o índice de busca não devolve `price_effective_date`; então o quadro "Promoções" só testa `base_price > price`. Hoje não há esse caso (a ficha 18 limpou as vencidas), mas se voltar a existir, a correção é buscar o produto em `/products/<id>.json` antes de exibir.
 

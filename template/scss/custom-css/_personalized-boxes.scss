@@ -145,6 +145,22 @@
   .glide__slide .banner, .glide__slide a, .glide__slide picture { display: block; }
   .glide__slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 
+  // Setas menores e coladas na borda: as do tema (72 × 61 px, a 24 px da borda) cobririam o texto das artes novas,
+  // que começa a ~44 px da borda em 1410 px de tela.
+  .glide__arrow {
+    top: calc(50% - 20px);
+    bottom: auto;
+    margin: 0;
+    transform: none;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 20px;
+    line-height: 40px;
+  }
+  .glide__arrow--left { left: 2px; }
+  .glide__arrow--right { right: 2px; }
+
   // A partir de 576 px entra a arte do computador (a do celular, só abaixo disso): ancorada à esquerda, onde ficam os textos.
   @media (min-width: 576px) {
     .glide__slide img { object-position: left center; }
