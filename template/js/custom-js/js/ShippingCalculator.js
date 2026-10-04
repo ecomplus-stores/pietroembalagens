@@ -202,7 +202,7 @@ import {
       },
 
       // v2 + autoSelectFree: after a suggestion add, take the free service for this exact cart and CEP.
-      // Each calculator applies a given hint once; a manual choice or another cart/CEP discards it.
+      // One-shot: used up on the first application; a manual choice, another cart/CEP or two minutes discard it too.
       peAutoSelect () {
         if (!this.peV2 || !autoSelectFree()) return
         const mark = readAutoSelect()
@@ -211,9 +211,11 @@ import {
         const free = this.shippingServices.findIndex(core.isFreeDelivery)
         if (free < 0) return
         this.peAutoAt = mark.at
-        // An earlier explicit paid choice must not pin the old service again on the next recalculation.
+        // An earlier explicit paid choice must not pin the old service again on the next recalculation:
+        // with no preference left, a sibling calculator (minicart + cart page) also defaults to the free service.
         setPreference(core.zip(this.localZipCode), '')
         this.setSelectedService(free, false)
+        clearAutoSelect()
       },
       peName (service) { return core.isFreeDelivery(service) ? 'Frete grátis' : service.label },
       peCost (service) { return formatMoney((core.serviceCost(service) || 0) / 100) },

@@ -63,7 +63,7 @@ Redesenho visual do bloco de frete grátis no minicart e na página do carrinho.
 ### Flags (`template/public/pe-freight-config.json`)
 
 - `"ui": "v1" | "v2"`, padrão `"v1"`. `uiVersion()` (em `freight/runtime.js`) retorna `'v2'` somente quando `config.ui === 'v2'` **e** `enabled()` é verdadeiro. Qualquer outro valor (`"V2"`, `"v3"`, ausente), `enabled: false`, bucket fora do `rolloutPercent`, falha de rede ou JSON inválido cai na v1.
-- `"autoSelectFree": false`, padrão desligado. Com `ui: "v2"` e a flag ligada, depois de uma adição **vinda de uma sugestão com frete grátis confirmado**, o calculador seleciona o frete grátis sozinho. O marcador fica em `sessionStorage` (`pe-freight-auto`), vale 2 minutos e só para o mesmo carrinho e CEP (`core.fingerprint`); é descartado por qualquer escolha manual da cliente, por outro carrinho/CEP ou ao expirar. Ao aplicar, a preferência explícita anterior do CEP é limpa (não fica fixada no frete grátis).
+- `"autoSelectFree": false`, padrão desligado. Com `ui: "v2"` e a flag ligada, depois de uma adição **vinda de uma sugestão com frete grátis confirmado**, o calculador seleciona o frete grátis sozinho. O marcador fica em `sessionStorage` (`pe-freight-auto`), vale 2 minutos e só para o mesmo carrinho e CEP (`core.fingerprint`); é descartado ao ser usado, por qualquer escolha manual da cliente, por outro carrinho/CEP ou ao expirar. Ao aplicar, a preferência explícita anterior do CEP é limpa (não fica fixada no frete grátis).
 - A v1 continua no código, sem alteração, atrás de `v-if`/`v-else` em `FreightStatus.vue`, `FreightSuggestions.vue`, `ShippingCalculator.html`, `CartQuickview.html` e `TheCart.html`.
 
 ### Onde a v2 vale

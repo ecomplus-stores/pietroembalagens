@@ -519,7 +519,8 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
   minicart.instance.parseShippingOptions(results([pac, free]))
   assert.equal(minicart.instance.shippingServices[minicart.instance.selectedService].service_code, 'FREE', 'hint + free service: free is taken')
   assert.equal(preferences.get('05141000'), '', 'the old explicit paid choice no longer pins')
-  assert.equal(minicart.instance.peAutoAt, flags.mark.at)
+  assert.equal(flags.mark, null, 'used up: the hint is deleted once applied')
+  assert.equal(minicart.instance.peAutoAt > 0, true)
   // one-shot per calculator: a manual choice afterwards wins and discards the hint
   minicart.instance.setSelectedService(minicart.instance.shippingServices.findIndex(item => item.service_code === 'PAC'))
   assert.equal(flags.mark, null)
