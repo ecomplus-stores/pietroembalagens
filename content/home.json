@@ -25,6 +25,10 @@
       ]
     },
     {
+      "type": "personalized-boxes",
+      "enabled": false
+    },
+    {
       "type": "info-bar",
       "enabled": true
     },

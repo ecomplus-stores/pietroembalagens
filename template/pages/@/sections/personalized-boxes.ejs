@@ -1,0 +1,11 @@
+<%_ /* Quadros personalizados (docs/QUADROS-PERSONALIZADOS.md): o servidor só imprime o contêiner; o JS (personalized-boxes/index.js) monta os quadros no navegador. */ _%>
+<noscript><style>.pe-boxes{display:none}</style></noscript>
+<section class="pe-boxes" aria-label="Produtos em destaque">
+  <button type="button" class="pe-boxes__arrow pe-boxes__arrow--prev" aria-label="Anterior" hidden>
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="pe-boxes__track"></div>
+  <button type="button" class="pe-boxes__arrow pe-boxes__arrow--next" aria-label="Próximo" hidden>
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</section>
