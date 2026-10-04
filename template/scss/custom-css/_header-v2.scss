@@ -1,0 +1,433 @@
+// Topo da home v2 (content/header.json -> pe_header_v2.enabled). Só existe com o markup v2, que carrega a
+// classe .pe-h2: toda regra deste arquivo fica sob .pe-h2, então o site atual (v1) não é afetado.
+// Cores do handoff: laranja #FD8043 · marrom #3F2D25 · creme #FFF8DC · azul do anel #37B8F7 ·
+// fundo do selo #EAF7FE · texto do selo #0B4F6C · ícone do selo #1C8FC9 · texto #333 · placeholder #777.
+
+// ---------- Tarja de marketing (alterna 2 mensagens; as duas ficam no DOM) ----------
+.pe-h2.top-bar {
+  background: #3F2D25;
+  min-height: 34px;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 992px) { min-height: 36px; }
+
+  .pe-h2__stripe-inner { display: grid; width: 100%; text-align: center; }
+
+  .pe-h2__msg {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s;
+    color: #FFF8DC;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+
+    @media (min-width: 992px) { font-size: 14px; }
+    &.is-active { opacity: 1; visibility: visible; }
+    &:hover, &:focus { color: #FFF8DC; text-decoration: underline; }
+    @media (prefers-reduced-motion: reduce) { transition: none; }
+  }
+}
+
+// ---------- Bloco laranja ----------
+#header.pe-h2 {
+  background: #FD8043 !important; // vence o `#header{background:#fff!important}` do código customizado
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+
+  a:focus-visible, button:focus-visible { outline: 2px solid #3F2D25; outline-offset: 2px; }
+
+  .pe-h2__container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 12px 16px 0;
+
+    @media (min-width: 992px) { padding: 16px 20px 12px; }
+  }
+
+  .pe-h2__row1 {
+    display: grid;
+    align-items: center;
+    gap: 12px;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas: "burger logo . buttons" "search search search search";
+
+    @media (min-width: 992px) {
+      gap: 40px;
+      grid-template-columns: auto minmax(0, 680px) 1fr auto;
+      grid-template-areas: "logo search . buttons";
+    }
+  }
+
+  .pe-h2__burger {
+    grid-area: burger;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #3F2D25;
+    font-size: 24px;
+    cursor: pointer;
+
+    @media (min-width: 992px) { display: none; }
+  }
+
+  .pe-h2__logo {
+    grid-area: logo;
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+    img { height: 36px; width: auto; max-width: none; }
+    @media (min-width: 992px) { height: 52px; img { height: 52px; } }
+  }
+
+  // Busca sempre visível. `#search-bar` ganha `display:block!important` do código customizado, o que serve aqui.
+  .pe-h2__search-block { grid-area: search; min-width: 0; }
+
+  .pe-h2__search {
+    position: relative;
+    overflow: visible;
+    margin: 0;
+  }
+
+  #search-input.pe-h2__search-input {
+    display: block !important;
+    width: 100%;
+    height: 44px;
+    padding: 0 64px 0 16px;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 3px rgba(63, 45, 37, .25) !important;
+    color: #333;
+    font-size: 15px !important;
+    line-height: 1.2;
+    text-transform: none !important;
+    font-family: inherit !important;
+
+    &::placeholder { color: #777; opacity: 1; }
+    &::-webkit-search-cancel-button { display: none; }
+    &:focus { outline: 2px solid #3F2D25; outline-offset: 2px; box-shadow: 0 1px 3px rgba(63, 45, 37, .25) !important; }
+
+    @media (min-width: 992px) { height: 48px; font-size: 16px !important; }
+  }
+
+  .pe-h2__search-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    width: 52px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #333;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before { content: ""; position: absolute; left: 0; top: 50%; width: 1px; height: 24px; margin-top: -12px; background: #eee; }
+    @media (min-width: 992px) { font-size: 22px; }
+  }
+
+  // Conta e sacola
+  .pe-h2__buttons {
+    grid-area: buttons;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #3F2D25;
+
+    @media (min-width: 992px) { gap: 24px; }
+  }
+
+  #login-modal, #cart-quickview { position: absolute; }
+  .pe-h2__hidden { display: none !important; }
+
+  .pe-h2__user, .pe-h2__cart {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #3F2D25;
+    text-decoration: none;
+    font-size: 24px;
+    line-height: 1;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; }
+    @media (min-width: 992px) { font-size: 26px; }
+  }
+  .pe-h2__cart { position: relative; @media (min-width: 992px) { font-size: 28px; } }
+
+  .pe-h2__user-text {
+    display: none;
+    flex-direction: column;
+    line-height: 1.2;
+    text-align: left;
+
+    small { font-size: 12px; font-weight: 400; }
+    strong { font-size: 14px; font-weight: 700; }
+    @media (min-width: 992px) { display: flex; }
+  }
+
+  #cart-count.badge {
+    position: absolute;
+    top: -7px;
+    right: -9px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 50px;
+    background: #3F2D25;
+    color: #FFF8DC;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+
+    &:empty { display: none; }
+    @media (min-width: 992px) { min-width: 20px; height: 20px; line-height: 20px; }
+  }
+
+  // Etiqueta "NOVO"
+  .pe-h2__new {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1px 6px;
+    border-radius: 50px;
+    background: #3F2D25;
+    color: #FFF8DC;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    pointer-events: none;
+
+    @media (min-width: 992px) { font-size: 10px; }
+  }
+
+  // Celular: menu em rolagem lateral
+  .pe-h2__mnav {
+    display: flex;
+    gap: 18px;
+    margin: 0 -16px;
+    padding: 12px 16px 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { display: none; }
+  }
+  .pe-h2__mitem {
+    position: relative;
+    flex: none;
+    padding-top: 8px;
+    color: #3F2D25;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; }
+  }
+  .pe-h2__mitem--natal { font-weight: 700; .pe-h2__new { top: -4px; } }
+
+  // Computador: Ver todas, Natal e categorias em destaque
+  .pe-h2__nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 6px 0 0;
+    color: #3F2D25;
+    font-size: 14px;
+    white-space: nowrap;
+
+    > div { flex-shrink: 0; }
+  }
+  .pe-h2__cat {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    color: #3F2D25;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: none;
+    transition: border-color .15s;
+
+    &:hover, &:focus { color: #3F2D25; text-decoration: none; border-bottom-color: #3F2D25; }
+  }
+  .pe-h2__cat--all { font-weight: 700; i { font-size: 18px; } }
+
+  // Submenus: estilo atual, com a linha de cima marrom (o laranja some sobre o laranja)
+  .header__submenu {
+    border-top-color: #3F2D25;
+    &::after { background: #3F2D25; }
+  }
+}
+
+// ---------- Benefícios (substituem a faixa azul na home) ----------
+.pe-h2.pe-h2__benefits {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 16px;
+
+  @media (min-width: 992px) { padding: 20px 20px 0; }
+
+  .pe-h2__benefits-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; overflow: visible; }
+  }
+
+  .pe-h2__benefit {
+    display: flex;
+    align-items: center;
+    flex: none;
+    gap: 8px;
+    padding: 8px 14px 8px 8px;
+    border-radius: 50px;
+    background: #EAF7FE;
+    color: #0B4F6C;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover, &:focus { color: #0B4F6C; text-decoration: none; }
+    @media (min-width: 992px) { gap: 12px; padding: 12px 18px 12px 12px; }
+  }
+  .pe-h2__benefit-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+    color: #1C8FC9;
+
+    svg { width: 15px; height: 15px; }
+    @media (min-width: 992px) { width: 40px; height: 40px; svg { width: 20px; height: 20px; } }
+  }
+  .pe-h2__benefit-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+
+    strong { font-size: 12px; font-weight: 700; }
+    small { font-size: 11px; }
+    @media (min-width: 992px) { strong { font-size: 15px; } small { font-size: 13px; } }
+  }
+}
+
+// O banner continua o mesmo; só ganha margem lateral e raio quando o topo v2 está ligado.
+.pe-h2.header ~ .banner-slider {
+  margin-left: 16px;
+  margin-right: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  @media (min-width: 992px) { margin-top: 20px; }
+}
+
+// ---------- Categorias em "stories" ----------
+.pe-h2.pe-h2__stories {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 20px 16px;
+
+  @media (min-width: 992px) { padding: 28px 20px; }
+
+  .pe-h2__stories-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    h2 { margin: 0; color: #000; font-size: 17px; font-weight: 700; @media (min-width: 992px) { font-size: 24px; } }
+    a { color: #874015; font-size: 13px; font-weight: 600; text-decoration: underline; @media (min-width: 992px) { font-size: 14px; } }
+  }
+
+  .pe-h2__stories-list {
+    display: flex;
+    gap: 12px;
+    margin: 0;
+    padding: 12px 0 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+    @media (min-width: 992px) { justify-content: space-between; padding-top: 16px; }
+
+    li { flex: none; width: 76px; @media (min-width: 992px) { width: 100px; } }
+  }
+
+  .pe-h2__story {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+
+    &:hover, &:focus { color: #333; text-decoration: none; }
+    &:focus-visible { outline: 2px solid #3F2D25; outline-offset: 4px; border-radius: 8px; }
+  }
+  .pe-h2__ring {
+    display: block;
+    width: 76px;
+    height: 76px;
+    padding: 3px;
+    border: 2.5px solid #37B8F7;
+    border-radius: 50%;
+    box-sizing: border-box;
+
+    @media (min-width: 992px) { width: 100px; height: 100px; border-width: 3px; }
+  }
+  .pe-h2__story--natal .pe-h2__ring { border-color: #FD8043; }
+  .pe-h2__disc {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #00B4F0;
+
+    // 80px de largura e altura automática, alinhada ao topo: mostra só o círculo da arte e esconde o texto do PNG
+    img { flex-shrink: 0; width: 80px; max-width: none; height: auto; @media (min-width: 992px) { width: 104px; } }
+  }
+  .pe-h2__label {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+
+    @media (min-width: 992px) { font-size: 14px; }
+  }
+}
