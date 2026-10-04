@@ -1,15 +1,21 @@
 // Topo da home v2: só faz algo se o markup v2 (.pe-h2) estiver na página (content/header.json -> pe_header_v2).
-const $stripe = document.querySelector('.pe-h2.top-bar')
+// Cápsula de promoções: alterna as mensagens (todas ficam no DOM) a cada promo_rotate_ms.
+const $promo = document.querySelector('.pe-h2__promo')
 
-if ($stripe) {
-  const messages = Array.from($stripe.querySelectorAll('.pe-h2__msg'))
-  const interval = Number($stripe.getAttribute('data-rotate-ms')) || 4000
+if ($promo) {
+  const messages = Array.from($promo.querySelectorAll('.pe-h2__promo-msg'))
+  const interval = Number($promo.getAttribute('data-rotate-ms')) || 4000
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   let current = 0
-  // Com movimento reduzido a tarja fica parada na primeira mensagem. As duas continuam no DOM.
+  let paused = false
+  // Com movimento reduzido a cápsula fica parada na primeira mensagem. Passar o mouse ou focar pausa a troca.
   if (messages.length > 1 && !reduceMotion) {
+    $promo.addEventListener('mouseenter', () => { paused = true })
+    $promo.addEventListener('mouseleave', () => { paused = false })
+    $promo.addEventListener('focusin', () => { paused = true })
+    $promo.addEventListener('focusout', () => { paused = false })
     setInterval(() => {
-      if (document.hidden) return
+      if (document.hidden || paused) return
       messages[current].classList.remove('is-active')
       current = (current + 1) % messages.length
       messages[current].classList.add('is-active')

@@ -31,11 +31,30 @@
   },
   "pe_header_v2": {
     "enabled": false,
-    "stripe_rotate_ms": 4000,
-    "stripe_alt": {
-      "text": "Frete grátis a partir de R$ 299 · veja seu estado",
-      "link": "/pages/politica-de-frete-gratis"
-    },
+    "promo_rotate_ms": 4000,
+    "promos": [
+      {
+        "icon": "percent",
+        "title": "5% OFF na 1ª compra",
+        "text": "Cupom BEMVINDO5",
+        "short": "5% OFF 1ª compra",
+        "link": "/."
+      },
+      {
+        "icon": "truck",
+        "title": "Frete grátis",
+        "text": "a partir de R$ 299*",
+        "short": "Frete grátis R$ 299",
+        "link": "/pages/politica-de-frete-gratis"
+      },
+      {
+        "icon": "credit-card",
+        "title": "5x sem juros",
+        "text": "ou desconto no PIX",
+        "short": "5x sem juros",
+        "link": ""
+      }
+    ],
     "seasonal": {
       "enabled": true,
       "label": "Natal",

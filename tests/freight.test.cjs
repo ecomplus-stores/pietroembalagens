@@ -578,7 +578,8 @@ test('topo v2: chave em header.json, templates EJS compilam e o markup v1 não g
   assert.ok(Array.isArray(v2.benefits) && v2.benefits.length === 3)
   assert.ok(Array.isArray(v2.stories) && v2.stories.length === 9)
   assert.match(v2.seasonal.link, /^\/caixas-tema-natal$/)
-  assert.match(v2.stripe_alt.link, /^\/pages\/politica-de-frete-gratis$/)
+  assert.ok(Array.isArray(v2.promos) && v2.promos.length >= 2 && v2.promos.every(promo => promo.title && promo.short), 'promos precisam de title e short')
+  assert.ok(v2.promos.some(promo => promo.link === '/pages/politica-de-frete-gratis'))
   for (const file of ['layout/inc/header-v2.ejs', 'layout/header.ejs', 'sections/info-bar.ejs', 'sections/categories-carousel.ejs', 'sections/banner-slider.ejs']) {
     const source = fs.readFileSync(path.join(root, 'template/pages/@', file), 'utf8')
     assert.doesNotThrow(() => ejs.compile(source, { async: true, filename: file }), file)

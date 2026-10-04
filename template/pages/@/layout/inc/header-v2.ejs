@@ -2,13 +2,7 @@
 // Topo da home v2 (content/header.json -> pe_header_v2). Só é incluído com enabled: true.
 // Mantém os IDs e as funções de que o JS do tema e o código customizado dependem (ver docs/TOPO-V2.md).
 const v2 = header.pe_header_v2
-const stripeMsgs = []
-if (header.marketing_stripe && header.marketing_stripe.text) {
-  stripeMsgs.push({ text: header.marketing_stripe.text, link: header.marketing_stripe.link })
-}
-if (v2.stripe_alt && v2.stripe_alt.text) {
-  stripeMsgs.push({ text: v2.stripe_alt.text, link: v2.stripe_alt.link })
-}
+const promos = (v2.promos || []).filter(promo => promo && promo.title)
 const seasonal = v2.seasonal && v2.seasonal.enabled ? v2.seasonal : null
 const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
   const [path, name] = pathAndName.split('?')
@@ -16,6 +10,10 @@ const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
 })
 const storeName = _.settings.name || _.store.name
 const searchLabel = 'Buscar caixas, fitas, forminhas…'
+const promoIcons = {
+  percent: '<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  tag: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'
+}
 const benefitIcons = {
   truck: '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
   'credit-card': '<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
@@ -23,18 +21,6 @@ const benefitIcons = {
 }
 %>
 <div id="overlay" class="fade"></div>
-
-<div class="top-bar pe-h2 pe-h2__stripe" data-rotate-ms="<%= v2.stripe_rotate_ms || 4000 %>">
-  <div class="pe-h2__stripe-inner" aria-live="off">
-    <% stripeMsgs.forEach((msg, index) => { %>
-      <% if (msg.link) { %>
-        <a class="pe-h2__msg<%= index === 0 ? ' is-active' : '' %>" href="<%= msg.link %>"><%= msg.text %></a>
-      <% } else { %>
-        <div class="pe-h2__msg<%= index === 0 ? ' is-active' : '' %>"><%= msg.text %></div>
-      <% } %>
-    <% }) %>
-  </div>
-</div>
 
 <header class="header pe-h2" id="header">
   <div class="pe-h2__container">
@@ -100,6 +86,24 @@ const benefitIcons = {
               })
             %></script>
           <% } %>
+        </div>
+      <% } %>
+
+      <%# Promoções: cápsula à direita da busca, alterna as mensagens de header.json -> pe_header_v2.promos (todas ficam no DOM) %>
+      <% if (promos.length) { %>
+        <div class="pe-h2__promo" data-rotate-ms="<%= v2.promo_rotate_ms || 4000 %>" aria-live="off">
+          <% promos.forEach((promo, index) => { %>
+            <<%- promo.link ? 'a href="' + promo.link + '"' : 'div' %> class="pe-h2__promo-msg<%= index === 0 ? ' is-active' : '' %>">
+              <span class="pe-h2__promo-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%- promoIcons[promo.icon] || benefitIcons[promo.icon] || promoIcons.tag %></svg>
+              </span>
+              <span class="pe-h2__promo-text">
+                <strong class="pe-h2__promo-title"><%= promo.title %></strong>
+                <% if (promo.text) { %><small class="pe-h2__promo-sub"><%= promo.text %></small><% } %>
+                <% if (promo.short) { %><span class="pe-h2__promo-short"><%= promo.short %></span><% } %>
+              </span>
+            </<%- promo.link ? 'a' : 'div' %>>
+          <% }) %>
         </div>
       <% } %>
 
