@@ -145,11 +145,15 @@
   .glide__slide .banner, .glide__slide a, .glide__slide picture { display: block; }
   .glide__slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 
+  // A partir de 576 px entra a arte do computador (a do celular, só abaixo disso): ancorada à esquerda, onde ficam os textos.
+  @media (min-width: 576px) {
+    .glide__slide img { object-position: left center; }
+  }
+
   @media (min-width: 992px) {
     height: 280px !important;
     width: 100%;
     margin: 0;
     border-radius: 0;
-    .glide__slide img { object-position: left center; }
   }
 }
