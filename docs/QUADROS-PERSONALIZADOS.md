@@ -72,3 +72,6 @@ Conferido com a chave ligada só localmente (`npm run serve`, nunca commitada): 
 - **Título espremido:** o quadro "Promoções" (uma linha a mais: preço antigo) estourava os 286 px e o título virava 3 px de altura. Agora o título nunca encolhe e quem cede espaço é a foto (`flex: 1 1 108px`, mínimo 56 px).
 - **Fileira que não preenchia a largura:** sem histórico eram 3 quadros (5 com histórico), deixando vazio à direita. Entraram 3 quadros de categoria como reserva (até 9 no total) e a fileira fica centralizada quando sobra espaço.
 - **Altura:** banner 283 px e margem de 18 px, somando 301 px do menu até os quadros (medido no ML).
+
+## Quadros maiores (04/10/2026)
+Pedido do Rafael ("aumenta o tamanho dos quadros e joga as categorias um pouco mais pra baixo"): quadro do computador de 184 × 286 para **224 × 350 px** (5 por linha; título 16 px, nome 15 px, preço 22 px, foto até 140 px; reserva de altura 360 px) e margem de **40 px** abaixo da fileira (era 8 px), empurrando as bolinhas de categorias. O celular não mudou (149 × 225). Backup antes: `backup/antes-quadros-maiores-20261004` (`d2021f96`).
