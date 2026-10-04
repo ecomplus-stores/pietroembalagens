@@ -49,7 +49,7 @@ try {
   console.error(err)
 }
 
-if (opt.category_ids) {
+if (opt.category_ids && opt.category_ids.length) {
     const categoryIds = opt.category_ids
 
     brands = brands.filter(({ _id }) => categoryIds.includes(_id))

@@ -62,7 +62,8 @@ export default ({ state }) => {
     fields: [
         {
             label: 'Selecione categorias',
-            required: true,
+            required: false,
+            hint: 'Vazio = todas as categorias (como está hoje na home).',
             name: 'category_ids',
             widget: 'select',
             multiple: true,

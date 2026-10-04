@@ -712,3 +712,12 @@ test('quadros: o painel tem os campos de configuração e a home traz os valores
   const fromHome = boxes.normalizeConfig({ max: section.max_boxes, titles: { viewed: section.title_viewed, search: section.title_search, related: section.title_related, sales: section.title_sales, offers: section.title_offers, news: section.title_news }, categories: section.category_boxes })
   assert.deepEqual(plain(fromHome), plain(boxes.normalizeConfig(undefined)))
 })
+test('painel: o admin da loja carrega as seções customizadas e o carrossel de categorias não trava a publicação', () => {
+  const admin = fs.readFileSync(path.join(root, 'template/js/admin.js'), 'utf8')
+  assert.match(admin, /from '\.\/cms\/sections'/)
+  assert.match(admin, /initNetlifyCms\(/)
+  const cms = fs.readFileSync(path.join(root, 'template/js/cms/sections.js'), 'utf8')
+  assert.doesNotMatch(cms, /required: true/)
+  const ejs = fs.readFileSync(path.join(root, 'template/pages/@/sections/categories-carousel.ejs'), 'utf8')
+  assert.match(ejs, /opt\.category_ids && opt\.category_ids\.length/)
+})
