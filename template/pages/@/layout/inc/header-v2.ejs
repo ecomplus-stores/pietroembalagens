@@ -281,7 +281,7 @@ const benefitIcons = {
 </header>
 
 <%# Benefícios: logo abaixo do cabeçalho, só na home. Substituem a faixa azul (info-bar), que não renderiza com a v2. %>
-<% if (_.pageName === 'home' && (v2.benefits || []).length) { %>
+<% if (_.pageName === 'home' && v2.show_benefits !== false && (v2.benefits || []).length) { %>
   <section class="pe-h2 pe-h2__benefits" aria-label="Vantagens da loja">
     <div class="pe-h2__benefits-list">
       <% v2.benefits.forEach(({ icon, title, text, link }) => { %>

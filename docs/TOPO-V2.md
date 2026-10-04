@@ -12,7 +12,7 @@ Redesenho do topo do site e do início da home (cabeçalho laranja com busca em 
 - **Rollback:** voltar `"enabled"` para `false`, commit e push no `master`. O site volta ao topo atual quando o deploy terminar, sem reverter código.
 - **Reversão integral:** `git revert` dos commits `feat(topo-v2):`, do mais recente para o mais antigo. Nunca `reset --hard` com push forçado.
 
-Outras chaves do mesmo objeto: `promo_rotate_ms` (troca da cápsula, 4000), `promos` (lista de mensagens da cápsula: `icon` (`percent`, `truck`, `credit-card` ou `tag`), `title`, `text`, `short` (versão de uma linha para o celular) e `link`; pode ter quantas quiser), `seasonal` (Natal: `label`, `tag`, `link`, `bolinha`; `enabled` próprio), `mobile_nav` (menu em rolagem no celular), `benefits` (3 selos) e `stories` (as 9 bolinhas depois de Natal, cada uma com `label`, `link` e `img`).  O `marketing_stripe` continua existindo só para o topo atual (v1); a v2 não o usa.
+Outras chaves do mesmo objeto: `promo_rotate_ms` (troca da cápsula, 4000), `promos` (lista de mensagens da cápsula: `icon` (`percent`, `truck`, `credit-card` ou `tag`), `title`, `text`, `short` (versão de uma linha para o celular) e `link`; pode ter quantas quiser), `show_benefits` (`false` = sem os 3 selos azuis abaixo do cabeçalho, que as mensagens da cápsula já cobrem; `true` os traz de volta, com os textos de `benefits`), `seasonal` (Natal: `label`, `tag`, `link`, `bolinha`; `enabled` próprio), `mobile_nav` (menu em rolagem no celular), `benefits` (3 selos) e `stories` (as 9 bolinhas depois de Natal, cada uma com `label`, `link` e `img`).  O `marketing_stripe` continua existindo só para o topo atual (v1); a v2 não o usa.
 
 ## Onde está
 
@@ -30,6 +30,10 @@ Outras chaves do mesmo objeto: `promo_rotate_ms` (troca da cápsula, 4000), `pro
 ## IDs, classes e funções preservados na v2
 
 `#header`, `#search-form`, `#search-input`, `#instant-search`, `#search-bar`, `#mobile-search-btn` (oculto na v2: a busca já aparece sempre), `#user-button`, `#cart-button`, `#cart-count`, `#cart-quickview`, `#login-modal`, `#overlay`, `#logo`, `toggleSidenav()`, `toggleSubmenu()`, o megamenu `#s-all` (com `.row > div` e `.header__submenu-subcategory`, que o script do "Ver todas" em estilo drill-down do `code.json` lê), os submenus `#s-<slug>` e os ids `cd-*`, `sd-*`, `td-*`, o JSON-LD `SearchAction` e o popup `header.popup` (fora do desvio, igual nas duas versões). O menu lateral do celular (`menu.ejs`) não muda.
+
+## Proporções do topo no computador (inspiradas no Mercado Livre)
+
+Linha 1: logo, busca (cerca de 50% da largura, 600 px, 38 px de altura) e cápsula de promoções (320×38 px) encostada à direita. Linha 2: menu à esquerda e conta + sacola à direita. O cabeçalho todo tem cerca de 88 px (era 157 px com a tarja e o cabeçalho antigo). Entre 992 e 1199 px a cápsula some e os ícones sobem para a linha 1; abaixo de 1360 px o texto "Entrar ou cadastrar" vira só o ícone. O banner de ponta a ponta tem `clamp(420px, 35vw, 580px)` de altura no computador.
 
 ## Menu no computador (como no site atual)
 
