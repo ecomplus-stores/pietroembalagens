@@ -30,6 +30,12 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 03/10/2026 — Frete grátis v2 e teste sem minicart (no ar)
+
+- **Frete v2** (`"ui": "v2"` em `pe-freight-config.json`): novo visual do bloco de frete grátis no minicart e no carrinho, datas "Chega até DD/MM (dia)", sugestões ordenadas pelo menor acréscimo. A v1 continua no código atrás da flag. Backup `backup/antes-frete-v2-20261003` (`176a9439`). Detalhes: `docs/FRETE-SUGESTOES.md`, seção "v2 (UI)".
+- **Teste sem minicart** (`"minicart": false` em `pe-cart-config.json`): o ícone do carrinho vai direto à página do carrinho e, ao adicionar produto, aparece um aviso com "Ver carrinho". Detalhes: `docs/TESTE-SEM-MINICART.md`.
+- Rollback: voltar `ui` para `v1` e/ou `minicart` para `true`, commit e push no `master`.
+
 ### 27/09/2026 — Sugestões de frete grátis: resposta imediata e destaque
 
 - Bloco "Que tal aproveitar o frete?" demorava vários segundos: buscava produto por produto em lotes sequenciais e só exibia depois de simular o frete de até 3 opções.

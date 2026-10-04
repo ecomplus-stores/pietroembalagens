@@ -56,6 +56,8 @@ O GTM usa a tag `GA4 - pe_freight`, acionada por `CE - pe_freight`, com o e-comm
 
 ## v2 (UI)
 
+**Status:** no ar desde 03/10/2026 com `"ui": "v2"` para 100% dos visitantes (commit `3aacbf9d`). Backup e reversão abaixo.
+
 Redesenho visual do bloco de frete grátis no minicart e na página do carrinho. O motor (`freight/core.js`, `service.js`, simulação, revalidação no clique, cache e eventos) não muda; só a apresentação.
 
 **Backup antes da v2:** branch `backup/antes-frete-v2-20261003`, SHA `176a94396a0b269df9ef6cac8a5854fe889286e4` (o `master` de 03/10/2026).
@@ -65,6 +67,10 @@ Redesenho visual do bloco de frete grátis no minicart e na página do carrinho.
 - `"ui": "v1" | "v2"`, padrão `"v1"`. `uiVersion()` (em `freight/runtime.js`) retorna `'v2'` somente quando `config.ui === 'v2'` **e** `enabled()` é verdadeiro. Qualquer outro valor (`"V2"`, `"v3"`, ausente), `enabled: false`, bucket fora do `rolloutPercent`, falha de rede ou JSON inválido cai na v1.
 - `"autoSelectFree": false`, padrão desligado. Com `ui: "v2"` e a flag ligada, depois de uma adição **vinda de uma sugestão com frete grátis confirmado**, o calculador seleciona o frete grátis sozinho. O marcador fica em `sessionStorage` (`pe-freight-auto`), vale 2 minutos e só para o mesmo carrinho e CEP (`core.fingerprint`); é descartado ao ser usado, por qualquer escolha manual da cliente, por outro carrinho/CEP ou ao expirar. Ao aplicar, a preferência explícita anterior do CEP é limpa (não fica fixada no frete grátis).
 - A v1 continua no código, sem alteração, atrás de `v-if`/`v-else` em `FreightStatus.vue`, `FreightSuggestions.vue`, `ShippingCalculator.html`, `CartQuickview.html` e `TheCart.html`.
+
+### Modalidades de frete no minicart (v2)
+
+Com mais de uma modalidade, o minicart mostra as 3 primeiras (a selecionada sempre entra) e o botão "Ver mais N opções de entrega", que expande a lista no próprio minicart ("Ver menos opções" recolhe). Com uma só, mostra a linha compacta "{serviço} · Chega até DD/MM". Com `"minicart": false` (ver `docs/TESTE-SEM-MINICART.md`) o minicart nem abre; a v2 vale então só na página do carrinho.
 
 ### Onde a v2 vale
 
