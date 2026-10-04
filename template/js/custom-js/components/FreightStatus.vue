@@ -146,6 +146,9 @@ export default {
 .pe-fs2-zip input{flex:1;min-width:0;height:44px;padding:0 18px;border:1px solid #e5d6cc;border-radius:50px;background:#fff;font:inherit;font-size:16px;color:#000}
 .pe-fs2-zip input:focus-visible{outline:2px solid #874015;outline-offset:2px}
 .pe-fs2-zip button,.pe-fs2-status__use{height:44px;padding:0 20px;border:0;border-radius:50px;font:inherit;font-size:14px;font-weight:700;color:#fff;background:#fd8043;cursor:pointer}
+.pe-fs2-status--cart .pe-fs2-zip{gap:8px}
+.pe-fs2-status--cart .pe-fs2-zip input{padding:0 14px;font-size:15px}
+.pe-fs2-status--cart .pe-fs2-zip button{padding:0 16px}
 .pe-fs2-status__use{width:100%;margin-top:12px;background:#1f7a45}
 .pe-fs2-zip button:focus-visible,.pe-fs2-status__use:focus-visible{outline:2px solid #874015;outline-offset:2px}
 /* v2 shipping calculator rows (minicart line and cart options) */
