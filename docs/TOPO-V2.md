@@ -31,6 +31,10 @@ Outras chaves do mesmo objeto: `stripe_rotate_ms` (troca da tarja, 4000), `strip
 
 `#header`, `#search-form`, `#search-input`, `#instant-search`, `#search-bar`, `#mobile-search-btn` (oculto na v2: a busca já aparece sempre), `#user-button`, `#cart-button`, `#cart-count`, `#cart-quickview`, `#login-modal`, `#overlay`, `#logo`, `toggleSidenav()`, `toggleSubmenu()`, o megamenu `#s-all` (com `.row > div` e `.header__submenu-subcategory`, que o script do "Ver todas" em estilo drill-down do `code.json` lê), os submenus `#s-<slug>` e os ids `cd-*`, `sd-*`, `td-*`, o JSON-LD `SearchAction` e o popup `header.popup` (fora do desvio, igual nas duas versões). O menu lateral do celular (`menu.ejs`) não muda.
 
+## Menu no computador (como no site atual)
+
+O `<nav>` do computador leva as classes `header__nav header__nav--full`, que são as que as regras de submenu do site esperam. Resultado, igual ao v1: ao passar o mouse numa categoria em destaque, cai um dropdown vertical compacto (220 px); "Ver todas" **não abre ao passar o mouse**, só ao clicar, e abre a gaveta vertical (340 px) do script de drill-down do `code.json`. A única mudança visual é a linha de cima dos submenus, marrom em vez de laranja.
+
 ## Cuidados com o CSS atual
 
 O `code.json` e o `_styles.scss` têm regras com `!important` e por `#header`. A v2 usa `#header.pe-h2` e `!important` pontual para vencê-las (fundo do `#header`, `#search-input`). A v2 não usa a classe `.header__nav`, por isso as regras `body #header .header__nav …` do v1 não a atingem. `marketing_stripe.color` (marrom) é ignorada na v2, que pinta a tarja de marrom com texto creme.

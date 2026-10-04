@@ -174,14 +174,14 @@ const benefitIcons = {
     <%# Computador: Ver todas (megamenu #s-all), Natal e as categorias em destaque, cada uma com o seu submenu %>
     <% if (categories && categories.length) { %>
       <div class="pe-h2__nav-block d-none d-lg-block">
-        <nav class="pe-h2__nav">
+        <%# header__nav header__nav--full: as regras de submenu do site (dropdown vertical e gaveta do "Ver todas") dependem dessas classes %>
+        <nav class="pe-h2__nav header__nav header__nav--full">
           <% if (hasAllDepartments) { %>
             <div class="d-inline-block">
               <a
                 href="javascript:;"
                 class="pe-h2__cat pe-h2__cat--all"
                 id="cd-all"
-                onmouseover="toggleSubmenu('all', this)"
                 onclick="toggleSubmenu('all', this)"
               >
                 <i class="i-bars"></i>

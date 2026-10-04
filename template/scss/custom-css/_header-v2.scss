@@ -280,10 +280,18 @@
   }
   .pe-h2__cat--all { font-weight: 700; i { font-size: 18px; } }
 
+  // O nav reaproveita as classes do site para manter o dropdown vertical e a gaveta do "Ver todas" como hoje;
+  // aqui só se desfazem a linha laranja na base e a quebra de linha, que no bloco laranja não fazem sentido.
+  .pe-h2__nav.header__nav {
+    border-bottom: 0 !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 0;
+    text-align: left;
+  }
+
   // Submenus: estilo atual, com a linha de cima marrom (o laranja some sobre o laranja)
-  .header__submenu {
-    border-top-color: #3F2D25;
-    &::after { background: #3F2D25; }
+  .header__nav .header__submenu {
+    border-top-color: #3F2D25 !important;
   }
 }
 
