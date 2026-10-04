@@ -98,5 +98,19 @@ export default ({ state }) => {
       }
     ]
 })
+  sections.push({
+    label: 'Quadros personalizados (histórico do navegador)',
+    name: 'personalized-boxes',
+    widget: 'object',
+    icon: 'https://api.iconify.design/bi:grid.svg',
+    fields: [
+      {
+        label: 'Exibir quadros personalizados',
+        name: 'enabled',
+        widget: 'boolean',
+        default: false
+      }
+    ]
+  })
   return sections
 }
