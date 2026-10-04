@@ -6,8 +6,11 @@
   max-width: 1240px;
   margin: 16px auto 8px;
   padding: 0 16px;
-  // Reserva a altura antes de o JS montar, para a página não pular.
-  min-height: 330px;
+  // Reserva a altura antes de o JS montar, para a página não pular (alturas medidas: celular 350, tablet ~390, computador 427).
+  min-height: 350px;
+
+  @media (min-width: 576px) { min-height: 390px; }
+  @media (min-width: 992px) { min-height: 427px; }
 
   &[hidden] { display: none; }
   &.pe-boxes--ready { min-height: 0; }
