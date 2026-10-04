@@ -37,6 +37,11 @@ const $banner = document.querySelector('.pe-h2.banner-slider')
 
 if ($banner) {
   const fit = () => {
+    // No computador a altura é fixa (CSS); aqui só se acompanha o slide em telas menores.
+    if (window.matchMedia('(min-width: 992px)').matches) {
+      $banner.style.removeProperty('height')
+      return
+    }
     const slide = $banner.querySelector('.glide__slide--active') || $banner.querySelector('.glide__slide')
     const img = slide && slide.querySelector('img')
     if (!img || !img.complete || !img.clientWidth) return

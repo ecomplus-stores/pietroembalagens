@@ -299,9 +299,9 @@
 .pe-h2.pe-h2__benefits {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 10px 16px;
 
-  @media (min-width: 992px) { padding: 20px 20px 0; }
+  @media (min-width: 992px) { padding: 12px 20px 0; }
 
   .pe-h2__benefits-list {
     display: flex;
@@ -310,7 +310,7 @@
     scrollbar-width: none;
 
     &::-webkit-scrollbar { display: none; }
-    @media (min-width: 992px) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; overflow: visible; }
+    @media (min-width: 992px) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; overflow: visible; }
   }
 
   .pe-h2__benefit {
@@ -318,7 +318,7 @@
     align-items: center;
     flex: none;
     gap: 8px;
-    padding: 8px 14px 8px 8px;
+    padding: 6px 12px 6px 6px;
     border-radius: 50px;
     background: #EAF7FE;
     color: #0B4F6C;
@@ -326,30 +326,30 @@
     white-space: nowrap;
 
     &:hover, &:focus { color: #0B4F6C; text-decoration: none; }
-    @media (min-width: 992px) { gap: 12px; padding: 12px 18px 12px 12px; }
+    @media (min-width: 992px) { gap: 10px; padding: 8px 16px 8px 8px; }
   }
   .pe-h2__benefit-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     flex: none;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     background: #fff;
     color: #1C8FC9;
 
-    svg { width: 15px; height: 15px; }
-    @media (min-width: 992px) { width: 40px; height: 40px; svg { width: 20px; height: 20px; } }
+    svg { width: 14px; height: 14px; }
+    @media (min-width: 992px) { width: 32px; height: 32px; svg { width: 17px; height: 17px; } }
   }
   .pe-h2__benefit-text {
     display: flex;
     flex-direction: column;
     line-height: 1.25;
 
-    strong { font-size: 12px; font-weight: 700; }
-    small { font-size: 11px; }
-    @media (min-width: 992px) { strong { font-size: 15px; } small { font-size: 13px; } }
+    strong { font-size: 11.5px; font-weight: 700; }
+    small { font-size: 10.5px; }
+    @media (min-width: 992px) { strong { font-size: 13px; } small { font-size: 11.5px; } }
   }
 }
 
@@ -370,38 +370,48 @@
 
   .glide__track, .glide__slides, .glide__slide { height: auto; }
   .glide__slides { align-items: flex-start; }
+
+  // Computador: altura fixa, maior que a da arte (1920×500). A imagem cobre a caixa e fica ancorada à esquerda,
+  // onde ficam os textos das artes; o corte é na lateral direita (e um pouco em cima e embaixo nas artes mais altas).
+  @media (min-width: 992px) {
+    height: clamp(400px, 31vw, 520px) !important;
+
+    .glide, .glide__track, .glide__slides, .glide__slide, .glide__slide .banner, .glide__slide a, .glide__slide picture { height: 100%; }
+    .glide__slide .banner, .glide__slide a, .glide__slide picture { display: block; }
+    .glide__slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left center; }
+  }
 }
 
 // ---------- Categorias em "stories" ----------
 .pe-h2.pe-h2__stories {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 20px 16px;
+  padding: 14px 16px;
 
-  @media (min-width: 992px) { padding: 28px 20px; }
+  @media (min-width: 992px) { padding: 16px 20px 18px; }
 
   .pe-h2__stories-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
 
-    h2 { margin: 0; color: #000; font-size: 17px; font-weight: 700; @media (min-width: 992px) { font-size: 24px; } }
-    a { color: #874015; font-size: 13px; font-weight: 600; text-decoration: underline; @media (min-width: 992px) { font-size: 14px; } }
+    h2 { margin: 0; color: #000; font-size: 16px; font-weight: 700; @media (min-width: 992px) { font-size: 20px; } }
+    a { color: #874015; font-size: 12px; font-weight: 600; text-decoration: underline; @media (min-width: 992px) { font-size: 13px; } }
   }
 
   .pe-h2__stories-list {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin: 0;
-    padding: 12px 0 0;
+    padding: 8px 0 0;
     list-style: none;
     overflow-x: auto;
     scrollbar-width: none;
 
     &::-webkit-scrollbar { display: none; }
-    @media (min-width: 992px) { justify-content: space-between; padding-top: 16px; }
+    @media (min-width: 992px) { justify-content: space-between; padding-top: 10px; }
 
-    li { flex: none; width: 76px; @media (min-width: 992px) { width: 100px; } }
+    li { flex: none; width: 66px; @media (min-width: 992px) { width: 84px; } }
   }
 
   .pe-h2__story {
@@ -416,14 +426,14 @@
   }
   .pe-h2__ring {
     display: block;
-    width: 76px;
-    height: 76px;
+    width: 66px;
+    height: 66px;
     padding: 3px;
-    border: 2.5px solid #37B8F7;
+    border: 2px solid #37B8F7;
     border-radius: 50%;
     box-sizing: border-box;
 
-    @media (min-width: 992px) { width: 100px; height: 100px; border-width: 3px; }
+    @media (min-width: 992px) { width: 84px; height: 84px; border-width: 2.5px; }
   }
   .pe-h2__story--natal .pe-h2__ring { border-color: #FD8043; }
   .pe-h2__disc {
@@ -437,15 +447,15 @@
     background: #00B4F0;
 
     // 80px de largura e altura automática, alinhada ao topo: mostra só o círculo da arte e esconde o texto do PNG
-    img { flex-shrink: 0; width: 80px; max-width: none; height: auto; @media (min-width: 992px) { width: 104px; } }
+    img { flex-shrink: 0; width: 70px; max-width: none; height: auto; @media (min-width: 992px) { width: 88px; } }
   }
   .pe-h2__label {
-    margin-top: 8px;
-    font-size: 12px;
+    margin-top: 6px;
+    font-size: 11.5px;
     font-weight: 600;
-    line-height: 1.25;
+    line-height: 1.2;
     text-align: center;
 
-    @media (min-width: 992px) { font-size: 14px; }
+    @media (min-width: 992px) { font-size: 12.5px; }
   }
 }
