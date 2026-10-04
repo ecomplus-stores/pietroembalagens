@@ -2,8 +2,15 @@
 <noscript><style>.pe-boxes{display:none}</style></noscript>
 <%_
 // Configuração do painel (content/home.json); campos ausentes caem no padrão do JS (personalized-boxes/core.js).
+// Quadros informativos: reaproveitam as mensagens da cápsula do topo (só com o topo v2 ligado).
+const peHeaderV2 = (_.cms('header') || {}).pe_header_v2
+const peInfo = peHeaderV2 && peHeaderV2.enabled
+  ? (peHeaderV2.promos || []).map(({ icon, title, text, link }) => ({ icon, title, text, link }))
+  : undefined
 const peConfig = {
   max: opt.max_boxes,
+  showInfo: opt.show_info_boxes,
+  info: peInfo,
   titles: {
     viewed: opt.title_viewed, search: opt.title_search, related: opt.title_related,
     sales: opt.title_sales, offers: opt.title_offers, news: opt.title_news

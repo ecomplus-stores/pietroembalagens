@@ -123,6 +123,54 @@
   .pe-boxes__arrow--prev { left: 4px; }
   .pe-boxes__arrow--next { right: 4px; }
 
+  // Quadros informativos (quem não está logado): título, ilustração num círculo creme, texto e botão no rodapé.
+  .pe-boxes__card--info {
+    align-items: stretch;
+
+    .pe-boxes__ico {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      width: 112px;
+      height: 112px;
+      margin: 10px auto 12px;
+      background: #FFFADB;
+      border-radius: 50%;
+
+      svg { display: block; width: 92px; height: 92px; }
+    }
+
+    .pe-boxes__itext {
+      margin-bottom: auto;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    // Botão da marca: laranja com texto branco, raio 6 px.
+    .pe-boxes__btn {
+      display: block;
+      flex: 0 0 auto;
+      margin-top: 12px;
+      padding: 9px 12px;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      background: #FD8043;
+      border: 0;
+      border-radius: 6px;
+
+      &:hover, &:focus-visible { color: #fff; text-decoration: none; filter: brightness(.95); }
+    }
+  }
+
   // Celular: quadro do Mercado Livre no celular (medido no print do Rafael): 149 × 225 px, 13 px entre quadros.
   @media (max-width: 575.98px) {
     min-height: 235px;
@@ -136,6 +184,12 @@
     .pe-boxes__price { font-size: 17px; }
     .pe-boxes__off { font-size: 11px; }
     .pe-boxes__inst { min-height: 28px; font-size: 11px; line-height: 14px; }
+
+    .pe-boxes__card--info {
+      .pe-boxes__ico { width: 68px; height: 68px; margin: 4px auto 6px; svg { width: 56px; height: 56px; } }
+      .pe-boxes__itext { font-size: 12px; }
+      .pe-boxes__btn { margin-top: 6px; padding: 6px 8px; font-size: 12px; }
+    }
   }
 }
 
