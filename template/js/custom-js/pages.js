@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import AffiliateLink from './components/AffiliateLink.vue'
+import './cart-ui'
 // Add your custom JavaScript for storefront pages here.
 const screenWidth = document.body ? document.body.offsetWidth : window.screen.width
 
