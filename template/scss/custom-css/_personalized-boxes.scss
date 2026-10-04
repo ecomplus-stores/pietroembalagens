@@ -6,11 +6,8 @@
   max-width: 1240px;
   margin: 16px auto 8px;
   padding: 0 16px;
-  // Reserva a altura antes de o JS montar, para a página não pular (alturas medidas: celular 350, tablet ~390, computador 427).
-  min-height: 350px;
-
-  @media (min-width: 576px) { min-height: 390px; }
-  @media (min-width: 992px) { min-height: 427px; }
+  // Reserva a altura antes de o JS montar, para a página não pular: quadro de 286 px + folga do track (2 + 8).
+  min-height: 296px;
 
   &[hidden] { display: none; }
   &.pe-boxes--ready { min-height: 0; }
@@ -32,11 +29,13 @@
     &::-webkit-scrollbar { display: none; }
   }
 
-  // 1 quadro por produto: 4 por vez no computador (cresce se houver menos), ~1,6 no celular.
+  // Tamanho do quadro igual ao do Mercado Livre (medido no site deles): 184 × 286 px, 16 px entre quadros, 6 visíveis
+  // em 1184 px. Largura fixa em qualquer tela: no celular aparecem ~2 e a fileira rola; o resto rola com a seta.
   .pe-boxes__card {
     display: flex;
-    flex: 1 0 62%;
+    flex: 0 0 184px;
     flex-direction: column;
+    height: 286px;
     min-width: 0;
     padding: 16px;
     color: #3F2D25;
@@ -49,18 +48,23 @@
     transition: box-shadow .2s ease;
 
     &:hover, &:focus-visible { color: #3F2D25; text-decoration: none; box-shadow: 0 6px 18px rgba(63, 45, 37, .12); }
-
-    @media (min-width: 576px) { flex-basis: calc((100% - 16px) / 2); }
-    @media (min-width: 768px) { flex-basis: calc((100% - 32px) / 3); }
-    @media (min-width: 992px) { flex-basis: calc((100% - 48px) / 4); }
   }
 
-  .pe-boxes__title { margin-bottom: 10px; font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .pe-boxes__title {
+    overflow: hidden;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap; // uma linha só, como no ML (Quicksand é mais larga: 14 px cabe "Também te interessa" em 152 px)
+  }
 
   .pe-boxes__pic {
     display: block;
+    flex: 0 0 auto;
+    height: 130px;
     margin-bottom: 12px;
-    aspect-ratio: 1;
     background: #fff;
 
     img { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -69,6 +73,7 @@
   .pe-boxes__name {
     display: -webkit-box;
     min-height: 2.6em;
+    margin-bottom: auto; // preço sempre colado embaixo, como no ML
     overflow: hidden;
     font-size: 14px;
     font-weight: 500;
@@ -107,4 +112,10 @@
 
   .pe-boxes__arrow--prev { left: 4px; }
   .pe-boxes__arrow--next { right: 4px; }
+}
+
+// Banner do topo v2 com o tamanho do Mercado Livre (280 px de altura no computador), só quando os quadros estão na
+// página (o banner é irmão anterior da seção). Sem os quadros, ou em navegador sem :has(), vale a altura do topo v2.
+@media (min-width: 992px) {
+  .pe-h2.banner-slider:has(~ .pe-boxes) { height: 280px !important; }
 }
