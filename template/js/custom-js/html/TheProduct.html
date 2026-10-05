@@ -130,7 +130,7 @@
                   />
                   <span style="color: #4698ca">/Pacote</span>
                 </div>
-                <a-prices
+                <pe-pdp-prices
                   :product="ghostProductForPrices"
                   :is-literal="true"
                   :is-big="true"
@@ -140,11 +140,8 @@
                     <span v-if="qntCt > 1">
                       kit com {{ qntCt }} de
                     </span>
-                    <span v-else>
-                      de
-                    </span>
                   </template>
-                </a-prices>
+                </pe-pdp-prices>
               </p>
             </slot>
 
