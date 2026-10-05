@@ -1,5 +1,5 @@
 // Card de produto no modelo do Mercado Livre (site/alteracoes-no-site/25-card-produto-ml.md).
-// Cores: azul da marca #37B8F7 (marca/design-guide.md), azul dos preços da loja #4698CA e marrom do topo v2 #3F2D25.
+// Cores da marca: azul #37B8F7 (marca/design-guide.md) e o marrom da logo #76574B (cor do nome do card antes da mudança).
 
 // Nome inteiro, sem corte em linhas: as medidas ficam no fim do nome e não podem sumir.
 // Alinhado à esquerda como no Mercado Livre (o tema centraliza nome e preço do card).
@@ -8,8 +8,8 @@
   display: block;
   -webkit-line-clamp: unset;
   overflow: visible;
-  color: #3F2D25;
-  font-weight: 500;
+  color: #76574B;
+  font-weight: 700;
 }
 
 .product-card .product-card__prices.pe-card-prices {
@@ -18,7 +18,7 @@
 }
 
 .pe-card-prices {
-  color: #3F2D25;
+  color: #76574B;
   line-height: 1;
 
   &__off {
@@ -59,7 +59,7 @@
   &__cents { font-size: 13px; margin-left: 2px; margin-top: 2px; }
 
   &__pix {
-    color: #4698CA;
+    color: #37B8F7;
     font-size: 14px;
     font-weight: 700;
     margin: 4px 0 3px;
