@@ -50,9 +50,8 @@ test('findBestSeller: switched off, empty, stale or broken ranking shows nothing
   assert.equal(findBestSeller('texto', 'D_04_B_10', NOW), null)
 })
 
-test('the file shipped in the repo is switched off and empty', () => {
+test('the file shipped in the repo has no ranking of its own and shows nothing by itself', () => {
   const shipped = JSON.parse(fs.readFileSync(path.join(root, 'template/public/pe-best-sellers.json'), 'utf8'))
-  assert.equal(shipped.enabled, false)
   assert.deepEqual(shipped.items, {})
   const { findBestSeller } = load('template/js/custom-js/best-sellers.js')
   assert.equal(findBestSeller(shipped, 'D_04_B_10', NOW), null)
@@ -111,10 +110,10 @@ test('loadBestSellers: PIMI down or broken means no label, never a stale file', 
   assert.equal(await bad.loadBestSellers(), null)
 })
 
-test('the shipped file points at the PIMI but stays switched off', () => {
+test('the shipped file is switched on and points at the PIMI', () => {
   const shipped = JSON.parse(fs.readFileSync(path.join(root, 'template/public/pe-best-sellers.json'), 'utf8'))
   assert.equal(shipped.source, PIMI)
-  assert.equal(shipped.enabled, false)
+  assert.equal(shipped.enabled, true)
 })
 
 function mount (props, fetchImpl) {

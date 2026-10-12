@@ -1,7 +1,7 @@
 # Etiqueta "Nº mais vendido" (1º a 5º)
 
 Etiqueta pequena no card (laranja, sobre a foto, canto inferior esquerdo) e na página do produto (discreta, acima do nome, com a categoria). Mostra a posição: "1º mais vendido", "2º mais vendido" até "5º".
-Nasce **desligada e vazia**: enquanto `template/public/pe-best-sellers.json` não tiver dados válidos, nada aparece e nenhum card muda.
+Nasceu desligada (12/10); **ligada em 12/10/2026** a pedido do Rafael, com o ranking vindo do PIMI. Se o PIMI não responder, nada aparece e nenhum card muda.
 
 ## Como funciona
 
@@ -25,7 +25,7 @@ Nasce **desligada e vazia**: enquanto `template/public/pe-best-sellers.json` nã
 - A etiqueta só aparece se `enabled` for `true`, `items` tiver o SKU com `category` preenchida e `rank` de 1 a 5, e `updated_at` tiver no máximo 3 dias. Ranking velho some sozinho.
 - PIMI fora do ar, resposta com erro, JSON quebrado, `source` de outro domínio ou arquivo vazio: nenhuma etiqueta, sem erro na página.
 - As regras do ranking (só pedidos do site, 90 dias, mínimo de 5 pedidos por posição, estoque) ficam no PIMI: `api/mais_vendidos.py` do repo `RafaBrion/ccos-ratos`.
-- **Para ligar:** (1) PIMI publicado com o endpoint; (2) trocar `"enabled": false` por `true` neste arquivo e publicar a loja. **Para desligar:** voltar para `false`.
+- **Para ligar:** (1) PIMI publicado com o endpoint; (2) trocar `"enabled": false` por `true` neste arquivo e publicar a loja (feito em 12/10/2026). **Para desligar:** voltar para `false`.
 
 ## Peças
 
@@ -36,7 +36,7 @@ Nasce **desligada e vazia**: enquanto `template/public/pe-best-sellers.json` nã
 | Card | `template/js/custom-js/html/ProductCard.html` (dentro de `product-card__pictures`) |
 | Página do produto | `template/js/custom-js/html/TheProduct.html` (antes do nome) |
 | Estilo | `template/scss/custom-css/_card-produto.scss` (`.pe-best-seller`) |
-| Chave geral e endereço do ranking (hoje desligada) | `template/public/pe-best-sellers.json` |
+| Chave geral e endereço do ranking (hoje ligada) | `template/public/pe-best-sellers.json` |
 | Testes | `tests/best-sellers.test.cjs` (`node --test tests/*.test.cjs`) |
 
 ## Cor e contraste
