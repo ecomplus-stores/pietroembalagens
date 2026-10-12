@@ -1,7 +1,9 @@
-// Etiqueta "1º mais vendido" (docs/MAIS-VENDIDO.md). Lê /pe-best-sellers.json, que traz só o SKU líder de cada categoria.
+// Etiqueta "Nº mais vendido" (docs/MAIS-VENDIDO.md). Lê /pe-best-sellers.json, que traz os SKUs mais vendidos de cada categoria
+// (posição de 1 a 5).
 // Qualquer falha, arquivo desligado, vazio ou velho demais: a etiqueta simplesmente não aparece.
 const SOURCE = '/pe-best-sellers.json'
 const MAX_AGE_MS = 3 * 24 * 60 * 60 * 1000
+const MAX_RANK = 5
 let pending
 
 // Ranking velho não pode afirmar "mais vendido": passa de 3 dias sem atualizar, a etiqueta some.
@@ -14,7 +16,8 @@ export const isUsable = (data, now = Date.now()) => {
 export const findBestSeller = (data, sku, now) => {
   if (!sku || !isUsable(data, now)) return null
   const item = Object.prototype.hasOwnProperty.call(data.items, sku) ? data.items[sku] : null
-  return item && typeof item.category === 'string' && item.category ? item : null
+  const validRank = item && Number.isInteger(item.rank) && item.rank >= 1 && item.rank <= MAX_RANK
+  return validRank && typeof item.category === 'string' && item.category ? item : null
 }
 
 export const loadBestSellers = () => {

@@ -3,11 +3,11 @@
     v-if="item"
     class="pe-best-seller"
     :class="{ 'pe-best-seller--pdp': withCategory }"
-  >{{ withCategory ? `1º mais vendido em ${item.category}` : '1º mais vendido' }}</span>
+  >{{ withCategory ? `${item.rank}º mais vendido em ${item.category}` : `${item.rank}º mais vendido` }}</span>
 </template>
 
 <script>
-// Etiqueta "1º mais vendido" no card (sobre a foto) e na página do produto (acima do nome).
+// Etiqueta "Nº mais vendido" (1º a 5º) no card (sobre a foto) e na página do produto (acima do nome).
 import { loadBestSellers, findBestSeller } from '../best-sellers'
 
 export default {

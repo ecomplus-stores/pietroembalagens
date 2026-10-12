@@ -30,9 +30,9 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
-### 12/10/2026 — Etiqueta "1º mais vendido" (código pronto, desligado)
+### 12/10/2026 — Etiqueta "Nº mais vendido" (código pronto, desligado)
 
-- Etiqueta laranja no card e na página do produto, lida de `/pe-best-sellers.json`. O arquivo entra `"enabled": false` e vazio: nada muda no site até alguém ligar e preencher o ranking.
+- Etiqueta pequena no card e na página do produto, de 1º a 5º mais vendido, lida de `/pe-best-sellers.json`. O arquivo entra `"enabled": false` e vazio: nada muda no site até alguém ligar e preencher o ranking.
 - Ranking velho (mais de 3 dias sem atualizar), falha de rede ou JSON quebrado: a etiqueta não aparece.
 - Detalhes, formato do arquivo e como desligar: `docs/MAIS-VENDIDO.md`. Testes: `node --test tests/best-sellers.test.cjs`.
 

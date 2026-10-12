@@ -8,7 +8,7 @@ const Vue = require('vue')
 const compiler = require('vue-template-compiler')
 const root = path.resolve(__dirname, '..')
 const NOW = Date.parse('2026-10-12T12:00:00Z')
-const data = (extra = {}) => ({ enabled: true, updated_at: '2026-10-12T03:00:00Z', items: { D_04_B_10: { category: '04 brigadeiros' } }, ...extra })
+const data = (extra = {}) => ({ enabled: true, updated_at: '2026-10-12T03:00:00Z', items: { D_04_B_10: { category: '04 brigadeiros', rank: 1 }, D_04_K_10: { category: '04 brigadeiros', rank: 3 } }, ...extra })
 
 function transpile (file, source) {
   return babel.transformSync(source, { filename: file, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code
@@ -26,6 +26,7 @@ const response = (body, ok = true) => Promise.resolve({ ok, json: () => Promise.
 test('findBestSeller: only the published leader gets the label', () => {
   const { findBestSeller } = load('template/js/custom-js/best-sellers.js')
   assert.equal(findBestSeller(data(), 'D_04_B_10', NOW).category, '04 brigadeiros')
+  assert.equal(findBestSeller(data(), 'D_04_K_10', NOW).rank, 3)
   assert.equal(findBestSeller(data(), 'OUTRO-SKU', NOW), null)
   assert.equal(findBestSeller(data(), 'toString', NOW), null)
   assert.equal(findBestSeller(data(), '', NOW), null)
@@ -40,7 +41,11 @@ test('findBestSeller: switched off, empty, stale or broken ranking shows nothing
   assert.equal(findBestSeller(data({ updated_at: 'ontem' }), 'D_04_B_10', NOW), null)
   assert.equal(findBestSeller(data({ updated_at: '2026-10-08T12:00:00Z' }), 'D_04_B_10', NOW), null)
   assert.equal(findBestSeller(data({ updated_at: '2026-10-10T12:00:00Z' }), 'D_04_B_10', NOW).category, '04 brigadeiros')
-  assert.equal(findBestSeller(data({ items: { D_04_B_10: { category: '' } } }), 'D_04_B_10', NOW), null)
+  assert.equal(findBestSeller(data({ items: { D_04_B_10: { category: '', rank: 1 } } }), 'D_04_B_10', NOW), null)
+  for (const rank of [undefined, 0, 6, 1.5, '1', null, -1]) {
+    assert.equal(findBestSeller(data({ items: { D_04_B_10: { category: '04 brigadeiros', rank } } }), 'D_04_B_10', NOW), null)
+  }
+  assert.equal(findBestSeller(data({ items: { D_04_B_10: { category: '04 brigadeiros', rank: 5 } } }), 'D_04_B_10', NOW).rank, 5)
   assert.equal(findBestSeller(null, 'D_04_B_10', NOW), null)
   assert.equal(findBestSeller('texto', 'D_04_B_10', NOW), null)
 })
@@ -87,6 +92,9 @@ test('component: label on the card and on the product page, nothing for other pr
   const pdp = mount({ sku: 'D_04_B_10', withCategory: true }, fresh)
   await tick()
   assert.equal(text(pdp), '1º mais vendido em 04 brigadeiros')
+  const third = mount({ sku: 'D_04_K_10' }, fresh)
+  await tick()
+  assert.equal(text(third), '3º mais vendido')
   const other = mount({ sku: 'OUTRO' }, fresh)
   await tick()
   assert.equal(text(other), null)
