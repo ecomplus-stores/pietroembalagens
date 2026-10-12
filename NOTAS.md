@@ -30,11 +30,12 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
-### 12/10/2026 — Etiqueta "Nº mais vendido" (código pronto, desligado)
+### 12/10/2026 — Etiqueta "Nº mais vendido" (ligada em 12/10, ranking do PIMI)
 
 - Etiqueta pequena no card e na página do produto, de 1º a 5º mais vendido, lida de `/pe-best-sellers.json`. O arquivo entra `"enabled": false` e vazio: nada muda no site até alguém ligar e preencher o ranking.
 - Ranking velho (mais de 3 dias sem atualizar), falha de rede ou JSON quebrado: a etiqueta não aparece.
 - Fase 1 (só site): o arquivo passa a apontar (`source`) para o ranking calculado pelo PIMI (`reviews.pietroembalagens.com.br/api/codex/mais-vendidos/ranking`). Continua `"enabled": false`; só aparece etiqueta depois que o PIMI for publicado e o arquivo for ligado.
+- **Ligada em 12/10/2026** (`"enabled": true`) a pedido do Rafael: 9 etiquetas na primeira leitura do ranking. Desligar: `"enabled": false` no mesmo arquivo.
 - Detalhes, formato do arquivo e como desligar: `docs/MAIS-VENDIDO.md`. Testes: `node --test tests/best-sellers.test.cjs`.
 
 ### 03/10/2026 — Frete grátis v2 e teste sem minicart (no ar)
