@@ -30,6 +30,13 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 12/10/2026 — Estante de produtos: ordenação agrupada (nenhuma estante usa ainda)
+
+- Duas opções novas em "Ordenação" da Estante de produtos: **Agrupar por subcategoria** e **Agrupar por tag**, com a lista "Ordem dos grupos". Produtos do mesmo grupo ficam juntos; dentro do grupo, mais vendidos; produto sem grupo vai para o fim.
+- As ordenações atuais seguem iguais e nenhum conteúdo foi trocado: nada muda no site até alguém escolher a opção nova numa estante.
+- Só a Estante de produtos (home e página de Produtos). A lista da página de categoria (filtros e páginas) não foi alterada.
+- Detalhes, regras e limites: `docs/ORDENACAO-AGRUPADA.md`. Testes: `node --test tests/*.test.cjs`.
+
 ### 12/10/2026 — Etiqueta "Nº mais vendido" (código pronto, desligado)
 
 - Etiqueta pequena no card e na página do produto, de 1º a 5º mais vendido, lida de `/pe-best-sellers.json`. O arquivo entra `"enabled": false` e vazio: nada muda no site até alguém ligar e preencher o ranking.

@@ -5,19 +5,24 @@ import '#template/js/lib/config'
 import EcomRouter from '@ecomplus/storefront-router'
 import initNetlifyCms from '#template/js/netlify-cms/init'
 import getBaseConfig from '#template/js/netlify-cms/base-config/'
-import getCustomSections from './cms/sections'
+import getCustomSections, { withGroupedSort } from './cms/sections'
 
 document.title = `Admin ~ ${document.title}`
 
 const state = {}
 
-// Troca só os tipos de seção da home pelos do tema + os da loja. O resto da configuração fica como no tema.
+// Troca só os tipos de seção da home pelos do tema + os da loja. O resto da configuração fica como no tema,
+// menos a Estante de produtos, que ganha a ordenação agrupada em todas as páginas que a oferecem (ex.: Produtos).
 const withCustomSections = (config, sections) => {
   config.collections.forEach(collection => {
     (collection.files || []).forEach(file => {
       if (file.name === 'home') {
         file.fields.forEach(field => {
           if (field.name === 'sections') field.types = sections
+        })
+      } else {
+        ;(file.fields || []).forEach(field => {
+          if (field.name === 'sections' && Array.isArray(field.types)) field.types = field.types.map(withGroupedSort)
         })
       }
     })

@@ -1,0 +1,43 @@
+<%_
+// Ordenação agrupada da Estante de produtos (docs/ORDENACAO-AGRUPADA.md).
+// Reordena opt.items NO LUGAR (não imprime nada): produtos do mesmo grupo ficam juntos, os grupos seguem uma ordem fixa e,
+// dentro de cada grupo, vale a ordem que os itens já tinham (a estante os busca por mais vendidos).
+// Produto que não cai em nenhum grupo vai para o fim, na ordem original: nunca some.
+// opt.mode        'group_subcategory' (categorias do produto) ou 'group_tag' (palavras-chave do produto)
+// opt.group_order lista de nomes, na ordem dos grupos (CMS "Ordem dos grupos"); vazia = automático (ver abaixo)
+// opt.parent_id / opt.categories  só no automático: grupos = subcategorias da categoria da estante, de A a Z
+const { items, mode } = opt
+const normalize = text => String(text || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase()
+
+if (Array.isArray(items) && items.length > 1) {
+  // cada grupo é uma lista de chaves; o produto entra no primeiro grupo (na ordem) em que casar alguma chave
+  let groups = (Array.isArray(opt.group_order) ? opt.group_order : [])
+    .map(normalize)
+    .filter(Boolean)
+    .map(name => [name])
+
+  if (!groups.length && mode === 'group_subcategory' && opt.parent_id && Array.isArray(opt.categories)) {
+    const childrenOf = id => opt.categories.filter(({ parent }) => parent && parent._id === id)
+    const descendantIds = id => childrenOf(id).reduce((ids, child) => ids.concat(child._id, descendantIds(child._id)), [])
+    groups = childrenOf(opt.parent_id)
+      .sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt', { numeric: true, sensitivity: 'base' }))
+      .map(({ _id }) => [_id].concat(descendantIds(_id)))
+  }
+
+  if (groups.length) {
+    const keysOf = item => mode === 'group_tag'
+      ? (Array.isArray(item.keywords) ? item.keywords : []).map(normalize)
+      : (Array.isArray(item.categories) ? item.categories : []).reduce((keys, category) => keys.concat(category._id, normalize(category.name)), [])
+    const rankOf = item => {
+      const keys = keysOf(item)
+      const index = groups.findIndex(group => group.some(key => keys.includes(key)))
+      return index === -1 ? groups.length : index
+    }
+    const ordered = items
+      .map((item, position) => ({ item, position, rank: rankOf(item) }))
+      .sort((a, b) => a.rank - b.rank || a.position - b.position)
+      .map(({ item }) => item)
+    items.splice(0, items.length, ...ordered)
+  }
+}
+_%>

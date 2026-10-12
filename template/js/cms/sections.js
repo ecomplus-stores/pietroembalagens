@@ -1,7 +1,36 @@
 import getSections from '@ecomplus/storefront-template/template/js/netlify-cms/base-config/sections'
 
+// Ordenação agrupada da Estante de produtos (docs/ORDENACAO-AGRUPADA.md): duas opções novas em "Ordenação" e a lista
+// "Ordem dos grupos". As opções do tema continuam como estão; só a Estante ganha as novas (as outras seções não sabem agrupar).
+const groupedSortOptions = [
+  { label: 'Agrupar por subcategoria (mais vendidos dentro de cada grupo)', value: 'group_subcategory' },
+  { label: 'Agrupar por tag (mais vendidos dentro de cada grupo)', value: 'group_tag' }
+]
+const groupOrderField = {
+  label: 'Ordem dos grupos (só para Agrupar por…)',
+  name: 'group_order',
+  widget: 'list',
+  required: false,
+  field: { label: 'Grupo', name: 'group', widget: 'string' },
+  hint: 'Um nome por linha, na ordem em que os grupos aparecem: nome da categoria (Agrupar por subcategoria) ou palavra-chave do produto (Agrupar por tag). ' +
+    'Vazio em Agrupar por subcategoria: usa as subcategorias da categoria escolhida, de A a Z. Produto fora da lista vai para o fim. ' +
+    'A estante mostra só os primeiros itens da ordem agrupada: aumente o Limite de itens para ver mais grupos.'
+}
+export const withGroupedSort = section => {
+  if (!section || section.name !== 'collection-shelf' || section.fields.some(({ name }) => name === 'group_order')) return section
+  const fields = []
+  section.fields.forEach(field => {
+    if (field.name === 'sort') {
+      fields.push({ ...field, options: field.options.concat(groupedSortOptions) }, groupOrderField)
+    } else {
+      fields.push(field)
+    }
+  })
+  return { ...section, fields }
+}
+
 export default ({ state }) => {
-  const sections = getSections({ state })
+  const sections = getSections({ state }).map(withGroupedSort)
   sections.push({
     label: "Grid de Avaliações",
     name: "review-carousel",
