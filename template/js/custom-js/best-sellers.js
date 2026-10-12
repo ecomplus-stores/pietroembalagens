@@ -1,7 +1,8 @@
-// Etiqueta "Nº mais vendido" (docs/MAIS-VENDIDO.md). Lê /pe-best-sellers.json, que traz os SKUs mais vendidos de cada categoria
-// (posição de 1 a 5).
+// Etiqueta "Nº mais vendido" (docs/MAIS-VENDIDO.md). /pe-best-sellers.json liga/desliga a etiqueta e, quando traz `source`, aponta
+// para o ranking calculado pelo PIMI (SKUs mais vendidos de cada categoria, posição de 1 a 5); sem `source`, vale o que estiver nele.
 // Qualquer falha, arquivo desligado, vazio ou velho demais: a etiqueta simplesmente não aparece.
-const SOURCE = '/pe-best-sellers.json'
+const CONFIG = '/pe-best-sellers.json'
+const ALLOWED_SOURCE = 'https://reviews.pietroembalagens.com.br/'
 const MAX_AGE_MS = 3 * 24 * 60 * 60 * 1000
 const MAX_RANK = 5
 let pending
@@ -20,19 +21,26 @@ export const findBestSeller = (data, sku, now) => {
   return validRank && typeof item.category === 'string' && item.category ? item : null
 }
 
-export const loadBestSellers = () => {
-  if (pending) return pending
+const getJson = (url, options) => {
   const controller = typeof AbortController === 'function' ? new AbortController() : null
   const timeout = controller && setTimeout(() => controller.abort(), 5000)
-  pending = fetch(SOURCE + '?v=' + Math.floor(Date.now() / 600000), { credentials: 'same-origin', signal: controller && controller.signal })
+  return fetch(url, { ...options, signal: controller && controller.signal })
     .then(response => {
       if (!response.ok) throw new Error('best-sellers')
       return response.json()
     })
-    .catch(() => null)
-    .then(data => {
-      clearTimeout(timeout)
-      return data
+    .finally(() => clearTimeout(timeout))
+}
+
+export const loadBestSellers = () => {
+  if (pending) return pending
+  pending = getJson(CONFIG + '?v=' + Math.floor(Date.now() / 600000), { credentials: 'same-origin' })
+    .then(config => {
+      if (!config || config.enabled !== true || config.source === undefined) return config
+      // Só o PIMI da Pietro: um endereço qualquer no arquivo não é buscado.
+      if (typeof config.source !== 'string' || !config.source.startsWith(ALLOWED_SOURCE)) return null
+      return getJson(config.source, { credentials: 'omit' }).then(ranking => ({ ...ranking, enabled: true }))
     })
+    .catch(() => null)
   return pending
 }

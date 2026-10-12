@@ -1,5 +1,6 @@
 {
   "enabled": false,
+  "source": "https://reviews.pietroembalagens.com.br/api/codex/mais-vendidos/ranking",
   "updated_at": null,
   "window_days": 90,
   "items": {}
