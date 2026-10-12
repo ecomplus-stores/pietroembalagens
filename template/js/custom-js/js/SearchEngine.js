@@ -31,9 +31,37 @@ import {
   import ProductCard from '@ecomplus/storefront-components/src/ProductCard.vue'
   import { isMobile, isScreenLg } from '@ecomplus/storefront-twbs'
   
-  const resetEcomSearch = ({ ecomSearch, term, page, defaultSort }) => {
+  // Ordenação agrupada da categoria (docs/ORDENACAO-AGRUPADA.md): o servidor da página manda o critério pronto em
+  // data-group-sort; aqui ele só entra na frente da ordenação "mais vendidos" (paginação e filtros seguem iguais).
+  const GROUP_SORT = 'group_subcategory'
+  const readGroupSort = () => {
+    try {
+      const $el = document.getElementById('search-engine')
+      const entry = $el && $el.dataset.groupSort && JSON.parse($el.dataset.groupSort)
+      return entry && entry._script ? entry : null
+    } catch (err) {
+      console.error(err)
+      return null
+    }
+  }
+  const applyGroupSort = self => {
+    const groupSort = readGroupSort()
+    self.ecomSearch.setSortOrder('sales')
+    if (groupSort) {
+      self.ecomSearch.dsl.sort.unshift(groupSort)
+    }
+    self.groupSort = groupSort
+    self.hasGroupSort = Boolean(groupSort)
+    self.selectedSortOption = groupSort ? GROUP_SORT : null
+  }
+
+  const resetEcomSearch = self => {
+    const { ecomSearch, term, page, defaultSort } = self
     ecomSearch.reset()
-    if (defaultSort) {
+    self.groupSort = null
+    if (defaultSort === GROUP_SORT) {
+      applyGroupSort(self)
+    } else if (defaultSort) {
       ecomSearch.setSortOrder(defaultSort)
     }
     if (term) {
@@ -117,6 +145,7 @@ import {
         lastSelectedFilter: null,
         selectedOptions: {},
         selectedSortOption: null,
+        hasGroupSort: false,
         countOpenRequests: 0,
         lastRequestId: null,
         isScheduled: false,
@@ -159,7 +188,12 @@ import {
         return this.hasSearched && !this.resultItems.length
       },
   
-      sortOptions: () => [
+      sortOptions () {
+        const options = this.baseSortOptions
+        return this.hasGroupSort ? [{ value: GROUP_SORT, label: 'Por subcategoria' }].concat(options) : options
+      },
+
+      baseSortOptions: () => [
         {
           value: null,
           label: i18n(i19relevance)
@@ -243,6 +277,16 @@ import {
           })
           .catch(err => {
             console.error(err)
+            const { groupSort } = this
+            if (groupSort && !isPopularItems && ecomSearch.dsl.sort.includes(groupSort)) {
+              // o servidor de busca recusou a ordenação agrupada: volta para mais vendidos e tenta de novo
+              ecomSearch.dsl.sort = ecomSearch.dsl.sort.filter(entry => entry !== groupSort)
+              this.groupSort = null
+              this.hasGroupSort = false
+              this.selectedSortOption = null
+              this.fetchItems(true, isPopularItems)
+              return
+            }
             if (this.lastRequestId === requestId || isPopularItems) {
               if (this.canRetry && !isRetry && (!err.response || err.response.status !== 400)) {
                 this.fetchItems(true, isPopularItems)
@@ -482,8 +526,13 @@ import {
       },
   
       setSortOrder (sort) {
-        this.selectedSortOption = sort
-        this.ecomSearch.setSortOrder(sort)
+        if (sort === GROUP_SORT && this.hasGroupSort) {
+          applyGroupSort(this)
+        } else {
+          this.selectedSortOption = sort
+          this.groupSort = null
+          this.ecomSearch.setSortOrder(sort)
+        }
         if (this.page > 1) {
           this.page = 1
         } else {

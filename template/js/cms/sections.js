@@ -16,7 +16,19 @@ const groupOrderField = {
     'Vazio em Agrupar por subcategoria: usa as subcategorias da categoria escolhida, de A a Z. Produto fora da lista vai para o fim. ' +
     'A estante mostra só os primeiros itens da ordem agrupada: aumente o Limite de itens para ver mais grupos.'
 }
+// Lista da página de categoria: uma única opção (as subcategorias saem da própria categoria; a configuração vale para todas as categorias)
+const groupedCategoryOption = {
+  label: 'Agrupar por subcategoria (categoria sem subcategorias: mais vendidos)',
+  value: 'group_subcategory'
+}
 export const withGroupedSort = section => {
+  if (section && section.name === 'category-retail') {
+    if (section.fields.some(({ name, options }) => name === 'sort' && options.some(({ value }) => value === groupedCategoryOption.value))) return section
+    return {
+      ...section,
+      fields: section.fields.map(field => field.name === 'sort' ? { ...field, options: field.options.concat(groupedCategoryOption) } : field)
+    }
+  }
   if (!section || section.name !== 'collection-shelf' || section.fields.some(({ name }) => name === 'group_order')) return section
   const fields = []
   section.fields.forEach(field => {
