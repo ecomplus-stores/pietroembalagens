@@ -30,6 +30,12 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 12/10/2026 — Etiqueta "1º mais vendido" (código pronto, desligado)
+
+- Etiqueta laranja no card e na página do produto, lida de `/pe-best-sellers.json`. O arquivo entra `"enabled": false` e vazio: nada muda no site até alguém ligar e preencher o ranking.
+- Ranking velho (mais de 3 dias sem atualizar), falha de rede ou JSON quebrado: a etiqueta não aparece.
+- Detalhes, formato do arquivo e como desligar: `docs/MAIS-VENDIDO.md`. Testes: `node --test tests/best-sellers.test.cjs`.
+
 ### 03/10/2026 — Frete grátis v2 e teste sem minicart (no ar)
 
 - **Frete v2** (`"ui": "v2"` em `pe-freight-config.json`): novo visual do bloco de frete grátis no minicart e no carrinho, datas "Chega até DD/MM (dia)", sugestões ordenadas pelo menor acréscimo. A v1 continua no código atrás da flag. Backup `backup/antes-frete-v2-20261003` (`176a9439`). Detalhes: `docs/FRETE-SUGESTOES.md`, seção "v2 (UI)".

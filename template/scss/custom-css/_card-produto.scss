@@ -144,3 +144,41 @@
     margin-top: 8px;
   }
 }
+
+// Etiqueta "1º mais vendido" (docs/MAIS-VENDIDO.md). Texto marrom escuro #3F2D25 sobre o laranja da marca #FD8043:
+// contraste 5,17 (branco sobre o mesmo laranja daria 2,52). Só existe na página quando o ranking publicado traz o produto,
+// então nada aqui muda os cards de hoje. Em navegador sem :has() ela fica logo abaixo da foto em vez de sobre ela.
+.pe-best-seller {
+  display: inline-block;
+  margin-top: 6px;
+  background: #FD8043;
+  color: #3F2D25;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 5px 8px;
+  border-radius: 4px;
+
+  // Página do produto: etiqueta acima do nome, fora da foto.
+  &--pdp {
+    margin: 0 0 8px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+@supports selector(:has(*)) {
+  .product-card__pictures:has(> .pe-best-seller) {
+    position: relative;
+  }
+
+  .product-card__pictures > .pe-best-seller {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    z-index: 2;
+    margin: 0;
+  }
+}
