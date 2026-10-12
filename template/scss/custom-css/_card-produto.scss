@@ -144,3 +144,47 @@
     margin-top: 8px;
   }
 }
+
+// Etiqueta "Nº mais vendido" (docs/MAIS-VENDIDO.md), pequena de propósito. Só existe na página quando o ranking publicado traz
+// o produto, então nada aqui muda os cards de hoje. Em navegador sem :has() ela fica logo abaixo da foto em vez de sobre ela.
+// Card: texto marrom escuro #3F2D25 sobre o laranja da marca #FD8043 (contraste 5,17; branco sobre o mesmo laranja daria 2,52).
+.pe-best-seller {
+  display: inline-block;
+  margin-top: 4px;
+  background: #FD8043;
+  color: #3F2D25;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 6px;
+  border-radius: 3px;
+
+  // Página do produto: discreta, acima do nome. Creme #FFFADB com borda laranja e o mesmo texto marrom (contraste 12,36).
+  &--pdp {
+    margin: 0 0 6px;
+    background: #FFFADB;
+    border: 1px solid #FD8043;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+}
+
+@supports selector(:has(*)) {
+  .product-card__pictures:has(> .pe-best-seller) {
+    position: relative;
+  }
+
+  .product-card__pictures > .pe-best-seller {
+    position: absolute;
+    left: 6px;
+    bottom: 6px;
+    z-index: 2;
+    margin: 0;
+  }
+}

@@ -50,6 +50,10 @@
           v-if="!isSSR"
           name="heading"
         >
+          <pe-best-seller
+            :sku="body.sku"
+            with-category
+          />
           <component
             :is="headingTag"
             class="product__name"

@@ -51,6 +51,7 @@ import AAlert from '@ecomplus/storefront-components/src/AAlert.vue'
 import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import APrices from '@ecomplus/storefront-components/src/APrices.vue'
 import PePdpPrices from '../components/PePdpPrices.vue'
+import PeBestSeller from '../components/PeBestSeller.vue'
 import AShare from '@ecomplus/storefront-components/src/AShare.vue'
 import ProductVariations from '@ecomplus/storefront-components/src/ProductVariations.vue'
 import ProductGallery from '@ecomplus/storefront-components/src/ProductGallery.vue'
@@ -84,6 +85,7 @@ export default {
     APicture,
     APrices,
     PePdpPrices,
+    PeBestSeller,
     AShare,
     ProductVariations,
     ProductGallery,

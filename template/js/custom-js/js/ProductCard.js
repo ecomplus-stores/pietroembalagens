@@ -20,6 +20,7 @@ import ecomCart from '@ecomplus/shopping-cart'
 import ALink from '@ecomplus/storefront-components/src/ALink.vue'
 import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import PeCardPrices from '../components/PeCardPrices.vue'
+import PeBestSeller from '../components/PeBestSeller.vue'
 import ecomPassport from '@ecomplus/passport-client'
 import { toggleFavorite, checkFavorite } from '@ecomplus/storefront-components/src/js/helpers/favorite-products'
 
@@ -52,7 +53,8 @@ export default {
   components: {
     ALink,
     APicture,
-    PeCardPrices
+    PeCardPrices,
+    PeBestSeller
   },
 
   props: {
