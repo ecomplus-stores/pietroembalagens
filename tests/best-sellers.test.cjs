@@ -70,6 +70,53 @@ test('loadBestSellers: a failed request or a bad status resolves to null and is 
   assert.equal(await broken.loadBestSellers(), null)
 })
 
+const PIMI = 'https://reviews.pietroembalagens.com.br/api/codex/mais-vendidos/ranking'
+const ranking = () => ({ updated_at: new Date().toISOString(), window_days: 90, items: { D_04_B_10: { category: '04 brigadeiros', rank: 1 } } })
+const routed = (config, calls, pimi = () => response(ranking())) => (url, options) => {
+  calls.push({ url, options })
+  return url.startsWith('/pe-best-sellers.json') ? response(config) : pimi()
+}
+
+test('loadBestSellers: switched on with a source reads the PIMI ranking, without cookies', async () => {
+  const calls = []
+  const loaded = load('template/js/custom-js/best-sellers.js', { fetch: routed({ enabled: true, source: PIMI, items: {} }, calls) })
+  const result = await loaded.loadBestSellers()
+  assert.equal(calls.length, 2)
+  assert.equal(calls[1].url, PIMI)
+  assert.equal(calls[1].options.credentials, 'omit')
+  assert.equal(loaded.findBestSeller(result, 'D_04_B_10').category, '04 brigadeiros')
+})
+
+test('loadBestSellers: switched off never calls the PIMI', async () => {
+  const calls = []
+  const loaded = load('template/js/custom-js/best-sellers.js', { fetch: routed({ enabled: false, source: PIMI, items: {} }, calls) })
+  assert.equal(loaded.findBestSeller(await loaded.loadBestSellers(), 'D_04_B_10'), null)
+  assert.equal(calls.length, 1)
+})
+
+test('loadBestSellers: a source outside the Pietro PIMI is not fetched', async () => {
+  for (const source of ['https://evil.example/ranking', 'https://reviews.pietroembalagens.com.br.evil.example/x', 'http://reviews.pietroembalagens.com.br/x', 42, null]) {
+    const calls = []
+    const loaded = load('template/js/custom-js/best-sellers.js', { fetch: routed({ enabled: true, source, items: {} }, calls) })
+    assert.equal(await loaded.loadBestSellers(), null)
+    assert.equal(calls.length, 1, String(source))
+  }
+})
+
+test('loadBestSellers: PIMI down or broken means no label, never a stale file', async () => {
+  const inline = { enabled: true, source: PIMI, updated_at: new Date().toISOString(), items: { D_04_B_10: { category: '04 brigadeiros', rank: 1 } } }
+  const down = load('template/js/custom-js/best-sellers.js', { fetch: routed(inline, [], () => Promise.reject(new Error('rede'))) })
+  assert.equal(await down.loadBestSellers(), null)
+  const bad = load('template/js/custom-js/best-sellers.js', { fetch: routed(inline, [], () => response({}, false)) })
+  assert.equal(await bad.loadBestSellers(), null)
+})
+
+test('the shipped file points at the PIMI but stays switched off', () => {
+  const shipped = JSON.parse(fs.readFileSync(path.join(root, 'template/public/pe-best-sellers.json'), 'utf8'))
+  assert.equal(shipped.source, PIMI)
+  assert.equal(shipped.enabled, false)
+})
+
 function mount (props, fetchImpl) {
   const bestSellers = load('template/js/custom-js/best-sellers.js', { fetch: fetchImpl })
   const file = path.join(root, 'template/js/custom-js/components/PeBestSeller.vue')
