@@ -44,7 +44,7 @@ Com `false` a home sai **idêntica** à do `master` anterior (conferido: build d
 | `template/pages/@/sections/personalized-boxes.ejs` | contêiner vazio com as setas; o `<noscript>` esconde a área sem JS. |
 | `template/js/custom-js/personalized-boxes/core.js` | funções puras: histórico (`addViewed`, `readViewed`, `saveTerm`, `readTerm`), `composeBoxes`, `sortByViewed`, `escapeHtml`. Testadas. |
 | `template/js/custom-js/personalized-boxes/index.js` | registra a visita (PDP e `/search`), busca os produtos (`EcomSearch`, `graphs`) e monta os quadros. Importado em `custom-js/pages.js`. |
-| `template/scss/custom-css/_personalized-boxes.scss` | todo o CSS, sob `.pe-boxes` (importado no fim de `_styles.scss`). Quadro de largura fixa (184 px) em qualquer tela e altura reservada de 296 px antes do JS montar (CLS 0). Também fixa o banner em 280 px no computador **só quando os quadros estão na página** (`.pe-h2.banner-slider:has(~ .pe-boxes)`). |
+| `template/scss/custom-css/_personalized-boxes.scss` | todo o CSS, sob `.pe-boxes` (importado no fim de `_styles.scss`). Quadro de largura fixa (184 px) em qualquer tela e altura reservada de 296 px antes do JS montar (CLS 0). Também ajusta o banner no computador à proporção da arte 1920×400 (até 400 px de altura) **só quando os quadros estão na página** (`.pe-h2.banner-slider:has(~ .pe-boxes)`). |
 | `template/js/cms/sections.js` | registra o tipo no painel. |
 | `tests/freight.test.cjs` | testes `quadros:` (limite, duplicados, JSON quebrado, storage bloqueado, escape, chave desligada). |
 
