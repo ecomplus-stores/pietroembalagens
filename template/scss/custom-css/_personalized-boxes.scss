@@ -14,7 +14,7 @@
 
   @media (min-width: 992px) {
     margin-top: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 20px; // era 40 px; 20 px a menos entre os quadros e "Categorias" (13/10, pedido do Rafael)
     padding: 0 20px;
   }
 
@@ -194,7 +194,7 @@
 }
 
 // Banner do topo v2 com o tamanho do Mercado Livre, só quando os quadros estão na página (o banner é irmão anterior
-// da seção). Computador: 280 px de altura. Celular: cartão de cantos arredondados com ~8:3 (328 × 123 no ML), com a arte
+// da seção). Computador: altura pela proporção da arte (1920×400). Celular: cartão de cantos arredondados com ~8:3 (328 × 123 no ML), com a arte
 // cobrindo a caixa. Sem os quadros, ou em navegador sem :has(), vale a altura do topo v2.
 .pe-h2.banner-slider:has(~ .pe-boxes) {
   width: auto;
@@ -227,8 +227,10 @@
     .glide__slide img { object-position: left center; }
   }
 
+  // Computador: a caixa acompanha a proporção da arte (1920×400, --pe-banner-ratio) para ela aparecer inteira, até
+  // 400 px de altura (em 1920 px de tela ou mais). Antes era fixa em 283 px e cortava o título e o botão da arte.
   @media (min-width: 992px) {
-    height: 283px !important;
+    height: min(calc(100vw * var(--pe-banner-ratio, .209)), 400px) !important;
     width: 100%;
     margin: 0;
     border-radius: 0;

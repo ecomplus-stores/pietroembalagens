@@ -30,6 +30,13 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 13/10/2026 — Banner da home 1920×400 inteiro no computador e 20 px a menos antes de "Categorias"
+
+- A arte do banner já estava em 1920×400, mas a caixa do computador era fixa em 283 px e cortava o título e o botão. Agora a altura segue a proporção da arte (`--pe-banner-ratio`), com teto de 400 px: 300 px em 1440 px de tela, 400 px a partir de 1920 px (`_personalized-boxes.scss`).
+- Espaço entre a fileira de quadros e o título "Categorias" no computador: de 40 para 20 px de margem (`.pe-boxes`, a partir de 992 px).
+- Celular não muda (medido: banner 134 px e espaço de 46 px antes e depois). Sem mudança no painel (CMS).
+- Desfazer: voltar `height: 283px !important` no bloco `min-width: 992px` do banner e `margin-bottom: 40px` em `.pe-boxes`.
+
 ### 13/10/2026 — Correção: painel não abria depois da ordenação agrupada
 
 - Depois do PR 83 o painel mostrava "Error loading the CMS configuration ... fields names must be unique". Causa: o painel junta a configuração do tema com a da loja por posição (lodash.merge) e a lista "Ordem dos grupos" estava no meio dos campos da Estante, o que deslocou os nomes e repetiu "autoplay".
