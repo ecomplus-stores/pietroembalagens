@@ -146,7 +146,7 @@
 }
 
 // Etiqueta "Nº mais vendido" (docs/MAIS-VENDIDO.md), pequena de propósito. Só existe na página quando o ranking publicado traz
-// o produto, então nada aqui muda os cards de hoje. Em navegador sem :has() ela fica logo abaixo da foto em vez de sobre ela.
+// o produto, então nada aqui muda os cards de hoje.
 // Card: texto marrom escuro #3F2D25 sobre o laranja da marca #FD8043 (contraste 5,17; branco sobre o mesmo laranja daria 2,52).
 .pe-best-seller {
   display: inline-block;
@@ -156,6 +156,7 @@
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   padding: 3px 6px;
@@ -175,16 +176,11 @@
   }
 }
 
-@supports selector(:has(*)) {
-  .product-card__pictures:has(> .pe-best-seller) {
-    position: relative;
-  }
-
-  .product-card__pictures > .pe-best-seller {
-    position: absolute;
-    left: 6px;
-    bottom: 6px;
-    z-index: 2;
-    margin: 0;
-  }
+// Sobre a foto, no canto: .product-card__pictures já é position: relative na biblioteca.
+.product-card__pictures > .pe-best-seller {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  z-index: 2;
+  margin: 0;
 }

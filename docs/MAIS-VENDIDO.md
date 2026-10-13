@@ -39,6 +39,10 @@ Nasceu desligada (12/10); **ligada em 12/10/2026** a pedido do Rafael, com o ran
 | Chave geral e endereço do ranking (hoje ligada) | `template/public/pe-best-sellers.json` |
 | Testes | `tests/best-sellers.test.cjs` (`node --test tests/*.test.cjs`) |
 
+## Cuidado no card
+
+- A etiqueta fica **antes** das fotos em `ProductCard.html`. O CSS da biblioteca esconde (`opacity: 0`) toda `.product-card__picture` que não seja o último filho; com a etiqueta depois da foto, a foto principal sumia (12/10).
+
 ## Cor e contraste
 
 - Card: texto marrom escuro `#3F2D25` sobre o laranja da marca `#FD8043`, contraste 5,17 (mínimo 4,5). Branco sobre o mesmo laranja daria 2,52.
