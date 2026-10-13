@@ -8,20 +8,12 @@
       "full_width": false,
       "slides": [
         {
-          "start": "2026-06-01T11:26:49.773Z",
-          "end": "",
-          "img": "/img/uploads/banner-florzinhas-desktop-1920x380.webp",
-          "link": "https://www.pietroembalagens.com.br/caixas-para-presente",
-          "alt": "Coleção Florzinhas: embalagens pra presentes e lembrancinhas que encantam. Conheça a linha",
-          "mobile_img": "/img/uploads/banner-florzinhas-mobile-1000x375.webp"
-        },
-        {
           "start": "",
           "end": "",
-          "img": "/img/uploads/banner-caixas-bolos-premium-desktop-1920x380.webp",
-          "link": "https://www.pietroembalagens.com.br/caixas-para-bolos",
-          "alt": "Caixas para bolos Premium: proteção e apresentação que valorizam o que realmente importa. Ver coleção",
-          "mobile_img": "/img/uploads/banner-caixas-bolos-premium-mobile-1000x375.webp"
+          "img": "/img/uploads/banner-full-desktop-conhec-a-a-colec-a-o_1920x400.webp",
+          "link": "https://www.pietroembalagens.com.br/caixas-tema-natal",
+          "alt": "embalagens natal",
+          "mobile_img": "/img/uploads/banner-full-mobile-conhec-a-a-colec-a-o_1000x375.webp"
         }
       ]
     },
