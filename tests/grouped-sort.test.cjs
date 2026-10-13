@@ -186,13 +186,29 @@ test('painel: a Estante ganha as duas opções novas e a lista de grupos; as ant
   const shelf = list.find(({ name }) => name === 'collection-shelf')
   const sortField = shelf.fields.find(({ name }) => name === 'sort')
   assert.deepEqual(sortField.options.map(({ value }) => value), ['views', 'sales', 'group_subcategory', 'group_tag'])
-  assert.deepEqual(shelf.fields.map(({ name }) => name), ['collection_id', 'sort', 'group_order', 'shuffle'])
+  assert.deepEqual(shelf.fields.map(({ name }) => name), ['collection_id', 'sort', 'shuffle', 'group_order'])
   const groupOrder = shelf.fields.find(({ name }) => name === 'group_order')
   assert.equal(groupOrder.widget, 'list')
   assert.equal(groupOrder.required, false)
   // outras seções não ganham opção que não sabem executar
   const showcase = list.find(({ name }) => name === 'dynamic-showcase')
   assert.deepEqual(showcase.fields[0].options.map(({ value }) => value), ['views'])
+})
+
+// O painel (init.js do tema) faz merge(configDoTema, configDaLoja) com lodash.merge, que junta arrays POR POSIÇÃO.
+// Campo novo no meio da lista desloca os nomes e quebra o painel ("fields names must be unique", 13/10/2026).
+test('painel: o merge por posição do tema (lodash.merge) mantém nomes únicos e os campos certos', () => {
+  const merge = require('lodash.merge')
+  const { exports: sectionsModule, base } = loadSections()
+  const themeConfig = JSON.parse(JSON.stringify(base))
+  const storeConfig = plain(base.map(sectionsModule.withGroupedSort))
+  const merged = merge(themeConfig, storeConfig)
+  const shelf = merged.find(({ name }) => name === 'collection-shelf')
+  const names = shelf.fields.map(({ name }) => name)
+  assert.equal(new Set(names).size, names.length)
+  assert.deepEqual(names, ['collection_id', 'sort', 'shuffle', 'group_order'])
+  assert.deepEqual(shelf.fields.find(({ name }) => name === 'sort').options.map(({ value }) => value), ['views', 'sales', 'group_subcategory', 'group_tag'])
+  assert.equal(shelf.fields.find(({ name }) => name === 'group_order').widget, 'list')
 })
 
 test('painel: aplicar duas vezes não duplica nada e não altera o original', () => {

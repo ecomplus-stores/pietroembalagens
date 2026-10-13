@@ -30,6 +30,12 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 13/10/2026 — Correção: painel não abria depois da ordenação agrupada
+
+- Depois do PR 83 o painel mostrava "Error loading the CMS configuration ... fields names must be unique". Causa: o painel junta a configuração do tema com a da loja por posição (lodash.merge) e a lista "Ordem dos grupos" estava no meio dos campos da Estante, o que deslocou os nomes e repetiu "autoplay".
+- Correção: "Ordem dos grupos" agora é o último campo da Estante (`template/js/cms/sections.js`). O que o Rafael vê não muda (ordenação com as duas opções novas e a lista de grupos).
+- Teste novo (`tests/grouped-sort.test.cjs`) roda o mesmo merge por posição e confere nomes únicos. Também conferido com o config real do tema empacotado: 0 duplicados nos 6 pontos que quebravam.
+
 ### 12/10/2026 — Ordenação agrupada: Estante de produtos e lista da categoria (nada usa ainda)
 
 - Duas opções novas em "Ordenação" da Estante de produtos: **Agrupar por subcategoria** e **Agrupar por tag**, com a lista "Ordem dos grupos". Produtos do mesmo grupo ficam juntos; dentro do grupo, mais vendidos; produto sem grupo vai para o fim.

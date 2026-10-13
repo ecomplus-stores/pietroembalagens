@@ -30,14 +30,11 @@ export const withGroupedSort = section => {
     }
   }
   if (!section || section.name !== 'collection-shelf' || section.fields.some(({ name }) => name === 'group_order')) return section
-  const fields = []
-  section.fields.forEach(field => {
-    if (field.name === 'sort') {
-      fields.push({ ...field, options: field.options.concat(groupedSortOptions) }, groupOrderField)
-    } else {
-      fields.push(field)
-    }
-  })
+  // A lista "Ordem dos grupos" vai no FIM dos campos, não ao lado de "Ordenação": o painel (init.js do tema) junta a
+  // configuração da loja com a do tema por posição (lodash.merge); campo novo no meio desloca os nomes e o painel
+  // quebra com "fields names must be unique" (13/10/2026).
+  const fields = section.fields.map(field => field.name === 'sort' ? { ...field, options: field.options.concat(groupedSortOptions) } : field)
+  fields.push(groupOrderField)
   return { ...section, fields }
 }
 
