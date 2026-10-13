@@ -37,6 +37,9 @@ if (!opt.items) {
       <% if (opt.sort) { %>
         data-sort="<%= opt.sort %>"
       <% } %>
+      <% if (opt.group_sort) { %>
+        data-group-sort="<%= JSON.stringify(opt.group_sort) %>"
+      <% } %>
       <% if (opt.disable_filters) { %>
         data-disable-filters="true"
       <% } %>

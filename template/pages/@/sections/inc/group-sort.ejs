@@ -1,0 +1,37 @@
+<%_
+// Ordenação agrupada da lista da categoria (docs/ORDENACAO-AGRUPADA.md). Não imprime nada: monta, em opt.entry, o critério de
+// ordenação que o servidor de busca aplica a toda a categoria (assim vale para todas as páginas e filtros). Sem subcategorias: opt.entry = null.
+// Grupos = subcategorias da categoria (opt.parent_id), de A a Z; filhas e netas contam para o grupo da filha.
+// O produto fica no primeiro grupo em que casar o nome de alguma das suas categorias; quem não casa vai para o fim.
+const { parent_id: parentId, categories } = opt
+opt.entry = null
+
+if (parentId && Array.isArray(categories)) {
+  const childrenOf = id => categories.filter(({ parent }) => parent && parent._id === id)
+  const withDescendants = category => [category].concat(childrenOf(category._id).reduce((all, child) => all.concat(withDescendants(child)), []))
+  const children = childrenOf(parentId)
+    .sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt', { numeric: true, sensitivity: 'base' }))
+
+  if (children.length) {
+    const ranks = new Map()
+    children.forEach((child, index) => {
+      withDescendants(child).forEach(({ name }) => {
+        if (typeof name === 'string' && name && !ranks.has(name)) ranks.set(name, index)
+      })
+    })
+    const literal = Array.from(ranks, ([name, index]) => `${JSON.stringify(name)}:${index}`).join(',')
+    opt.entry = {
+      _script: {
+        type: 'number',
+        script: {
+          lang: 'painless',
+          source: `Map m = [${literal}]; def n = doc['categories.name']; int best = ${children.length};` +
+            ' for (int k = 0; k < n.size(); k++) { def v = n.get(k); if (m.containsKey(v)) { int r = m.get(v); if (r < best) best = r; } }' +
+            ' return best;'
+        },
+        order: 'asc'
+      }
+    }
+  }
+}
+_%>

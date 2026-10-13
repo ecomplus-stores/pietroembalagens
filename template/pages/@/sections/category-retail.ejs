@@ -1,11 +1,40 @@
 <%
 const search = new _.EcomSearch()
-search
-  .setCategoryNames([_.state.name])
-  .setSortOrder(opt.sort)
+// Ordenação agrupada (docs/ORDENACAO-AGRUPADA.md): subcategorias da categoria, juntas, no servidor de busca (vale para todas as páginas e filtros)
+const groupOpt = { parent_id: _.state._id, categories: _.categories }
+if (opt.sort === 'group_subcategory') {
+  await include('@/sections/inc/group-sort', { _, opt: groupOpt })
+}
+let groupEntry = groupOpt.entry || null
+const setSort = () => {
+  if (opt.sort === 'group_subcategory') {
+    // sem subcategorias, ou se o servidor de busca recusar o critério: mais vendidos
+    search.setSortOrder('sales')
+    if (groupEntry) {
+      search.dsl.sort.unshift(groupEntry)
+    }
+  } else {
+    search.setSortOrder(opt.sort)
+  }
+}
+const fetchSearch = async () => {
+  try {
+    await search.fetch()
+  } catch (err) {
+    if (!groupEntry || (err.response && err.response.status === 404)) {
+      throw err
+    }
+    console.error('category-retail: ordenação agrupada recusada, usando mais vendidos', err)
+    groupEntry = null
+    setSort()
+    await search.fetch()
+  }
+}
+search.setCategoryNames([_.state.name])
+setSort()
 let items
 try {
-  await search.fetch()
+  await fetchSearch()
   items = search.getItems()
 } catch (err) {
   if (err.response && err.response.status === 404) {
@@ -24,10 +53,9 @@ if (items && !items.length) {
     childCategories.forEach(({ name }) => {
       categoryNames.push(name)
     })
-    search
-      .setCategoryNames(categoryNames)
-      .setSortOrder(opt.sort)
-    await search.fetch()
+    search.setCategoryNames(categoryNames)
+    setSort()
+    await fetchSearch()
     items = await search.getItems()
   }
 }
@@ -39,7 +67,8 @@ if (items && !items.length) {
       items,
       search,
       category_names: categoryNames,
-      sort: opt.sort
+      sort: opt.sort === 'group_subcategory' && !groupEntry ? 'sales' : opt.sort,
+      group_sort: groupEntry
     }
   }) %>
 </div>
