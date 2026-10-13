@@ -148,3 +148,10 @@ test('component: label on the card and on the product page, nothing for other pr
   await tick()
   assert.equal(text(down), null)
 })
+
+test('card: a etiqueta fica antes das fotos (a biblioteca esconde foto que não é :last-child)', () => {
+  const html = fs.readFileSync(path.join(root, 'template/js/custom-js/html/ProductCard.html'), 'utf8')
+  const pictures = html.slice(html.indexOf('product-card__pictures'), html.indexOf('product-card__name'))
+  assert.ok(pictures.includes('<pe-best-seller'))
+  assert.ok(pictures.indexOf('<pe-best-seller') < pictures.indexOf('<a-picture'))
+})

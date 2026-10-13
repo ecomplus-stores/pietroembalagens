@@ -27,6 +27,8 @@
           <slot name="header"/>
 
           <div class="product-card__pictures">
+            <!-- Antes das fotos: o CSS da biblioteca esconde toda foto que não for o último filho (:last-child). -->
+            <pe-best-seller :sku="body.sku"/>
             <template v-if="body.pictures && body.pictures.length">
               <a-picture
                 class="product-card__picture"
@@ -41,7 +43,6 @@
               v-else
               class="product-card__picture"
             />
-            <pe-best-seller :sku="body.sku"/>
           </div>
 
           <slot name="title">
