@@ -44,3 +44,7 @@ if (customCode.css) {
 }
 %>
 <%- customCode.html_head %>
+
+<% if (_.route.path === '/app' || _.route.path.startsWith('/app/')) { %>
+  <script defer src="<%= _.assetsPrefix || '' %>/assets/pe-checkout-enhancements.27a9b0b1a9f9.js"></script>
+<% } %>
