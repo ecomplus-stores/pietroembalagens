@@ -1,0 +1,42 @@
+{
+  "family": "Quicksand",
+  "version": "3.006 (Google Fonts v37)",
+  "retrieved": "2026-10-14",
+  "license": "SIL Open Font License 1.1; see OFL-Quicksand.txt",
+  "embeddedCopyright": "Copyright 2019 The Quicksand Project Authors (https://github.com/andrew-paglinawan/QuicksandFamily.git), with Reserved Font Name \"Quicksand\"",
+  "licenseSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/quicksand/OFL.txt",
+  "cssSource": "https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;700&display=swap",
+  "cssUserAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "weights": [
+    300,
+    400,
+    700
+  ],
+  "note": "Unmodified upstream WOFF2 files. Each subset URL is reused across all three original single-weight faces; keep that matching behavior rather than declaring a continuous weight range. Retain these files during rollback for cached CSS.",
+  "files": [
+    {
+      "subset": "vietnamese",
+      "file": "quicksand-vietnamese.602d23d1e2cb.woff2",
+      "bytes": 8840,
+      "sha256": "602d23d1e2cb8d416e336f184720c07d06497674c2876d05821f7839bba3e6c8",
+      "source": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJFQNcOM.woff2"
+    },
+    {
+      "subset": "latin-ext",
+      "file": "quicksand-latin-ext.b5a37861949c.woff2",
+      "bytes": 26616,
+      "sha256": "b5a37861949c4489894ff1e76d3657819830e91316b40effa16c5a6923bc0928",
+      "source": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hJVQNcOM.woff2"
+    },
+    {
+      "subset": "latin",
+      "file": "quicksand-latin.2add7d60b1cd.woff2",
+      "bytes": 28244,
+      "sha256": "2add7d60b1cd2ab84c9967e23d5ec08eb3fc9635c46855b17d59404dec6b410e",
+      "source": "https://fonts.gstatic.com/s/quicksand/v37/6xKtdSZaM9iE8KbpRA_hK1QN.woff2"
+    }
+  ],
+  "licenseSourceSha256": "14d28541780d90f6577bb7abcc6f005bf6969614294e75c82abb8758a696ad46",
+  "licenseFileSha256": "b4578833b5c1ce3a9a811df806760ba4e98566c3b52689808fa1290f946450fc",
+  "licenseNormalization": "Only trailing whitespace removed from the upstream license; wording unchanged."
+}
