@@ -61,14 +61,14 @@ jobs:
       - name: Install root dependencies
         run: npm ci --only=production
 
+      - name: Install functions dependencies
+        run: cd .functions && npm ci --only=production
+
       - name: Verify source after installation
         run: node .github/scripts/verify-deploy.cjs source
 
       - name: Test storefront safeguards
         run: node --test tests/*.test.cjs
-
-      - name: Install functions dependencies
-        run: cd .functions && npm ci --only=production && cd ../..
 
       - name: Check last changed files
         uses: lots0logs/gh-action-get-changed-files@2.1.4
