@@ -30,12 +30,18 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
-### 14/10/2026 — Velocidade 2a: ajustes de checkout por rota (em revisão)
+### 14/10/2026 — Velocidade 3: Quicksand local (em revisão)
+
+- Mesmos binários, família, nove faces e pesos da fonte atual, com licença/proveniência; elimina a importação tardia de Quicksand e pré-carrega somente Latin.
+- 124 testes, build/SSR, menu/busca, produto/carrinho/entrada do checkout, comparação tipográfica e PWA/rollback passaram. Em seis pares locais com processo/perfil novo por run, LCP mediano 514 → 358 ms; resultado de laboratório, ainda sem confirmação pública. CLS mediano 0,07218 → 0,07340, sem afirmar ganho de CLS.
+- 2b permanece fora desta entrega/produção. Advisor aprovou a preparação para PR/revisão, sem impeditivos; publicação depende de aprovação concreta de Rafael, CI e conferência pública. Reversão testada retendo fontes, licença e proveniência; exige novo build/deploy Hosting + SSR. Detalhes/limites: `docs/ENTREGA-FONTES.md`.
+
+### 14/10/2026 — Velocidade 2a: ajustes de checkout por rota (publicada)
 
 - Textos de identificação, ordem Pix/boleto/cartão e eventos das etapas saem do head global para um helper versionado carregado apenas no app. Datas de entrega, frete grátis e cupons continuam compartilhados com o catálogo/carrinho.
 - O worker recebe um marcador determinístico para atualizar o HTML precacheado da PWA quando esse head/helper mudar. Bundles/chunks existentes e políticas de cache permanecem iguais.
 - Validação local: 124 testes, build/SSR, menu/busca desktop e celular, produto/carrinho/entrada do checkout, fixture de etapas e transição PWA/rollback passaram. Primeiro app ganha uma requisição e +371 B gzip / +272 B Brotli; home reduz 802 B gzip / 888 B Brotli. Ainda não há ganho de velocidade pública confirmado.
-- Publicação ainda depende de aprovação concreta de Rafael e verificação do deploy. Rollback: reverter somente esta entrega **retendo o helper novo** para páginas/abas em cache; exige novo build e deploy Hosting + SSR. Procedimento e limites: `docs/ENTREGA-JAVASCRIPT-CHECKOUT.md`.
+- Publicada pelo PR #89: merge `deed7fd2`, Actions `38546529280` concluído, Hosting `c9387863ac4b4db2`, SSR `634`. Rollback: reverter somente esta entrega **retendo o helper novo** para páginas/abas em cache; exige novo build e deploy Hosting + SSR. Procedimento e limites: `docs/ENTREGA-JAVASCRIPT-CHECKOUT.md`.
 
 ### 13/10/2026 — Banner da home 1920×400 inteiro no computador e 20 px a menos antes de "Categorias"
 

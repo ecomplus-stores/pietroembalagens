@@ -1,1 +1,4 @@
 @import '#template/scss/variables';
+
+// false also prevents the theme's !default from restoring an external font URL.
+$web-font-path: false;
