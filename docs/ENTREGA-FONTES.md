@@ -2,6 +2,8 @@
 
 Preparada em 14/10/2026; **não publicada**. A entrega 2b permanece fora desta branch e de produção.
 
+Advisor: intenção e ajuste `false` aprovados antes da implementação. Parecer final favorável sobre aplicação `89818d05` e documentação `c0ecabdb`, sem impeditivos para PR/revisão de Rafael. Não aprova merge/deploy; exige aprovação concreta de Rafael, CI completo e verificações públicas previstas abaixo.
+
 - Base: `6a26e8d26c8ddfadaf238a9f434b49238351b9e1` (master com 2a e dois triggers do bot).
 - Aplicação: `89818d051b3217fa4ad96c478b67f5c008d0ead7`, branch `perf/fontes-quicksand-local`.
 - Última publicação funcional registrada da 2a: merge `deed7fd2ad43c2f9a80423e555fdedd619f0f4f9`, Actions `38546529280`, Hosting `c9387863ac4b4db2`, SSR `634`. Reconfirmar os identificadores atuais antes de publicar; os triggers posteriores não autorizam presumir outra versão.

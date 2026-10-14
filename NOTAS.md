@@ -34,7 +34,7 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 - Mesmos binários, família, nove faces e pesos da fonte atual, com licença/proveniência; elimina a importação tardia de Quicksand e pré-carrega somente Latin.
 - 124 testes, build/SSR, menu/busca, produto/carrinho/entrada do checkout, comparação tipográfica e PWA/rollback passaram. Em seis pares locais com processo/perfil novo por run, LCP mediano 514 → 358 ms; resultado de laboratório, ainda sem confirmação pública. CLS mediano 0,07218 → 0,07340, sem afirmar ganho de CLS.
-- 2b permanece fora desta entrega/produção. Publicação depende de revisão final do advisor e aprovação concreta de Rafael. Reversão testada retendo fontes, licença e proveniência; exige novo build/deploy Hosting + SSR. Detalhes/limites: `docs/ENTREGA-FONTES.md`.
+- 2b permanece fora desta entrega/produção. Advisor aprovou a preparação para PR/revisão, sem impeditivos; publicação depende de aprovação concreta de Rafael, CI e conferência pública. Reversão testada retendo fontes, licença e proveniência; exige novo build/deploy Hosting + SSR. Detalhes/limites: `docs/ENTREGA-FONTES.md`.
 
 ### 14/10/2026 — Velocidade 2a: ajustes de checkout por rota (publicada)
 
