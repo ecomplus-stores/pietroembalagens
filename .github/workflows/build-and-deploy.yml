@@ -13,6 +13,15 @@ on:
       - 'firebase.json'
       - '.github/build-and-deploy'
       - '.github/workflows/build-and-deploy.yml'
+      - '.github/scripts/**'
+      - 'tests/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-production-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -24,25 +33,25 @@ jobs:
       !contains(github.event.head_commit.message, '[skip ci]')
 
     steps:
-      - name: Set remote repo URL
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "::set-output name=url::https://${GITHUB_ACTOR}:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        id: remote_repo
-
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Configure build evidence directory
+        run: echo "DEPLOY_EVIDENCE_DIR=$RUNNER_TEMP/pietro-build-evidence" >> "$GITHUB_ENV"
+
+      - name: Verify approved source
+        run: node .github/scripts/verify-deploy.cjs source
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -52,8 +61,11 @@ jobs:
       - name: Install root dependencies
         run: npm ci --only=production
 
-      - name: Test freight safeguards
-        run: node --test tests/freight.test.cjs
+      - name: Verify source after installation
+        run: node .github/scripts/verify-deploy.cjs source
+
+      - name: Test storefront safeguards
+        run: node --test tests/*.test.cjs
 
       - name: Install functions dependencies
         run: cd .functions && npm ci --only=production && cd ../..
@@ -67,54 +79,73 @@ jobs:
       - name: Run partial build
         env:
           CHANGED_FILES: ${{ steps.changed_files.outputs.all }}
-        run: |
-          IS_ECOMPLUS_CD=$(node -p "const f = JSON.parse('${CHANGED_FILES}'); f.length === 1 && f[0] === '.ecomplus.cd.json'");
-          if [ $IS_ECOMPLUS_CD != false ]; then
-            BUILD_SLUG=$(node -p "require('./.ecomplus.cd.json').slug || false");
-            STORE_DOMAIN=$(node -p "require('./content/settings.json').domain || false");
-            if [ $BUILD_SLUG != false ] && [ $STORE_DOMAIN != false ]; then
-              IFS=",";
-              read -ra slug <<< "$BUILD_SLUG";
-              for i in "${slug[@]}"; do
-                curl -X PURGE "https://$STORE_DOMAIN/$i"
-              done;
-              echo "::set-output name=isg::2";
-              exit 0;
-            fi
-          fi
-          npm run build -- --prerender=index,app/index,search,404,blog,admin/index --prerender-limit=0;
-          echo "::set-output name=isg::0";
-        id: partial_build
+        run: node .github/scripts/build-storefront.cjs
+        id: build
 
-      - name: Config Git and check diff
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add content template
-          (git diff-index --quiet HEAD && echo "::set-output name=diff::0") || echo "::set-output name=diff::1"
-        id: git_diff
+      - name: Verify source after build or purge
+        run: node .github/scripts/verify-deploy.cjs source
 
-      - name: Commit local file changes
-        continue-on-error: true
-        if: steps.git_diff.outputs.diff == 1
-        run: |
-          git commit -m 'chore(post-build): update template and content defaults [skip ci]'
+      - name: Verify build and prepare SSR evidence
+        if: steps.build.outputs.mode == 'build'
+        run: node .github/scripts/verify-deploy.cjs evidence
 
-      - name: Push changes
-        if: steps.git_diff.outputs.diff == 1
-        continue-on-error: true
-        env:
-          REMOTE_REPO: ${{ steps.remote_repo.outputs.url }}
-        run: git push "${REMOTE_REPO}" HEAD:master --follow-tags
+      - name: Preserve prepared build evidence
+        if: steps.build.outputs.mode == 'build'
+        uses: actions/upload-artifact@v4
+        with:
+          name: prepared-build-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.DEPLOY_EVIDENCE_DIR }}/deployment.json
+            ${{ env.DEPLOY_EVIDENCE_DIR }}/hosting-build.tar.gz
+            ${{ env.DEPLOY_EVIDENCE_DIR }}/ssr-source.tar.gz
+          if-no-files-found: error
+          retention-days: 14
 
-      - name: Deploy to Firebase
-        if: steps.partial_build.outputs.isg == 0
+      - name: Capture production baseline
+        if: steps.build.outputs.mode == 'build'
         env:
           GCP_ACCOUNT_KEY: ${{ secrets.GCP_ACCOUNT_KEY }}
         run: |
-          if [ -f .bundles.json ] && [ -f dist/storefront.js ]; then
-            export GOOGLE_APPLICATION_CREDENTIALS=".firebase-adminsdk.json";
-            echo $GCP_ACCOUNT_KEY > $GOOGLE_APPLICATION_CREDENTIALS;
-            PROJECT_ID=$(node -p "require('./$GOOGLE_APPLICATION_CREDENTIALS').project_id");
-            GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS npx firebase deploy --project=$PROJECT_ID;
-          fi
+          set -euo pipefail
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/pietro-firebase-baseline.json"
+          trap 'rm -f "$GOOGLE_APPLICATION_CREDENTIALS"' EXIT
+          umask 077
+          printf '%s' "$GCP_ACCOUNT_KEY" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          PROJECT_ID=$(node -e 'let project; try { project = JSON.parse(process.env.GCP_ACCOUNT_KEY).project_id } catch {} if (typeof project !== "string" || !/^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(project)) { console.error("Invalid Firebase project configuration"); process.exit(1) } process.stdout.write(project)')
+          node .github/scripts/capture-deployment.cjs "$PROJECT_ID" before
+
+      - name: Preserve baseline before changing production
+        if: steps.build.outputs.mode == 'build'
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-baseline-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ env.DEPLOY_EVIDENCE_DIR }}/production-before.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Deploy to Firebase
+        if: steps.build.outputs.mode == 'build'
+        env:
+          GCP_ACCOUNT_KEY: ${{ secrets.GCP_ACCOUNT_KEY }}
+        run: |
+          set -euo pipefail
+          node .github/scripts/verify-deploy.cjs source
+          node .github/scripts/verify-deploy.cjs artifacts
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/pietro-firebase-adminsdk.json"
+          trap 'rm -f "$GOOGLE_APPLICATION_CREDENTIALS"' EXIT
+          umask 077
+          printf '%s' "$GCP_ACCOUNT_KEY" > "$GOOGLE_APPLICATION_CREDENTIALS"
+          PROJECT_ID=$(node -e 'let project; try { project = JSON.parse(process.env.GCP_ACCOUNT_KEY).project_id } catch {} if (typeof project !== "string" || !/^[a-z][a-z0-9-]{4,28}[a-z0-9]$/.test(project)) { console.error("Invalid Firebase project configuration"); process.exit(1) } process.stdout.write(project)')
+          npx firebase deploy --project="$PROJECT_ID" --non-interactive
+          node .github/scripts/capture-deployment.cjs "$PROJECT_ID" after
+
+      - name: Preserve production resource identifiers
+        if: always() && steps.build.outputs.mode == 'build'
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-resources-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ env.DEPLOY_EVIDENCE_DIR }}/production-before.json
+            ${{ env.DEPLOY_EVIDENCE_DIR }}/production-after.json
+          if-no-files-found: warn
+          retention-days: 14
