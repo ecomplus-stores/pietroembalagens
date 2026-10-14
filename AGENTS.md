@@ -27,4 +27,5 @@ O usuário determinou: “sempre chame o advisor para validar o que vai fazer”
 - Valide menu/busca mobile e desktop, carrinho, quantidade, preço, frete, login/OAuth e etapas do checkout em contexto de teste, sem compra real nem evento Purchase fictício em produção.
 - Alterações de frontend precisam de validação visual e de interações no navegador antes de publicar. Registre medições bloqueadas ou não executadas; não as apresente como aprovadas.
 - Preserve proxy, autenticação injetada e verificação TLS. A importação permanente do certificado do proxy no Chromium foi rejeitada pela revisão automática e não recebeu autorização explícita; não contorne esse bloqueio.
+- Rafael autorizou explicitamente confiar no certificado do proxy apenas em um perfil temporário de testes. Mantenha a verificação HTTPS ativa, não altere a confiança permanente do usuário/sistema e apague o perfil após a validação.
 - Registre rollback e parecer do advisor junto à entrega. Depois do deploy e, se houver, da reversão, confirme a versão efetiva e o funcionamento na loja pública.
