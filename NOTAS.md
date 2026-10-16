@@ -30,11 +30,18 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
-### 14/10/2026 — Velocidade 3: Quicksand local (em revisão)
+### 15/10/2026 — Velocidade 5: cache das fontes versionadas (preparada, sem publicação)
+
+- Regras exatas para os três WOFF2 Quicksand com hash: de um dia/600 s compartilhado para um ano/immutable. Imagens CMS, HTML, configurações e cache de JS/CSS preservados. Base `704463e8`, aplicação `5c0759f5`; entregas 4 e 2B continuam suspensas e fora desta branch.
+- 127 testes e build/SSR aprovados. Fonte real e cache HTTP/PWA/offline/rollback validados em laboratório; menor revalidação após idade simulada, sem ganho público de LCP declarado. Fontes/CSS/JS/worker preservados; diferenças geradas de home/sitemap delimitadas.
+- Revert real testado com 124 testes, novo build/SSR e headers anteriores. Três quantidades comerciais mudaram entre os builds e foram confirmadas na API pública; não foram normalizadas. Rollback exige novo deploy e não expira respostas já armazenadas por um ano.
+- Advisor deu parecer final favorável à preparação/PR draft, sem merge/deploy. Limites, validação e comandos: `docs/ENTREGA-CACHE-FONTES.md`. Publicação depende da revisão concreta de Rafael e do fluxo habitual.
+
+### 14/10/2026 — Velocidade 3: Quicksand local (publicada)
 
 - Mesmos binários, família, nove faces e pesos da fonte atual, com licença/proveniência; elimina a importação tardia de Quicksand e pré-carrega somente Latin.
 - 124 testes, build/SSR, menu/busca, produto/carrinho/entrada do checkout, comparação tipográfica e PWA/rollback passaram. Em seis pares locais com processo/perfil novo por run, LCP mediano 514 → 358 ms; resultado de laboratório, ainda sem confirmação pública. CLS mediano 0,07218 → 0,07340, sem afirmar ganho de CLS.
-- 2b permanece fora desta entrega/produção. Advisor aprovou a preparação para PR/revisão, sem impeditivos; publicação depende de aprovação concreta de Rafael, CI e conferência pública. Reversão testada retendo fontes, licença e proveniência; exige novo build/deploy Hosting + SSR. Detalhes/limites: `docs/ENTREGA-FONTES.md`.
+- 2b permanece fora desta entrega/produção. Publicada pelo PR #90, merge `e78a30cc`, Actions `38592708589`; os arquivos/fontes foram conferidos na loja pública. O novo trabalho de cache parte dessa publicação, sem ganho de LCP público confirmado. Reversão testada retendo fontes, licença e proveniência; exige novo build/deploy Hosting + SSR. Detalhes/limites: `docs/ENTREGA-FONTES.md`.
 
 ### 14/10/2026 — Velocidade 2a: ajustes de checkout por rota (publicada)
 
