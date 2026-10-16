@@ -76,8 +76,8 @@
       "shuffle": false,
       "limit": 12,
       "page": 1,
-      "collection_id": "684f22a8578b5f79543fbdd6:categories:Caixas para presente:/caixas-para-presente",
-      "sort": "group_tag",
+      "collection_id": "684f22a8578b5f79543fbdd6:categories:Caixas para presentes e cosméticos:/caixas-para-presente-cosmeticos",
+      "sort": "group_subcategory",
       "title": "Caixas para cosméticos e presentes",
       "link": "https://www.pietroembalagens.com.br/caixas-para-presente"
     },
