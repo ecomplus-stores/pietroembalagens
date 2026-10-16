@@ -58,6 +58,33 @@
         ]
       },
       {
+        "source": "/assets/fonts/quicksand-vietnamese.602d23d1e2cb.woff2",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/assets/fonts/quicksand-latin-ext.b5a37861949c.woff2",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/assets/fonts/quicksand-latin.2add7d60b1cd.woff2",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
         "source": "/chunk.?*.*",
         "headers": [
           {
