@@ -30,7 +30,9 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
-### 15/10/2026 — Velocidade 5: cache das fontes versionadas (preparada, sem publicação)
+### 15/10/2026 — Velocidade 5: cache das fontes versionadas (PUBLICADA em 16/10)
+
+- **Correção de registro (16/10):** esta entrega foi para o `master` direto (commits `5c0759f5` e `4c9f7180`, sem PR) e publicada pela execução Actions `38844354322` (run 8150, sucesso, 16/10 03:12 UTC). As linhas abaixo foram escritas antes disso e dizem "sem publicação"; valem como descrição do que foi preparado, não do estado. Conferência pública (headers das 3 fontes) ainda não registrada.
 
 - Regras exatas para os três WOFF2 Quicksand com hash: de um dia/600 s compartilhado para um ano/immutable. Imagens CMS, HTML, configurações e cache de JS/CSS preservados. Base `704463e8`, aplicação `5c0759f5`; entregas 4 e 2B continuam suspensas e fora desta branch.
 - 127 testes e build/SSR aprovados. Fonte real e cache HTTP/PWA/offline/rollback validados em laboratório; menor revalidação após idade simulada, sem ganho público de LCP declarado. Fontes/CSS/JS/worker preservados; diferenças geradas de home/sitemap delimitadas.

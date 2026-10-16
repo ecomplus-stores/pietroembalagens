@@ -1,6 +1,6 @@
 # Entrega 5 — cache das fontes versionadas
 
-**Preparada para revisão; ainda não publicada.** Entregas 4 e 2B continuam suspensas e fora desta branch.
+**Publicada em 16/10/2026 (execução Actions 38844354322, commit `4c9f7180`), direto no `master`, sem PR; o texto abaixo foi escrito antes da publicação.** Entregas 4 e 2B continuam suspensas e fora desta branch.
 
 - Branch: `perf/cache-fontes-versionadas`.
 - Base atual: `704463e8cadad05178414d6ae139efa1fa23a67f`. O avanço desde `e78a30cc` altera somente o trigger/slug de `.ecomplus.cd.json`, preservado nesta entrega.
