@@ -336,6 +336,14 @@ import {
           addFilter(key, options, true)
         })
         this.filters = this.filters.filter((_, i) => updatedFilters.includes(i))
+        // "Tipo" sempre no topo da coluna de filtros (a ordem vem da busca, não do painel)
+        const tipoIndex = this.filters.findIndex(({ filter, isSpec }) => {
+          return isSpec && this.getFilterLabel(filter).trim().toLowerCase() === 'tipo'
+        })
+        if (tipoIndex > 0) {
+          this.filters = [this.filters[tipoIndex]]
+            .concat(this.filters.filter((_, i) => i !== tipoIndex))
+        }
         this.searchFilterId = Date.now()
       },
   
