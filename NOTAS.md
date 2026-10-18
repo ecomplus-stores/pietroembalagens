@@ -30,6 +30,11 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 18/10/2026 — Filtro "Tipo" no topo dos filtros laterais (PR #92, publicada)
+
+- A ordem dos filtros da categoria vem da busca; não há opção no painel. `SearchEngine.js` (`updateFilters`) passa a pôr no início o filtro de especificação cujo nome ou id começa com "Tipo". Outras categorias e filtros inalterados.
+- Não validado em tela (sem acesso à loja pela nuvem): conferir em uma categoria com filtros, página recarregada à força. Se a grade tiver outro nome, a regra precisa dele. Desfazer: reverter o commit no `master`.
+
 ### 15/10/2026 — Velocidade 5: cache das fontes versionadas (PUBLICADA em 16/10)
 
 - **Correção de registro (16/10):** esta entrega foi para o `master` direto (commits `5c0759f5` e `4c9f7180`, sem PR) e publicada pela execução Actions `38844354322` (run 8150, sucesso, 16/10 03:12 UTC). As linhas abaixo foram escritas antes disso e dizem "sem publicação"; valem como descrição do que foi preparado, não do estado. Conferência pública (headers das 3 fontes) ainda não registrada.
