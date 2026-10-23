@@ -16,7 +16,21 @@ const hasTwoDayPostingDeadline = service => {
   return (carrier === 'jet' && /\bstandard\b/.test(serviceName)) ||
     (carrier === 'loggi' && /\bexpress\b/.test(serviceName))
 }
+// Correios and Jadlog: payment approved before 12h on a working day is posted the same day (head script decides the clock).
+const hasSameDayCutoff = service => /correios|jadlog|jad log/.test(normalizeServiceText(service && [service.carrier, service.service_name, service.label].filter(Boolean).join(' ')))
+const postsToday = () => typeof window === 'object' && window.peDeliveryDate && typeof window.peDeliveryDate.postaHoje === 'function' && window.peDeliveryDate.postaHoje()
 const applyPostingDeadline = service => {
+  if (service && service.shipping_line && hasSameDayCutoff(service)) {
+    const posting = service.shipping_line.posting_deadline || {}
+    return {
+      ...service,
+      pe_cutoff: true,
+      shipping_line: {
+        ...service.shipping_line,
+        posting_deadline: { ...posting, days: posting.days === 1 && postsToday() ? 0 : posting.days, working_days: true, after_approval: true }
+      }
+    }
+  }
   if (!hasTwoDayPostingDeadline(service) || !service.shipping_line) return service
   return {
     ...service,

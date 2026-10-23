@@ -771,3 +771,36 @@ test('quadros informativos: padrão ligado, painel tem o campo e os ícones exis
   const header = JSON.parse(fs.readFileSync(path.join(root, 'content/header.json'), 'utf8')).pe_header_v2
   for (const promo of header.promos) assert.ok(boxes.INFO_ICONS.includes(promo.icon), `ícone ${promo.icon} da cápsula sem ilustração`)
 })
+test('Correios and Jadlog post same day before the 12h cutoff; other carriers keep their days', () => {
+  const quoted = (carrier, name, days = 1) => service(name, 10, {
+    carrier,
+    service_name: name,
+    shipping_line: { price: 10, total_price: 10, delivery_time: { days: 4, working_days: true }, posting_deadline: { days, working_days: true, after_approval: true } }
+  })
+  const raw = [quoted('Correios', 'Sedex'), quoted('Jadlog', '.Package'), quoted('JeT', 'Standard'), quoted('Correios', 'PAC', 3)]
+  const days = (core, name) => core.parseQuote(results(raw)).services.find(item => item.service_name === name).shipping_line.posting_deadline.days
+  const open = load('template/js/custom-js/freight/core.js', {}, { window: { peDeliveryDate: { postaHoje: () => true } } }).default
+  const closed = load('template/js/custom-js/freight/core.js', {}, { window: { peDeliveryDate: { postaHoje: () => false } } }).default
+  assert.deepEqual(['Sedex', '.Package', 'Standard', 'PAC'].map(name => days(open, name)), [0, 0, 2, 3])
+  assert.deepEqual(['Sedex', '.Package', 'Standard', 'PAC'].map(name => days(closed, name)), [1, 1, 2, 3])
+  assert.equal(open.parseQuote(results(raw)).services.find(item => item.service_name === 'Sedex').pe_cutoff, true)
+  assert.equal(days(core, 'Sedex'), 1)
+})
+test('head cutoff clock: working day before 12h in Sao Paulo only', () => {
+  const html = JSON.parse(fs.readFileSync(path.join(root, 'content/code.json'), 'utf8')).html_head
+  const start = html.indexOf('var FERIADOS')
+  const end = html.indexOf('var RE_PRAZO')
+  const at = iso => {
+    const fixed = new Date(iso).getTime()
+    const Fake = class extends Date { constructor (...args) { super(...(args.length ? args : [fixed])) } }
+    const context = { window: {}, Date: Fake, Intl, NodeFilter: {} }
+    vm.runInNewContext(html.slice(start, end), context)
+    return context.window.peDeliveryDate.postaHoje()
+  }
+  assert.equal(at('2026-10-23T14:59:00Z'), true) // sexta 11:59 BRT
+  assert.equal(at('2026-10-23T15:00:00Z'), false) // sexta 12:00 BRT
+  assert.equal(at('2026-10-24T13:00:00Z'), false) // sabado
+  assert.equal(at('2026-10-25T13:00:00Z'), false) // domingo
+  assert.equal(at('2026-11-02T13:00:00Z'), false) // feriado (Finados)
+  assert.equal(at('2026-10-23T02:30:00Z'), false) // quinta 23:30 BRT (nao e sexta cedo)
+})

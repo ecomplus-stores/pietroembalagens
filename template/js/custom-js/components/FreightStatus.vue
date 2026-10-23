@@ -159,6 +159,7 @@ export default {
 .pe-fs2-line{margin:16px 0 4px}
 .pe-fs2-line__main{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600;line-height:1.35;color:#000}
 .pe-fs2-line__main strong{flex:none;font-weight:700}
+.pe-fs2-cutoff{display:block;margin-top:6px;font-size:12px;line-height:1.35;color:#555}
 .pe-fs2-line__zip,.pe-fs2-cep{display:block;margin-top:2px;font-size:13px;font-weight:400;color:#333}
 .pe-fs2-cep{margin:6px 0 12px}
 .pe-fs2-more{display:inline-block;margin:0 0 4px;padding:0;border:0;background:none;font:inherit;font-size:13px;font-weight:700;color:#874015;text-decoration:underline;cursor:pointer}
