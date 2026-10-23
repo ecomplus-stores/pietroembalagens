@@ -54,6 +54,7 @@
           <span>{{ peName(peSelected) }}<template v-if="peDate(peSelected)"> · <span>{{ peDate(peSelected) }}</span></template></span>
           <strong>{{ peCost(peSelected) }}</strong>
         </div>
+                <small v-if="peCutoffNote" class="pe-fs2-cutoff">Prazo para pagamento aprovado até 12h (dias úteis). Depois, postamos no próximo dia útil.</small>
         <small class="pe-fs2-line__zip">CEP {{ peZipLabel }} · <button type="button" class="pe-fs2-link" @click="peEditing = true">alterar</button></small>
       </div>
 
@@ -83,6 +84,7 @@
           </span>
           <strong class="pe-fs2-option__price">{{ peCost(service) }}</strong>
         </label>
+        <small v-if="peCutoffNote" class="pe-fs2-cutoff">Prazo para pagamento aprovado até 12h (dias úteis). Depois, postamos no próximo dia útil.</small>
       </div>
 
       <div

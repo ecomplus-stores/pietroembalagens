@@ -164,6 +164,8 @@ import {
           : null
       },
   
+      peCutoffNote () { return this.shippingServices.some(service => service.pe_cutoff) },
+
       productionDeadline () {
         let maxDeadline = 0
         this.shippedItems.forEach(item => {
