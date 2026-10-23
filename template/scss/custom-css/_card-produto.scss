@@ -130,6 +130,13 @@
     font-weight: 700;
   }
 
+  // Quantas unidades vêm no pacote e quanto sai cada uma (site/alteracoes-no-site/55-cro-pdp-pacote.md).
+  &__unit {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
   &__inst {
     font-size: 17px;
     line-height: 1.4;
@@ -183,4 +190,20 @@
   bottom: 6px;
   z-index: 2;
   margin: 0;
+}
+
+// CRO 23/10 (site/alteracoes-no-site/55-cro-pdp-pacote.md)
+// Chip de pacote escolhido: antes texto branco sobre cinza claro, parecia desligado.
+#product .product__ct .btn.active {
+  background: #fff;
+  border-color: #fd8043;
+  color: #3F2D25;
+  box-shadow: inset 0 0 0 1px #fd8043;
+}
+
+// Celular: o botão flutuante do WhatsApp cobria a ponta do "Comprar" fixo do rodapé.
+@media (max-width: 991.98px) {
+  #page-products a[aria-label="Fale conosco no WhatsApp"] {
+    bottom: 90px !important;
+  }
 }
