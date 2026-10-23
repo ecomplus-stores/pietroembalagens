@@ -106,7 +106,7 @@
                 :class="qntCt === 1 ? 'active' : null"
                 @click.prevent="qntCt = 1"
               >
-                Pacote
+                Pacote<template v-if="packUnits"> c/ {{ packUnits }}</template>
               </button>
               <button
                 v-for="kit in kitCta"
@@ -136,6 +136,7 @@
                 </div>
                 <pe-pdp-prices
                   :product="ghostProductForPrices"
+                  :units="packUnits * qntCt"
                   :is-literal="true"
                   :is-big="true"
                   @fix-price="price => fixedPrice = price"

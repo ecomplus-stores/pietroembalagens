@@ -40,6 +40,12 @@
       ou {{ formatMoney(price) }} em outros meios
     </div>
     <div
+      v-if="units > 1"
+      class="pe-pdp-prices__unit"
+    >
+      Pacote com {{ units }} unidades · {{ formatMoney(mainPrice / units) }} cada<template v-if="priceWithDiscount"> no Pix</template>
+    </div>
+    <div
       v-if="earnPointsFactor > 0 && !(pointsMinPrice > price)"
       class="pe-pdp-prices__points"
     >
@@ -56,6 +62,14 @@ import PeCardPrices from './PeCardPrices.vue'
 
 export default {
   name: 'PePdpPrices',
-  extends: PeCardPrices
+  extends: PeCardPrices,
+
+  props: {
+    // Unidades no preço mostrado (pacote × quantidade de pacotes); 0 esconde a linha.
+    units: {
+      type: Number,
+      default: 0
+    }
+  }
 }
 </script>

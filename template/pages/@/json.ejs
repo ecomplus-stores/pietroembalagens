@@ -10,7 +10,9 @@ if (body) {
       ...body,
       body_html: '',
       body_text: '',
-      inventory_records: []
+      inventory_records: [],
+      // custo é dado interno: não vai para o HTML público (CRO 23/10, ficha 55)
+      cost_price: undefined
     }
   }
 } else if (slug) {

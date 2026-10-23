@@ -254,6 +254,14 @@ export default {
         Date.now() < new Date(body.price_effective_date.end).getTime()
     },
 
+    // "Pacote com" do cadastro (ex.: "05 unidades"); fica fora do body (sanitizeProductBody).
+    packUnits () {
+      if (this.body._id !== getContextId()) return 0
+      const spec = (getContextBody().specifications || {}).pacote_com
+      const n = spec && spec[0] && parseInt(spec[0].text, 10)
+      return n > 1 ? n : 0
+    },
+
     ghostProductForPrices () {
       const prices = {}
       ;['price', 'base_price'].forEach(field => {
