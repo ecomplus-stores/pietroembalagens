@@ -124,7 +124,7 @@ test('component: summary under the name and section with every review, no buyer 
   const s = summary._render()
   assert.equal(s.tag, 'a')
   assert.equal(s.data.attrs.href, '#avaliacoes')
-  assert.match(textOf(s), /4,9 36 avaliações no Mercado Livre/)
+  assert.match(textOf(s), /4,9 36 avaliações$/)
   const section = mount({ sku: 'D_09_B_10', section: true }, fresh())
   await tick()
   const v = section._render()
