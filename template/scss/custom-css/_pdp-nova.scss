@@ -395,26 +395,69 @@ $pdp-muted: #8a7d75;
 
 .pdp-free-shipping {
   margin: 8px 0;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
   background: $pdp-cream;
-  font-size: 12.5px;
+  color: $pdp-brown;
+  font-size: 13.5px;
   line-height: 1.35;
 
-  a { color: $pdp-brown; text-decoration: underline; }
+  a {
+    color: $pdp-brown;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
+// Garantias (mockup B): ícone laranja de 18 px, 13,5 px, sem sublinhar o texto inteiro.
 .pdp-assurances {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
   list-style: none;
   margin: 6px 0 0;
-  padding: 8px 0 0;
+  padding: 12px 0 0;
   border-top: 1px solid $pdp-line;
-  font-size: 12.5px;
+  color: $pdp-brown;
+  font-size: 13.5px;
   line-height: 1.35;
 
-  li { margin: 0 0 4px; }
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 0;
+  }
 
-  a { color: $pdp-brown; text-decoration: underline; }
+  &__ic {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    color: $pdp-orange;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  b { font-weight: 700; }
+}
+
+// "Encontre sua embalagem" (script da loja) tem título e ícone grandes para a coluna larga; aqui fica no tamanho da caixa.
+.pdp-buy-box [data-pietro-emb-pdp] {
+  .pietro-emb-pdp-cab { padding: 10px 12px; gap: 10px; }
+  .pietro-emb-pdp-ico { flex: none; width: 32px; height: 32px; }
+  .pietro-emb-pdp-ico svg { width: 18px; height: 18px; }
+  .pietro-emb-pdp-tit { font-size: 14px; line-height: 1.25; }
+  .pietro-emb-pdp-sub { font-size: 12.5px; line-height: 1.3; }
 }
 
 .pdp-fav-text {
