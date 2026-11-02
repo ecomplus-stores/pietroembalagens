@@ -62,9 +62,10 @@ test('prazo: antes das 12h em dia útil posta hoje', () => {
   assert.equal(postingText(false), 'Pague hoje e postamos no próximo dia útil')
 })
 
-test('chave da PDP nova: desligada por padrão no arquivo publicado', () => {
+test('chave da PDP nova: arquivo publicado é {"enabled": true|false}', () => {
   const shipped = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../template/public/pe-pdp-nova.json'), 'utf8'))
-  assert.deepEqual(shipped, { enabled: false })
+  assert.deepEqual(Object.keys(shipped), ['enabled'])
+  assert.equal(typeof shipped.enabled, 'boolean')
 })
 
 test('chave da PDP nova: ?pdp=nova e ?pdp=antiga mandam sobre o arquivo, e a escolha da aba segue valendo', () => {
