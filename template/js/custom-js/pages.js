@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import AffiliateLink from './components/AffiliateLink.vue'
+import PeMlReviews from './components/PeMlReviews.vue'
 import './cart-ui'
 import './header-v2'
 import './personalized-boxes'
@@ -10,6 +11,12 @@ const screenWidth = document.body ? document.body.offsetWidth : window.screen.wi
 const affiliateLinkDiv = document.getElementById('affiliate-link')
 if (affiliateLinkDiv) {
   new Vue(AffiliateLink).$mount(affiliateLinkDiv)
+}
+
+// Avaliações do Mercado Livre depois da descrição (product-description.ejs); nada aparece sem 3+ avaliações.
+const mlReviewsDiv = document.getElementById('pe-ml-reviews')
+if (mlReviewsDiv && mlReviewsDiv.dataset.sku) {
+  new Vue({ render: h => h(PeMlReviews, { props: { sku: mlReviewsDiv.dataset.sku, section: true } }) }).$mount(mlReviewsDiv)
 }
 
 if (screenWidth >= 992) {

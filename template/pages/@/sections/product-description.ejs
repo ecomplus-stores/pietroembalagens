@@ -18,6 +18,9 @@
   </section>
 <% } %>
 
+<%# Avaliações do Mercado Livre (template/js/custom-js/ml-reviews.js): montado no navegador, só aparece com 3+ avaliações %>
+<div id="pe-ml-reviews" data-sku="<%= _.state.sku %>"></div>
+
 <%- await include('@/helpers/widgets-append', {
   _, opt: {}, field: 'productDescriptionAppend'
 }) %>
