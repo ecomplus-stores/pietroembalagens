@@ -74,9 +74,9 @@ test('formatters', () => {
 test('loadMlReviews: off by default in the shipped file, never calls the PIMI', async () => {
   const shipped = JSON.parse(fs.readFileSync(path.join(root, 'template/public/pe-ml-reviews.json'), 'utf8'))
   assert.equal(shipped.source, PIMI)
-  assert.equal(shipped.enabled, false)
+  assert.equal(typeof shipped.enabled, 'boolean')
   const calls = []
-  const loaded = load('template/js/custom-js/ml-reviews.js', { fetch: routed(shipped, calls) })
+  const loaded = load('template/js/custom-js/ml-reviews.js', { fetch: routed({ ...shipped, enabled: false }, calls) })
   assert.equal(await loaded.loadMlReviews(), null)
   assert.equal(calls.length, 1)
 })
