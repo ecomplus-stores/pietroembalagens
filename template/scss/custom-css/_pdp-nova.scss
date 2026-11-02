@@ -455,6 +455,11 @@ $pdp-muted: #8a7d75;
   .pdp-buy-box > .pe-pdp-totals:not(.pe-pdp-totals--pay) {
     display: none;
   }
+
+  // O texto curto do cadastro empurrava os botões para longe; no celular a descrição completa vem mais abaixo.
+  #product-block.pdp-nova .pdp-info .product__info {
+    display: none;
+  }
 }
 
 // Computador: 3 colunas (foto | título, escada e benefícios | caixa de compra)
