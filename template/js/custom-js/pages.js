@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import AffiliateLink from './components/AffiliateLink.vue'
 import PeMlReviews from './components/PeMlReviews.vue'
+import { loadPdpNova } from './pdp-nova'
 import './cart-ui'
 import './header-v2'
 import './personalized-boxes'
@@ -17,6 +18,16 @@ if (affiliateLinkDiv) {
 const mlReviewsDiv = document.getElementById('pe-ml-reviews')
 if (mlReviewsDiv && mlReviewsDiv.dataset.sku) {
   new Vue({ render: h => h(PeMlReviews, { props: { sku: mlReviewsDiv.dataset.sku, section: true } }) }).$mount(mlReviewsDiv)
+}
+
+// Página nova de produto: estrelas e nº de avaliações sob o código (criado em pdp-nova.js); nada aparece sem 3+ avaliações.
+if (document.getElementById('product-block')) {
+  loadPdpNova().then(isNova => {
+    const mlReviewsSummaryDiv = isNova && document.getElementById('pe-ml-reviews-summary')
+    if (mlReviewsSummaryDiv && mlReviewsSummaryDiv.dataset.sku) {
+      new Vue({ render: h => h(PeMlReviews, { props: { sku: mlReviewsSummaryDiv.dataset.sku } }) }).$mount(mlReviewsSummaryDiv)
+    }
+  }).catch(() => {})
 }
 
 if (screenWidth >= 992) {
