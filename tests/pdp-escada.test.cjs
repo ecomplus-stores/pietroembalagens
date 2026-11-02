@@ -71,7 +71,7 @@ test('chave da PDP nova: arquivo publicado é {"enabled": true|false}', () => {
 test('chave da PDP nova: ?pdp=nova e ?pdp=antiga mandam sobre o arquivo, e a escolha da aba segue valendo', () => {
   const f = path.resolve(__dirname, '../template/js/custom-js/pdp-nova.js')
   const m = { exports: {} }
-  new Function('module', 'exports', babel.transformSync(fs.readFileSync(f, 'utf8'), { filename: f, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code)(m, m.exports)
+  new Function('module', 'exports', 'require', babel.transformSync(fs.readFileSync(f, 'utf8'), { filename: f, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code)(m, m.exports, () => ({ pickShipping () {} }))
   const { pickMode } = m.exports
   assert.equal(pickMode({ search: '', stored: null, enabled: false }).isNova, false)
   assert.equal(pickMode({ search: '', stored: null, enabled: true }).isNova, true)
@@ -91,4 +91,29 @@ test('arredondamento: meio centavo sobe igual no cartão e na caixa (promoção 
   assert.equal(roundMoney(19.49), 19.49)
   const ladder = buildLadder({ price: 13.9, basePrice: 21.89, onPromotion: true, kitCta: KITS, packUnits: 0 })
   assert.equal(ladder[2].total, 66.03)
+})
+
+test('frete: resumo escolhe a opção mais barata e a mais rápida a partir do texto da lista', () => {
+  const f = path.resolve(__dirname, '../template/js/custom-js/pdp-frete.js')
+  const m = { exports: {} }
+  new Function('module', 'exports', babel.transformSync(fs.readFileSync(f, 'utf8'), { filename: f, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code)(m, m.exports)
+  const { parsePrice, parseDay, pickShipping } = m.exports
+  assert.equal(parsePrice('R$\u00a09,38'), 9.38)
+  assert.equal(parsePrice('R$ 1.234,50'), 1234.5)
+  assert.equal(parsePrice('Grátis'), 0)
+  assert.equal(parsePrice('sem preço'), null)
+  const now = new Date(2026, 10, 2)
+  assert.equal(new Date(parseDay('Chega até 06/11 (sex)', now)).getDate(), 6)
+  assert.equal(new Date(parseDay('Chega até 05/01 (ter)', new Date(2026, 11, 28))).getFullYear(), 2027)
+  const options = [
+    { name: 'Standard', when: 'Chega até 06/11 (sex)', price: 'R$ 9,38' },
+    { name: 'Loggi Ponto', when: 'Chega até 09/11 (seg)', price: 'R$ 9,91' },
+    { name: 'Sedex', when: 'Chega até 04/11 (qua)', price: 'R$ 9,94' }
+  ]
+  const picked = pickShipping(options, now)
+  assert.equal(picked.cheapest.name, 'Standard')
+  assert.equal(picked.fastest.name, 'Sedex')
+  assert.equal(picked.total, 3)
+  assert.equal(pickShipping([{ name: 'A', when: 'Chega até 04/11 (qua)', price: 'R$ 5,00' }, { name: 'B', when: 'Chega até 06/11 (sex)', price: 'R$ 9,00' }], now).fastest, null)
+  assert.equal(pickShipping([], now), null)
 })
