@@ -332,7 +332,12 @@ $pdp-muted: #8a7d75;
   &::after { display: none; }
 }
 
-.pdp-buy-box[data-ship-open] .pdp-ship-summary p {
+.pdp-buy-box[data-ship-open] .pdp-ship-summary p:not(.pdp-ship-summary__zip) {
+  display: none;
+}
+
+// CEP já guardado e frete calculado: o campo some e fica "Entrega para CEP · alterar".
+.pdp-buy-box[data-ship-collapsed]:not([data-ship-edit]) .shipping-calculator__form {
   display: none;
 }
 
@@ -355,6 +360,32 @@ $pdp-muted: #8a7d75;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+  }
+
+  p.pdp-ship-summary__zip {
+    padding: 0 0 4px;
+    border: 0;
+    font-size: 13px;
+
+    b {
+      display: inline;
+      color: $pdp-brown;
+      font-size: 13px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+  }
+
+  &__change {
+    margin-left: 8px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $pdp-brown;
+    font-family: inherit;
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   &__price {

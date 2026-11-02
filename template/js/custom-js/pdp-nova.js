@@ -47,6 +47,31 @@ const textOf = $el => ($el && $el.textContent ? $el.textContent.replace(/\s+/g, 
 const buildSummary = ($box, picked) => {
   const $summary = document.createElement('div')
   $summary.className = 'pdp-ship-summary'
+  // CEP que o calculador já guarda no navegador (localStorage "shipping-to-zip"); "alterar" mostra o campo de volta.
+  const $zipInput = $box.querySelector('#shipping-calculator-zip')
+  const zip = $zipInput ? $zipInput.value.trim() : ''
+  if (zip) {
+    const $zipLine = document.createElement('p')
+    $zipLine.className = 'pdp-ship-summary__zip'
+    $zipLine.appendChild(document.createTextNode('Entrega para '))
+    const $zip = document.createElement('b')
+    $zip.textContent = zip
+    $zipLine.appendChild($zip)
+    const $change = document.createElement('button')
+    $change.type = 'button'
+    $change.className = 'pdp-ship-summary__change'
+    $change.textContent = 'alterar'
+    $change.addEventListener('click', () => {
+      $box.setAttribute('data-ship-edit', '')
+      const $input = $box.querySelector('#shipping-calculator-zip')
+      if ($input) {
+        $input.focus()
+        $input.select()
+      }
+    })
+    $zipLine.appendChild($change)
+    $summary.appendChild($zipLine)
+  }
   ;[['Mais barato', picked.cheapest], ['Mais rápido', picked.fastest]].forEach(([label, option]) => {
     if (!option) return
     const $line = document.createElement('p')
@@ -91,13 +116,16 @@ const watchShipping = $buybox => {
     if (!picked || picked.total < 2) {
       if ($old) $old.remove()
       $box.removeAttribute('data-ship-collapsed')
+      $box.removeAttribute('data-ship-edit')
       signature = ''
       return
     }
-    const next = JSON.stringify([picked.total, picked.cheapest, picked.fastest])
+    const $zipField = $box.querySelector('#shipping-calculator-zip')
+    const next = JSON.stringify([$zipField ? $zipField.value : '', picked.total, picked.cheapest, picked.fastest])
     if ($old && next === signature) return
     signature = next
     if ($old) $old.remove()
+    $box.removeAttribute('data-ship-edit')
     $box.setAttribute('data-ship-collapsed', '')
     $box.appendChild(buildSummary($box, picked))
   }
