@@ -40,7 +40,14 @@ export const withGroupedSort = section => {
 
 export default ({ state }) => {
   const sections = getSections({ state }).map(withGroupedSort)
-  sections.push({
+  // O tema (beta.302+) já traz 'review-carousel'; repetir o mesmo name em `types` quebra o painel
+  // ("should pass uniqueItemProperties"). Só adiciona a seção da loja se o tema ainda não tiver uma com o mesmo name.
+  const push = (...novas) => {
+    novas.forEach(section => {
+      if (!sections.some(({ name }) => name === section.name)) sections.push(section)
+    })
+  }
+  push({
     label: "Grid de Avaliações",
     name: "review-carousel",
     widget: "object",
@@ -137,7 +144,7 @@ export default ({ state }) => {
       }
     ]
 })
-  sections.push({
+  push({
     label: 'Quadros personalizados (histórico do navegador)',
     name: 'personalized-boxes',
     widget: 'object',
