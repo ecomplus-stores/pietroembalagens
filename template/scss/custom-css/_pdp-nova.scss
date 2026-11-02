@@ -1,0 +1,420 @@
+// Nova página de produto: escada de pacotes, caixa de compra e 3 colunas no computador
+// (site/alteracoes-no-site/59-pdp-nova-escada-3-colunas.md no ccos-ratos). Marca: Quicksand, laranja #fd8043,
+// creme #FFFADB, marrom #3F2D25. Sem verde.
+$pdp-orange: #fd8043;
+$pdp-cream: #FFFADB;
+$pdp-brown: #3F2D25;
+$pdp-title: #6E4B3A;
+$pdp-line: #e9eef6;
+$pdp-muted: #8a7d75;
+
+// Escada de pacotes
+.pdp-ladder {
+  margin: 4px 0 12px;
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    color: $pdp-brown;
+    font-size: 14px;
+
+    span {
+      color: $pdp-muted;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 8px;
+    padding: 10px 12px;
+    border: 1px solid $pdp-line;
+    border-radius: 12px;
+    background: #fff;
+    color: $pdp-brown;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.3;
+    text-align: left;
+    cursor: pointer;
+
+    &.is-fixed {
+      cursor: default;
+    }
+
+    &.is-selected {
+      border: 2px solid $pdp-orange;
+      background: $pdp-cream;
+      padding: 9px 11px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $pdp-brown;
+      outline-offset: 2px;
+    }
+  }
+
+  &__radio {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #c9c2bb;
+    background: #fff;
+    box-shadow: inset 0 0 0 3px #fff;
+
+    .is-selected & {
+      border-color: $pdp-orange;
+      background: $pdp-orange;
+    }
+  }
+
+  &__what {
+    flex: 1;
+    min-width: 0;
+
+    b { font-weight: 700; }
+
+    small {
+      display: block;
+      font-size: 13px;
+      color: $pdp-brown;
+    }
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+
+    s {
+      color: $pdp-muted;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    b {
+      font-size: 22px;
+      line-height: 1.1;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    em {
+      font-style: normal;
+      font-size: 11px;
+      color: $pdp-muted;
+    }
+
+    i {
+      margin-top: 2px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: $pdp-orange;
+      color: $pdp-brown;
+      font-style: normal;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+  }
+
+  &__best {
+    position: absolute;
+    top: -9px;
+    right: 12px;
+    padding: 1px 7px;
+    border-radius: 6px;
+    background: $pdp-brown;
+    color: $pdp-cream;
+    font-size: 11px;
+    font-weight: 700;
+  }
+}
+
+// Total, parcelas e Pix
+.pe-pdp-totals {
+  color: $pdp-brown;
+
+  &__kicker {
+    margin: 0 0 4px;
+    color: $pdp-muted;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__main {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+  }
+
+  &__cents {
+    margin-left: 2px;
+    font-size: 17px;
+    vertical-align: top;
+    position: relative;
+    top: 4px;
+  }
+
+  &__label {
+    margin: 0 0 8px;
+    color: $pdp-muted;
+    font-size: 13px;
+  }
+
+  &__inst,
+  &__pix {
+    margin: 0 0 4px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  &__chip {
+    margin-left: 4px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: $pdp-cream;
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+// Celular: parcelas e Pix logo abaixo da escada; o total da caixa fica só no computador.
+.pdp-pay-mobile {
+  margin: 2px 0 4px;
+}
+
+// Benefícios do cadastro (some sem dado)
+.pdp-benefits {
+  list-style: none;
+  margin: 12px 0;
+  padding: 10px 12px 4px;
+  border-radius: 12px;
+  background: $pdp-cream;
+  color: $pdp-brown;
+  font-size: 13.5px;
+  line-height: 1.3;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+  }
+
+  svg { flex: none; }
+}
+
+// Caixa de compra
+.pdp-buy-box {
+  display: flex;
+  flex-direction: column;
+  color: $pdp-brown;
+
+  // "Encontre sua embalagem" (script da loja) entra logo depois dos botões; fica no fim da caixa para o prazo e o CEP aparecerem na 1ª tela.
+  > [data-pietro-emb-pdp] {
+    order: 90;
+    margin-top: 12px;
+  }
+
+  .product__buy {
+    margin-top: 10px;
+
+    div > span { display: flex; flex-direction: column; }
+  }
+
+  #addCart,
+  #goToCart {
+    display: block;
+    width: 100%;
+    margin: 0 0 8px;
+    border: 0;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.2;
+    min-height: 2.9rem;
+    padding: 0.65rem 1rem;
+    text-align: center;
+  }
+
+  #addCart {
+    background: $pdp-orange;
+    color: #fff;
+  }
+
+  #goToCart {
+    background: #FFE9DC;
+    color: #A33F0A;
+  }
+}
+
+.pdp-buy-box .shipping-calculator {
+  // O campo já tem aria-label "CEP"; sem o rótulo e sem folga a caixa cabe na 1ª tela do computador.
+  label { display: none; }
+
+  .form-group { margin-bottom: 0.5rem; }
+}
+
+.pdp-posting {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 8px 0 8px;
+  font-size: 14px;
+  line-height: 1.35;
+
+  svg { flex: none; margin-top: 2px; }
+
+  strong { display: block; font-weight: 700; }
+
+  small {
+    display: block;
+    color: $pdp-muted;
+    font-size: 12.5px;
+  }
+}
+
+.pdp-free-shipping {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: $pdp-cream;
+  font-size: 12.5px;
+  line-height: 1.35;
+
+  a { color: $pdp-brown; text-decoration: underline; }
+}
+
+.pdp-assurances {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 8px 0 0;
+  border-top: 1px solid $pdp-line;
+  font-size: 12.5px;
+  line-height: 1.35;
+
+  li { margin: 0 0 4px; }
+
+  a { color: $pdp-brown; text-decoration: underline; }
+}
+
+.pdp-fav-text {
+  display: inline-block;
+  padding: 8px 4px;
+  color: $pdp-brown;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:hover { color: $pdp-brown; }
+
+  .i-heart.active { color: $pdp-orange; }
+}
+
+.pdp-fav-icon {
+  display: none;
+  color: $pdp-orange;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+
+  &:hover { color: $pdp-orange; }
+}
+
+#product-block.pdp-nova .pdp-buybox-col:has(#product-buybox:empty) {
+  display: none;
+}
+
+// Celular e tablet: uma coluna, na ordem da ficha (foto, título, estrelas, escada, parcelas, benefícios, botões, prazo...)
+@media (max-width: 991.98px) {
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-gallery,
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-info,
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-buybox-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .pdp-buy-box > .pe-pdp-totals:not(.pe-pdp-totals--pay) {
+    display: none;
+  }
+}
+
+// Computador: 3 colunas (foto | título, escada e benefícios | caixa de compra)
+@media (min-width: 992px) {
+  #product-block.pdp-nova .container {
+    max-width: 1290px;
+  }
+
+  #product-block.pdp-nova .product > .row.pdp-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) 300px;
+    gap: 0 1.75rem;
+    align-items: start;
+  }
+
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-gallery,
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-info,
+  #product-block.pdp-nova .product > .row.pdp-grid > .pdp-buybox-col {
+    flex: none;
+    width: auto;
+    max-width: none;
+    padding: 0;
+  }
+
+  #product-block.pdp-nova .pdp-gallery .gallery__thumbs {
+    flex-basis: 76px;
+    margin-right: 1rem;
+  }
+
+  #product-block.pdp-nova .pdp-info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .product__sku {
+      order: -1;
+      margin-bottom: 0.35rem;
+    }
+
+    .product__name {
+      padding-right: 2rem;
+      font-size: clamp(1.3rem, 1.5vw, 1.5rem);
+    }
+  }
+
+  .pdp-fav-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+  }
+
+  .pdp-fav-text,
+  .pdp-pay-mobile {
+    display: none;
+  }
+
+  .pdp-buybox-col {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .pdp-buy-box {
+    padding: 18px;
+    border: 1px solid $pdp-line;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(63, 45, 37, 0.06);
+  }
+}

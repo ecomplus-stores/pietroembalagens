@@ -51,6 +51,9 @@ import AAlert from '@ecomplus/storefront-components/src/AAlert.vue'
 import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import APrices from '@ecomplus/storefront-components/src/APrices.vue'
 import PePdpPrices from '../components/PePdpPrices.vue'
+import PePdpTotals from '../components/PePdpTotals.vue'
+import { buildLadder, isChoice, buildBenefits, postingText } from '../pdp-escada'
+import { loadPdpNova } from '../pdp-nova'
 import PeBestSeller from '../components/PeBestSeller.vue'
 import PeMlReviews from '../components/PeMlReviews.vue'
 import AShare from '@ecomplus/storefront-components/src/AShare.vue'
@@ -86,6 +89,7 @@ export default {
     APicture,
     APrices,
     PePdpPrices,
+    PePdpTotals,
     PeBestSeller,
     PeMlReviews,
     AShare,
@@ -170,7 +174,12 @@ export default {
       paymentOptions: [],
       customizations: [],
       kitItems: [],
-      currentTimer: null
+      currentTimer: null,
+      // Chave da página nova (pdp-nova.js); desligada, tudo segue como antes.
+      pdpNova: false,
+      postsToday: typeof window === 'object' && window.peDeliveryDate && typeof window.peDeliveryDate.postaHoje === 'function'
+        ? Boolean(window.peDeliveryDate.postaHoje())
+        : false
     }
   },
 
@@ -264,7 +273,8 @@ export default {
       return n > 1 ? n : 0
     },
 
-    ghostProductForPrices () {
+    // Preço unitário (variação e personalização já somadas), antes da quantidade de pacotes e do desconto por quantidade.
+    unitPrices () {
       const prices = {}
       ;['price', 'base_price'].forEach(field => {
         let price = this.selectedVariation[field] || getPrice(this.body) || this.body[field]
@@ -275,12 +285,19 @@ export default {
             }
           })
         }
-        price *= this.qntCt
         prices[field] = price
         if (field === 'base_price' && checkOnPromotion(this.body) && this.body['base_price']) {
-          prices[field] = this.body['base_price'] * this.qntCt
+          prices[field] = this.body['base_price']
         }
       })
+      return prices
+    },
+
+    ghostProductForPrices () {
+      const prices = {
+        price: this.unitPrices.price * this.qntCt,
+        base_price: this.unitPrices.base_price * this.qntCt
+      }
       prices.price = this.addProgressiveDiscount(prices.price)
       const ghostProduct = { ...this.body }
       console.log(ghostProduct)
@@ -293,6 +310,41 @@ export default {
         ...ghostProduct,
         ...prices
       }
+    },
+
+    // Escada de pacotes em cartões (mesmos degraus e descontos de window.productKitCtas).
+    ladder () {
+      if (this.isKit) return []
+      return buildLadder({
+        price: this.unitPrices.price,
+        basePrice: this.unitPrices.base_price,
+        onPromotion: checkOnPromotion(this.body),
+        kitCta: this.kitCta,
+        packUnits: this.packUnits
+      })
+    },
+
+    isLadderChoice () {
+      return isChoice(this.ladder)
+    },
+
+    selectedStep () {
+      return this.ladder.find(({ qnt }) => qnt === this.qntCt) || this.ladder[0]
+    },
+
+    totalLabel () {
+      const { qntCt } = this
+      return `total de ${qntCt} ${qntCt > 1 ? 'pacotes' : 'pacote'}`
+    },
+
+    // Caixa de benefícios: serve_para, material e cuidado do cadastro (fica fora do body, como pacote_com).
+    benefits () {
+      if (this.body._id !== getContextId()) return []
+      return buildBenefits(getContextBody().specifications)
+    },
+
+    postingLine () {
+      return postingText(this.postsToday)
     },
 
     hasVariations () {
@@ -578,6 +630,9 @@ export default {
       this.fetchProduct().then(presetQntToBuy)
     }
     this.isFavorite = checkFavorite(this.body._id || this.productId, this.ecomPassport)
+    if (this.isSSR && !this.isQuickview) {
+      loadPdpNova().then(isNova => { this.pdpNova = isNova }).catch(() => {})
+    }
   },
 
   mounted () {

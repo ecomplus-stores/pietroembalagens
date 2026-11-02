@@ -30,6 +30,13 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 02/11/2026 — PDP nova: escada de pacotes, parcelas/Pix, prazo 12h e 3 colunas (atrás de chave, DESLIGADA)
+
+- Ficha 59 do ccos-ratos. Escada em cartões no lugar dos chips "Pacote c/ N" (mesmos degraus e descontos de `window.productKitCtas`), caixa de compra à direita (total, parcelas e Pix lidos de `list_payments`, botões, prazo "Pague até 12h e postamos hoje" via `window.peDeliveryDate.postaHoje()`, CEP, frete grátis SP, troca, Pagar.me, WhatsApp), caixa de benefícios (`serve_para`/`material`/`cuidado`, some sem dado) e 3 colunas a partir de 992 px.
+- **Chave:** `template/public/pe-pdp-nova.json` (`enabled`, hoje `false`). `?pdp=nova` mostra a nova, `?pdp=antiga` força a de antes (vale na aba). Desligada, a página é a de hoje: o código antigo continua em `TheProduct.html` (`v-else-if="!pdpNova"`).
+- Código: `pdp-escada.js` (contas), `pdp-nova.js` (chave e colunas), `components/PePdpTotals.vue`, `scss/custom-css/_pdp-nova.scss`; testes em `tests/pdp-escada.test.cjs`.
+- Desfazer: pôr `enabled` em `false` e push no `master`, ou reverter o merge do PR.
+
 ### 18/10/2026 — Filtro "Tipo" no topo dos filtros laterais (PR #92, publicada)
 
 - A ordem dos filtros da categoria vem da busca; não há opção no painel. `SearchEngine.js` (`updateFilters`) passa a pôr no início o filtro de especificação cujo nome ou id começa com "Tipo". Outras categorias e filtros inalterados.
