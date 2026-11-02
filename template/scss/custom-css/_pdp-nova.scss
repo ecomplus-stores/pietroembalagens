@@ -222,6 +222,16 @@ $pdp-muted: #8a7d75;
   flex-direction: column;
   color: $pdp-brown;
 
+  // Ordem da caixa: total, parcelas/Pix, prazo, CEP (+ frete), botões, frete grátis SP, favoritos, garantias.
+  > .pdp-posting { order: 1; }
+  > .shipping-calculator { order: 2; }
+  > .pdp-ship-summary { order: 3; }
+  > .product__buy,
+  > .product__out-of-stock { order: 4; }
+  > .pdp-free-shipping { order: 5; }
+  > .pdp-fav-text { order: 6; }
+  > .pdp-assurances { order: 7; }
+
   // "Encontre sua embalagem" (script da loja) entra logo depois dos botões; fica no fim da caixa para o prazo e o CEP aparecerem na 1ª tela.
   > [data-pietro-emb-pdp] {
     order: 90;
@@ -314,6 +324,53 @@ $pdp-muted: #8a7d75;
       font-weight: 700;
       white-space: nowrap;
     }
+  }
+}
+
+.pdp-buy-box[data-ship-collapsed]:not([data-ship-open]) .shipping-calculator__services {
+  .list-group,
+  &::after { display: none; }
+}
+
+.pdp-buy-box[data-ship-open] .pdp-ship-summary p {
+  display: none;
+}
+
+.pdp-ship-summary {
+  margin: 0 0 4px;
+  font-size: 13px;
+  line-height: 1.35;
+
+  p {
+    margin: 0 0 4px;
+    padding: 6px 10px;
+    border: 1px solid $pdp-line;
+    border-radius: 10px;
+  }
+
+  b {
+    display: block;
+    color: $pdp-muted;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  &__price {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  &__more {
+    padding: 2px 0;
+    border: 0;
+    background: none;
+    color: $pdp-brown;
+    font-family: inherit;
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
 
