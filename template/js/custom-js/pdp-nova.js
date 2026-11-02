@@ -17,6 +17,28 @@ export const pickMode = ({ search, stored, enabled }) => {
 const readStored = () => { try { return window.sessionStorage.getItem(STORE_KEY) } catch (e) { return null } }
 const writeStored = value => { try { window.sessionStorage.setItem(STORE_KEY, value) } catch (e) {} }
 
+// O slider da galeria (Glide) mede a largura quando monta; se a coluna mudar de largura depois (chave resolvida,
+// janela redimensionada), a foto fica maior que a janela e aparece cortada. Avisa o slider para medir de novo.
+const watchGallery = $col => {
+  const remeasure = () => window.dispatchEvent(new Event('resize'))
+  const isCut = () => {
+    const $track = $col.querySelector('.glide__track')
+    const $slide = $col.querySelector('.glide__slide')
+    return Boolean($track && $slide && $slide.offsetWidth > $track.offsetWidth + 2)
+  }
+  if (typeof ResizeObserver === 'function') {
+    let last
+    let timer
+    new ResizeObserver(() => {
+      if ($col.offsetWidth === last) return
+      last = $col.offsetWidth
+      clearTimeout(timer)
+      timer = setTimeout(remeasure, 150)
+    }).observe($col)
+  }
+  ;[400, 1200, 3000].forEach(ms => setTimeout(() => { if (isCut()) remeasure() }, ms))
+}
+
 // Coluna da caixa de compra: só existe na página nova (na de hoje a linha tem duas colunas, e o CSS da loja conta com isso).
 const prepareDom = () => {
   const $block = document.getElementById('product-block')
@@ -24,7 +46,10 @@ const prepareDom = () => {
   if (!$row) return false
   $block.classList.add('pdp-nova')
   $row.classList.add('pdp-grid')
-  $row.children[0] && $row.children[0].classList.add('pdp-gallery')
+  if ($row.children[0]) {
+    $row.children[0].classList.add('pdp-gallery')
+    watchGallery($row.children[0])
+  }
   $row.children[1] && $row.children[1].classList.add('pdp-info')
   const $sku = $block.querySelector('.product__sku')
   if ($sku && !document.getElementById('pe-ml-reviews-summary')) {
