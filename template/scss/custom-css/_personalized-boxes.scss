@@ -96,7 +96,8 @@
   // Parcelas ("em até 6x de R$ 3,15 / sem juros"): a linha tem altura reservada para o preço não pular quando ela chega.
   .pe-boxes__inst { min-height: 34px; margin-top: 2px; font-size: 13px; font-weight: 500; line-height: 17px; color: #3F2D25; }
 
-  .pe-boxes__off { margin-left: 4px; font-size: 14px; font-weight: 700; color: #874015; }
+  // Selo de desconto igual ao dos cartões de vitrine (.pe-card-prices__tag): fundo azul, texto branco.
+  .pe-boxes__off { display: inline-block; margin-left: 6px; padding: 4px 6px; border-radius: 3px; background: #37B8F7; color: #fff; font-size: 13px; font-weight: 700; line-height: 1; vertical-align: middle; white-space: nowrap; }
 
   .pe-boxes__arrow {
     position: absolute;
@@ -182,7 +183,7 @@
     .pe-boxes__name { min-height: 2.6em; font-size: 12px; }
     .pe-boxes__old { margin-top: 4px; font-size: 11px; }
     .pe-boxes__price { font-size: 17px; }
-    .pe-boxes__off { font-size: 11px; }
+    .pe-boxes__off { margin-left: 4px; padding: 3px 5px; font-size: 11px; }
     .pe-boxes__inst { min-height: 28px; font-size: 11px; line-height: 14px; }
 
     .pe-boxes__card--info {
