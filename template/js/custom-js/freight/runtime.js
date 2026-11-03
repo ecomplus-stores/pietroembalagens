@@ -19,6 +19,11 @@ export function uiVersion () {
   return enabled() && runtime.config && runtime.config.ui === 'v2' ? 'v2' : 'v1'
 }
 
+// Avisos "pagamento até 12h / postamos hoje" (carrinho, PDP): escondidos por padrão; religa com "avisoPostagemHoje": true em pe-freight-config.json.
+export function cutoffNoteOn () {
+  return runtime.config && runtime.config.avisoPostagemHoje === true
+}
+
 export function autoSelectFree () {
   return uiVersion() === 'v2' && runtime.config.autoSelectFree === true
 }
