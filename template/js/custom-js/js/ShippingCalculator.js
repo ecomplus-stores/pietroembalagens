@@ -1,5 +1,5 @@
 import core from '../freight/core'
-import { runtime, enabled, uiVersion, autoSelectFree, readAutoSelect, clearAutoSelect, init, getPreference, setPreference } from '../freight/runtime'
+import { runtime, enabled, uiVersion, cutoffNoteOn, autoSelectFree, readAutoSelect, clearAutoSelect, init, getPreference, setPreference } from '../freight/runtime'
 import { deliveryText } from '../freight/delivery-date'
 import FreightStatus from '../components/FreightStatus.vue'
 import {
@@ -164,7 +164,7 @@ import {
           : null
       },
   
-      peCutoffNote () { return this.shippingServices.some(service => service.pe_cutoff) },
+      peCutoffNote () { return cutoffNoteOn() && this.shippingServices.some(service => service.pe_cutoff) },
 
       productionDeadline () {
         let maxDeadline = 0
