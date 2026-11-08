@@ -26,6 +26,11 @@ export function fastestFirstLimit () {
   return typeof value === 'number' && value >= 0 ? value : 5
 }
 
+// Avisos "pagamento até 12h / postamos hoje" (carrinho, PDP): escondidos por padrão; religa com "avisoPostagemHoje": true em pe-freight-config.json.
+export function cutoffNoteOn () {
+  return runtime.config && runtime.config.avisoPostagemHoje === true
+}
+
 export function autoSelectFree () {
   return uiVersion() === 'v2' && runtime.config.autoSelectFree === true
 }

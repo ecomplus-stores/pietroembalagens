@@ -54,6 +54,7 @@ import PePdpPrices from '../components/PePdpPrices.vue'
 import PePdpTotals from '../components/PePdpTotals.vue'
 import { buildLadder, isChoice, buildBenefits, postingText } from '../pdp-escada'
 import { loadPdpNova } from '../pdp-nova'
+import { runtime, cutoffNoteOn, init as initFreightConfig } from '../freight/runtime'
 import PeBestSeller from '../components/PeBestSeller.vue'
 import PeMlReviews from '../components/PeMlReviews.vue'
 import AShare from '@ecomplus/storefront-components/src/AShare.vue'
@@ -343,6 +344,10 @@ export default {
       return buildBenefits(getContextBody().specifications)
     },
 
+    peCutoffNoteOn () {
+      return runtime.ready && cutoffNoteOn()
+    },
+
     postingLine () {
       return postingText(this.postsToday)
     },
@@ -604,6 +609,7 @@ export default {
   },
 
   created () {
+    initFreightConfig()
     const { productKitCtas } = window
     if (this.product && Array.isArray(productKitCtas)) {
       let kitCta = this.product.sku && productKitCtas.find(({ skus }) => {
