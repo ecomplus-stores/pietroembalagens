@@ -1,7 +1,8 @@
 // Chave da nova página de produto (site/alteracoes-no-site/59-pdp-nova-escada-3-colunas.md no ccos-ratos).
 // /pe-pdp-nova.json liga e desliga para todo mundo; ?pdp=nova mostra a nova e ?pdp=antiga força a de antes
 // (guardado na aba, para seguir navegando). Qualquer falha ou arquivo desligado: a página de hoje, sem mudança nenhuma.
-import { pickShipping } from './pdp-frete'
+import { pickShipping, orderShipping } from './pdp-frete'
+import { fastestFirstLimit } from './freight/runtime'
 
 const CONFIG = '/pe-pdp-nova.json'
 const STORE_KEY = 'pe-pdp'
@@ -72,8 +73,7 @@ const buildSummary = ($box, picked) => {
     $zipLine.appendChild($change)
     $summary.appendChild($zipLine)
   }
-  ;[['Mais barato', picked.cheapest], ['Mais rápido', picked.fastest]].forEach(([label, option]) => {
-    if (!option) return
+  orderShipping(picked, fastestFirstLimit()).forEach(([label, option]) => {
     const $line = document.createElement('p')
     const $label = document.createElement('b')
     $label.textContent = label
@@ -121,7 +121,7 @@ const watchShipping = $buybox => {
       return
     }
     const $zipField = $box.querySelector('#shipping-calculator-zip')
-    const next = JSON.stringify([$zipField ? $zipField.value : '', picked.total, picked.cheapest, picked.fastest])
+    const next = JSON.stringify([$zipField ? $zipField.value : '', picked.total, picked.cheapest, picked.fastest, fastestFirstLimit()])
     if ($old && next === signature) return
     signature = next
     if ($old) $old.remove()

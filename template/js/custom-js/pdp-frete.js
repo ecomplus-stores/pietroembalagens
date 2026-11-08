@@ -15,6 +15,18 @@ export const parseDay = (text, now = new Date()) => {
   return day.getTime()
 }
 
+// Ordem das duas linhas do resumo. Diferença de preço pequena (até `limit` reais): mais rápido primeiro; maior: mais barato primeiro.
+// limit 0 (ou inválido) = ordem antiga (barato, rápido). Quando a mesma opção é a mais barata e a mais rápida, só há uma linha.
+export const orderShipping = (picked, limit) => {
+  if (!picked) return []
+  const cheap = ['Mais barato', picked.cheapest]
+  if (!picked.fastest) return [cheap]
+  const fast = ['Mais rápido', picked.fastest]
+  const max = Number(limit)
+  const diff = Math.round((picked.fastest.cost - picked.cheapest.cost) * 100) / 100
+  return max > 0 && diff <= max ? [fast, cheap] : [cheap, fast]
+}
+
 export const pickShipping = (options, now) => {
   const list = (options || [])
     .map(option => ({ ...option, cost: parsePrice(option.price), day: parseDay(option.when, now) }))

@@ -2,6 +2,7 @@
   "enabled": true,
   "ui": "v2",
   "autoSelectFree": false,
+  "freteRapidoPrimeiroAte": 5,
   "avisoPostagemHoje": false,
   "rolloutPercent": 100,
   "maxCandidates": 12,
