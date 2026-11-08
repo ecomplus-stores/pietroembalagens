@@ -97,7 +97,7 @@ test('frete: resumo escolhe a opção mais barata e a mais rápida a partir do t
   const f = path.resolve(__dirname, '../template/js/custom-js/pdp-frete.js')
   const m = { exports: {} }
   new Function('module', 'exports', babel.transformSync(fs.readFileSync(f, 'utf8'), { filename: f, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code)(m, m.exports)
-  const { parsePrice, parseDay, pickShipping } = m.exports
+  const { parsePrice, parseDay, pickShipping, orderShipping } = m.exports
   assert.equal(parsePrice('R$\u00a09,38'), 9.38)
   assert.equal(parsePrice('R$ 1.234,50'), 1234.5)
   assert.equal(parsePrice('Grátis'), 0)
@@ -116,4 +116,12 @@ test('frete: resumo escolhe a opção mais barata e a mais rápida a partir do t
   assert.equal(picked.total, 3)
   assert.equal(pickShipping([{ name: 'A', when: 'Chega até 04/11 (qua)', price: 'R$ 5,00' }, { name: 'B', when: 'Chega até 06/11 (sex)', price: 'R$ 9,00' }], now).fastest, null)
   assert.equal(pickShipping([], now), null)
+  // diferença R$ 0,56 (até R$ 5): mais rápido primeiro; acima: mais barato primeiro; limite 0: ordem antiga
+  assert.deepEqual(orderShipping(picked, 5).map(l => l[0]), ['Mais rápido', 'Mais barato'])
+  assert.deepEqual(orderShipping(picked, 0).map(l => l[0]), ['Mais barato', 'Mais rápido'])
+  const far = pickShipping([{ name: 'A', when: 'Chega até 06/11 (sex)', price: 'R$ 9,00' }, { name: 'B', when: 'Chega até 04/11 (qua)', price: 'R$ 14,50' }], now)
+  assert.deepEqual(orderShipping(far, 5).map(l => l[0]), ['Mais barato', 'Mais rápido'])
+  const same = pickShipping([{ name: 'A', when: 'Chega até 04/11 (qua)', price: 'R$ 9,00' }, { name: 'B', when: 'Chega até 06/11 (sex)', price: 'R$ 9,00' }], now)
+  assert.deepEqual(orderShipping(same, 5).map(l => l[1].name), ['A'])
+  assert.deepEqual(orderShipping(null, 5), [])
 })

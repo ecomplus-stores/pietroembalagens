@@ -19,6 +19,13 @@ export function uiVersion () {
   return enabled() && runtime.config && runtime.config.ui === 'v2' ? 'v2' : 'v1'
 }
 
+// PDP: até quantos reais a opção mais rápida pode custar a mais que a mais barata para aparecer primeiro (padrão 5).
+// 0 em "freteRapidoPrimeiroAte" no pe-freight-config.json volta à ordem antiga (mais barato primeiro).
+export function fastestFirstLimit () {
+  const value = runtime.ready && runtime.config ? runtime.config.freteRapidoPrimeiroAte : undefined
+  return typeof value === 'number' && value >= 0 ? value : 5
+}
+
 export function autoSelectFree () {
   return uiVersion() === 'v2' && runtime.config.autoSelectFree === true
 }
