@@ -17,11 +17,12 @@
     margin: 0 auto;
     padding: 10px 16px 0;
 
-    // Computador (como o Mercado Livre): linha 1 = logo, busca e promoções; linha 2 = menu à esquerda, conta e sacola à direita
+    // Computador (como o Mercado Livre): linha 1 = logo, busca, promoções, conta e sacola; linha 2 = menu com a largura toda.
+    // (Com OFERTAS e Natal o menu passou de ~1080 px e não cabia mais ao lado de conta e sacola: sobrepunha "Entrar ou cadastrar".)
     @media (min-width: 992px) {
       display: grid;
-      grid-template-columns: auto minmax(0, 600px) minmax(0, 1fr) auto;
-      grid-template-areas: "logo search promo promo" "nav nav nav buttons";
+      grid-template-columns: auto minmax(0, 480px) minmax(0, 1fr) auto;
+      grid-template-areas: "logo search promo buttons" "nav nav nav nav";
       column-gap: 24px;
       row-gap: 4px;
       align-items: center;
@@ -136,7 +137,7 @@
     min-width: 0;
     height: 32px;
 
-    @media (min-width: 992px) { height: 38px; justify-self: end; width: 320px; }
+    @media (min-width: 992px) { height: 38px; justify-self: end; width: 100%; max-width: 300px; }
   }
   .pe-h2__promo-msg {
     grid-area: 1 / 1;
@@ -219,9 +220,9 @@
     text-align: left;
 
     small { display: none; }
-    strong { font-size: 13px; font-weight: 700; }
-    @media (max-width: 1359px) { display: none; }
-    @media (min-width: 992px) { display: flex; }
+    strong { max-width: 150px; overflow: hidden; font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    // o texto só aparece onde cabe; abaixo de 1360 px fica o ícone (o link tem title). A ordem importa: a última regra vence.
+    @media (min-width: 1360px) { display: flex; }
   }
 
   #cart-count.badge {
@@ -290,7 +291,7 @@
   .pe-h2__mitem--offer, .pe-h2__mitem--natal { font-weight: 700; .pe-h2__new { top: -4px; } }
 
   // Computador: Ver todas, Natal e categorias em destaque
-  .pe-h2__nav-block { grid-area: nav; min-width: 0; padding-right: 12px; }
+  .pe-h2__nav-block { grid-area: nav; min-width: 0; }
   .pe-h2__nav {
     display: flex;
     align-items: center;
@@ -299,7 +300,7 @@
     color: #3F2D25;
     font-size: 13px;
 
-    // laptops estreitos: o menu e os ícones da conta dividem a mesma linha
+    // laptops estreitos: fonte menor para o menu caber em 1 linha (a partir de ~1100 px)
     @media (max-width: 1359px) { gap: 13px; font-size: 12.5px; }
     white-space: nowrap;
 
@@ -326,9 +327,24 @@
   // aqui só se desfazem a linha laranja na base e a quebra de linha, que no bloco laranja não fazem sentido.
   .pe-h2__nav.header__nav {
     border-bottom: 0 !important;
-    flex-wrap: nowrap !important;
+    // se um dia entrarem mais itens do que cabem, o menu quebra para a 2ª linha em vez de sobrepor a conta
+    flex-wrap: wrap !important;
+    row-gap: 4px;
     padding-bottom: 0;
     text-align: left;
+  }
+
+  // Menu em pílulas (content/header.json -> pe_header_v2.menu_pills). OFERTAS em pílula marrom, Natal em creme;
+  // as demais categorias seguem em texto, com fundo creme translúcido no hover. Fonte inalterada.
+  .pe-h2__nav--pills.header__nav {
+    gap: 4px;
+
+    .pe-h2__cat { padding: 5px 8px; border-bottom: 0; border-radius: 50px; }
+    .pe-h2__cat:hover, .pe-h2__cat:focus { background: rgba(255, 248, 220, .35); border-bottom: 0; }
+    .pe-h2__cat--all { padding-left: 0; }
+    .pe-h2__cat--all:hover, .pe-h2__cat--all:focus { background: none; }
+    .pe-h2__cat--offer { background: #3F2D25; color: #FFF8DC; &:hover, &:focus { background: #3F2D25; color: #FFF8DC; } }
+    .pe-h2__cat--natal { background: #FFF8DC; &:hover, &:focus { background: #FFF8DC; } }
   }
 
   // Submenus: estilo atual, com a linha de cima marrom (o laranja some sobre o laranja)
