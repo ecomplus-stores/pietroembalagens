@@ -334,6 +334,19 @@
     text-align: left;
   }
 
+  // Menu em pílulas (content/header.json -> pe_header_v2.menu_pills). OFERTAS em pílula marrom, Natal em creme;
+  // as demais categorias seguem em texto, com fundo creme translúcido no hover. Fonte inalterada.
+  .pe-h2__nav--pills.header__nav {
+    gap: 4px;
+
+    .pe-h2__cat { padding: 5px 8px; border-bottom: 0; border-radius: 50px; }
+    .pe-h2__cat:hover, .pe-h2__cat:focus { background: rgba(255, 248, 220, .35); border-bottom: 0; }
+    .pe-h2__cat--all { padding-left: 0; }
+    .pe-h2__cat--all:hover, .pe-h2__cat--all:focus { background: none; }
+    .pe-h2__cat--offer { background: #3F2D25; color: #FFF8DC; &:hover, &:focus { background: #3F2D25; color: #FFF8DC; } }
+    .pe-h2__cat--natal { background: #FFF8DC; &:hover, &:focus { background: #FFF8DC; } }
+  }
+
   // Submenus: estilo atual, com a linha de cima marrom (o laranja some sobre o laranja)
   .header__nav .header__submenu {
     border-top-color: #3F2D25 !important;

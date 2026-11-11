@@ -48,3 +48,9 @@ O `code.json` e o `_styles.scss` têm regras com `!important` e por `#header`. A
 ## Conferido
 
 Ver "Validação" no PR: build com a chave `false` e `true`, `node --test tests/freight.test.cjs`, HTML do topo, do info-bar e do carrossel idênticos ao `master` com `false`, busca instantânea (computador), minicart, contador do carrinho, login, menu lateral, megamenu e submenus. Observação: no celular a busca instantânea não abre a caixa por cima, igual ao site no ar (decisão da ficha 16); o campo envia para `/search`.
+
+## Menu em pílulas (11/11/2026)
+
+`content/header.json` → `pe_header_v2.menu_pills` (`true` = no ar). No computador, OFERTAS em pílula marrom (#3F2D25, texto creme #FFF8DC) e Natal em pílula creme; fonte inalterada.
+
+- **Rollback:** `"menu_pills": false`, commit e push no `master` (dá para fazer pelo GitHub web, no celular). Atua no build, ~3 min.

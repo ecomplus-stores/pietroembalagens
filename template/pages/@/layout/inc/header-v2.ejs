@@ -192,7 +192,7 @@ const benefitIcons = {
     <% if (categories && categories.length) { %>
       <div class="pe-h2__nav-block d-none d-lg-block">
         <%# header__nav header__nav--full: as regras de submenu do site (dropdown vertical e gaveta do "Ver todas") dependem dessas classes %>
-        <nav class="pe-h2__nav header__nav header__nav--full">
+        <nav class="pe-h2__nav header__nav header__nav--full<%= v2.menu_pills ? ' pe-h2__nav--pills' : '' %>">
           <% if (hasAllDepartments) { %>
             <div class="d-inline-block">
               <a
