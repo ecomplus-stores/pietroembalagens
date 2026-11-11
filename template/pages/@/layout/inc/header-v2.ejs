@@ -5,6 +5,11 @@ const v2 = header.pe_header_v2
 const promos = (v2.promos || []).filter(promo => promo && promo.title)
 const seasonal = v2.seasonal && v2.seasonal.enabled ? v2.seasonal : null
 const offer = v2.offer && v2.offer.enabled && v2.offer.link && v2.offer.label ? v2.offer : null
+// "Ver todas": a gaveta lista as categorias na ordem da API; a de ofertas vai para o topo
+const offerSlug = offer ? String(offer.link).replace(/^\/+/, '').split(/[?#]/)[0] : ''
+const allDepartments = offerSlug
+  ? [..._.categories.filter(({ slug }) => slug === offerSlug), ..._.categories.filter(({ slug }) => slug !== offerSlug)]
+  : _.categories
 const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
   const [path, name] = pathAndName.split('?')
   return { path, name }
@@ -200,7 +205,7 @@ const benefitIcons = {
               </a>
               <nav class="header__submenu header__submenu--full" id="s-all">
                 <div class="row">
-                  <% _.categories.forEach(({ name, slug, parent, _id }) => { %>
+                  <% allDepartments.forEach(({ name, slug, parent, _id }) => { %>
                     <% if (!parent) { %>
                       <div class="col-12 col-lg-<%- isCategoriesNavFull ? '2' : '4' %>">
                         <a id="sd-all-<%= _id %>" href="/<%= slug %>">
