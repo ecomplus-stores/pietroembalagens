@@ -4,6 +4,7 @@
 const v2 = header.pe_header_v2
 const promos = (v2.promos || []).filter(promo => promo && promo.title)
 const seasonal = v2.seasonal && v2.seasonal.enabled ? v2.seasonal : null
+const offer = v2.offer && v2.offer.enabled && v2.offer.link && v2.offer.label ? v2.offer : null
 const mobileNav = (v2.mobile_nav || []).map(pathAndName => {
   const [path, name] = pathAndName.split('?')
   return { path, name }
@@ -164,6 +165,12 @@ const benefitIcons = {
 
     <%# Celular: menu em rolagem lateral com links diretos para as categorias %>
     <nav class="pe-h2__mnav" aria-label="Categorias">
+      <% if (offer) { %>
+        <a class="pe-h2__mitem pe-h2__mitem--offer" href="<%= offer.link %>">
+          <% if (offer.tag) { %><span class="pe-h2__new"><%= offer.tag %></span><% } %>
+          <%= offer.label %>
+        </a>
+      <% } %>
       <% if (seasonal) { %>
         <a class="pe-h2__mitem pe-h2__mitem--natal" href="<%= seasonal.link %>">
           <% if (seasonal.tag) { %><span class="pe-h2__new"><%= seasonal.tag %></span><% } %>
@@ -218,6 +225,14 @@ const benefitIcons = {
                   <% }) %>
                 </div>
               </nav>
+            </div>
+          <% } %>
+          <% if (offer) { %>
+            <div class="d-inline-block">
+              <a class="pe-h2__cat pe-h2__cat--offer" href="<%= offer.link %>">
+                <% if (offer.tag) { %><span class="pe-h2__new"><%= offer.tag %></span><% } %>
+                <%= offer.label %>
+              </a>
             </div>
           <% } %>
           <% if (seasonal) { %>

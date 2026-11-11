@@ -1,7 +1,6 @@
 {
   "categories_list": {
     "featured": [
-      "/caixas-em-promocao?OFERTAS 11.11",
       "/caixas-para-presente?Caixas para presente",
       "/caixas-embalagens-para-doces-e-brigadeiro?Caixas P/ Doces",
       "/caixas-com-berco?Caixas com berço",
@@ -46,6 +45,13 @@
         "link": ""
       }
     ],
+    "offer": {
+      "enabled": true,
+      "label": "OFERTAS 11.11",
+      "tag": "",
+      "link": "/caixas-em-promocao",
+      "bolinha": "/img/uploads/desktop_bolinha_ofertas-11-11.png"
+    },
     "seasonal": {
       "enabled": true,
       "label": "Natal",
