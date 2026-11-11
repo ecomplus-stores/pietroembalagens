@@ -1,6 +1,7 @@
 {
   "categories_list": {
     "featured": [
+      "/caixas-em-promocao?OFERTAS 11.11",
       "/caixas-para-presente?Caixas para presente",
       "/caixas-embalagens-para-doces-e-brigadeiro?Caixas P/ Doces",
       "/caixas-com-berco?Caixas com berço",
@@ -12,23 +13,6 @@
     "full_width": true
   },
   "menu_all_departments": true,
-  "centralized_logo": false,
-  "marketing_stripe": {
-    "text": "5% OFF Na Primeira Compra! CUPOM: BEMVINDO5",
-    "link": "/.",
-    "color": "#3F2D25"
-  },
-  "alphabetical_order_submenu": true,
-  "popup": "",
-  "name_all_departments": "Ver todas",
-  "search_input": true,
-  "desktop_megamenu": true,
-  "full_width_submenu": false,
-  "contacts_stripe": {
-    "pages": [],
-    "phone_wpp": false,
-    "socials": true
-  },
   "pe_header_v2": {
     "enabled": true,
     "promo_rotate_ms": 4000,
@@ -143,5 +127,22 @@
         "img": "/img/uploads/desktop_bolinhas_sacola.png"
       }
     ]
+  },
+  "centralized_logo": false,
+  "marketing_stripe": {
+    "text": "5% OFF Na Primeira Compra! CUPOM: BEMVINDO5",
+    "link": "/.",
+    "color": "#3F2D25"
+  },
+  "alphabetical_order_submenu": true,
+  "popup": "",
+  "name_all_departments": "Ver todas",
+  "search_input": true,
+  "desktop_megamenu": true,
+  "full_width_submenu": false,
+  "contacts_stripe": {
+    "pages": [],
+    "phone_wpp": false,
+    "socials": true
   }
 }
