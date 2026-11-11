@@ -2,6 +2,7 @@
 const peHeaderV2 = (_.cms('header') || {}).pe_header_v2
 const peV2 = Boolean(peHeaderV2 && peHeaderV2.enabled)
 const peSeasonal = peV2 && peHeaderV2.seasonal && peHeaderV2.seasonal.enabled ? peHeaderV2.seasonal : null
+const peOffer = peV2 && peHeaderV2.offer && peHeaderV2.offer.enabled && peHeaderV2.offer.bolinha ? peHeaderV2.offer : null
 _%>
 <%_ if (peV2) { _%>
 <section class="pe-h2 pe-h2__stories" id="category-carousel">
@@ -10,6 +11,14 @@ _%>
     <a href="javascript:;" data-pe-see-all>Ver todas</a>
   </div>
   <ul class="pe-h2__stories-list">
+    <% if (peOffer) { %>
+      <li>
+        <a class="pe-h2__story pe-h2__story--offer" href="<%= peOffer.link %>">
+          <span class="pe-h2__ring"><span class="pe-h2__disc"><img src="<%= peOffer.bolinha %>" alt="" width="130" height="160" loading="lazy"></span></span>
+          <span class="pe-h2__label"><%= peOffer.label %></span>
+        </a>
+      </li>
+    <% } %>
     <% if (peSeasonal) { %>
       <li>
         <a class="pe-h2__story pe-h2__story--natal" href="<%= peSeasonal.link %>">

@@ -287,7 +287,7 @@
 
     &:hover, &:focus { color: #3F2D25; text-decoration: none; }
   }
-  .pe-h2__mitem--natal { font-weight: 700; .pe-h2__new { top: -4px; } }
+  .pe-h2__mitem--offer, .pe-h2__mitem--natal { font-weight: 700; .pe-h2__new { top: -4px; } }
 
   // Computador: Ver todas, Natal e categorias em destaque
   .pe-h2__nav-block { grid-area: nav; min-width: 0; padding-right: 12px; }
