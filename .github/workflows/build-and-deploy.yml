@@ -91,7 +91,7 @@ jobs:
 
       - name: Preserve prepared build evidence
         if: steps.build.outputs.mode == 'build'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: prepared-build-${{ github.sha }}-${{ github.run_attempt }}
           path: |
@@ -116,7 +116,7 @@ jobs:
 
       - name: Preserve baseline before changing production
         if: steps.build.outputs.mode == 'build'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: production-baseline-${{ github.sha }}-${{ github.run_attempt }}
           path: ${{ env.DEPLOY_EVIDENCE_DIR }}/production-before.json
@@ -141,7 +141,7 @@ jobs:
 
       - name: Preserve production resource identifiers
         if: always() && steps.build.outputs.mode == 'build'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: production-resources-${{ github.sha }}-${{ github.run_attempt }}
           path: |
