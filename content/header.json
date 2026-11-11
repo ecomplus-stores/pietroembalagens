@@ -14,6 +14,7 @@
   "menu_all_departments": true,
   "pe_header_v2": {
     "enabled": true,
+    "menu_pills": true,
     "promo_rotate_ms": 4000,
     "promos": [
       {
