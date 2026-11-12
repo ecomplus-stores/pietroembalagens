@@ -30,6 +30,15 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 12/11/2026 — Pixel próprio: carrinho, WhatsApp e etapas do checkout (PREPARADO, não publicado)
+
+- Plano `ccos-ratos/.claude/plans/plano-pixel-proprio-v2.md`, fase 3. Nada visual muda. O pixel (`window.pimi.track`) passa a receber `view_cart` (rota do carrinho), `remove_from_cart` (`ecomCart.on('removeItem')`, fora de `#/confirmation`), `whatsapp_click` (clique em link de WhatsApp; o link nunca é enviado) e `checkout_step` dados/entrega/pagamento.
+- Código: ponte do pixel em `content/code.json` → `html_body`; etapas em `template/public/assets/pe-checkout-enhancements.dfadb4c59f4d.js` (função `avisarPixel`, chamada depois do GA4, em `try` próprio, espera o pixel por até 8 s). **O helper antigo `…27a9b0b1a9f9.js` fica no repositório**: HTML em cache e PWA ainda pedem ele.
+- O `sw.js` só muda neste PR por causa do hash novo do helper; mudança só no `html_body` não atualiza a PWA.
+- Fora desta entrega: cálculo de frete (`shipping_quote`) e cupom (`coupon_apply`), sem gancho limpo.
+- Publicar: ninguém salva "Código" no painel da E-Com Plus até o deploy terminar; `git fetch` antes do merge. Depois da primeira compra real, conferir se `remove_from_cart` não dispara sozinho no fim do pedido.
+- Desfazer: reverter o commit do PR **mantendo o helper novo no repositório** (mesmo procedimento de `docs/ENTREGA-JAVASCRIPT-CHECKOUT.md`). Os eventos param de chegar e nada mais muda.
+
 ### 02/11/2026 — PDP nova: escada de pacotes, parcelas/Pix, prazo 12h e 3 colunas (atrás de chave, DESLIGADA)
 
 - Ficha 59 do ccos-ratos. Escada em cartões no lugar dos chips "Pacote c/ N" (mesmos degraus e descontos de `window.productKitCtas`), caixa de compra à direita (total, parcelas e Pix lidos de `list_payments`, botões, prazo "Pague até 12h e postamos hoje" via `window.peDeliveryDate.postaHoje()`, CEP, frete grátis SP, troca, Pagar.me, WhatsApp), caixa de benefícios (`serve_para`/`material`/`cuidado`, some sem dado) e 3 colunas a partir de 992 px.
