@@ -49,6 +49,7 @@
     "offer": {
       "enabled": true,
       "label": "BLACK NOVEMBER",
+      "blink": true,
       "tag": "",
       "link": "/caixas-em-promocao",
       "bolinha": "/img/uploads/desktop_bolinha_black-november.png"
