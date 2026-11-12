@@ -523,6 +523,18 @@
   animation: pe-h2-blink 1.2s ease-in-out infinite;
   @media (prefers-reduced-motion: reduce) { animation: none; }
 }
+// No celular o item é só texto: com a chave ligada ele vira a mesma pílula marrom do computador,
+// senão o pisca apaga o texto sobre o laranja.
+#header.pe-h2 .pe-h2__mitem--offer.pe-h2--blink {
+  align-self: flex-end;
+  margin-bottom: -4px;
+  padding: 4px 11px;
+  border-radius: 50px;
+  background: #3F2D25;
+  color: #FFF8DC;
+
+  &:hover, &:focus { color: #FFF8DC; }
+}
 @keyframes pe-h2-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: .35; }
