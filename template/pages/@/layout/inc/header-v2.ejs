@@ -172,7 +172,7 @@ const benefitIcons = {
     <%# Celular: menu em rolagem lateral com links diretos para as categorias %>
     <nav class="pe-h2__mnav" aria-label="Categorias">
       <% if (offer) { %>
-        <a class="pe-h2__mitem pe-h2__mitem--offer" href="<%= offer.link %>">
+        <a class="pe-h2__mitem pe-h2__mitem--offer<%= offer.blink ? ' pe-h2--blink' : '' %>" href="<%= offer.link %>">
           <% if (offer.tag) { %><span class="pe-h2__new"><%= offer.tag %></span><% } %>
           <%= offer.label %>
         </a>
@@ -235,7 +235,7 @@ const benefitIcons = {
           <% } %>
           <% if (offer) { %>
             <div class="d-inline-block">
-              <a class="pe-h2__cat pe-h2__cat--offer" href="<%= offer.link %>">
+              <a class="pe-h2__cat pe-h2__cat--offer<%= offer.blink ? ' pe-h2--blink' : '' %>" href="<%= offer.link %>">
                 <% if (offer.tag) { %><span class="pe-h2__new"><%= offer.tag %></span><% } %>
                 <%= offer.label %>
               </a>
