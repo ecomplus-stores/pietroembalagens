@@ -48,10 +48,10 @@
     ],
     "offer": {
       "enabled": true,
-      "label": "OFERTAS 11.11",
+      "label": "BLACK NOVEMBER",
       "tag": "",
       "link": "/caixas-em-promocao",
-      "bolinha": "/img/uploads/desktop_bolinha_ofertas-11-11.png"
+      "bolinha": "/img/uploads/desktop_bolinha_black-november.png"
     },
     "seasonal": {
       "enabled": true,
