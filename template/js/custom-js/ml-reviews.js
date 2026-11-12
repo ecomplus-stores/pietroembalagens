@@ -5,6 +5,8 @@ const CONFIG = '/pe-ml-reviews.json'
 const ALLOWED_SOURCE = 'https://reviews.pietroembalagens.com.br/'
 const MAX_AGE_MS = 10 * 24 * 60 * 60 * 1000
 const MIN_TOTAL = 3
+// Avaliações das compras do site, aprovadas na tela Reviews do PIMI (site/alteracoes-no-site/63-avaliacoes-site-pdp.md).
+const SITE_SOURCE = ALLOWED_SOURCE + 'api/codex/reviews/public/'
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
 let pending
 
@@ -55,4 +57,30 @@ export const loadMlReviews = () => {
     })
     .catch(() => null)
   return pending
+}
+
+const siteCache = {}
+
+// Avaliações do site aparecem a partir de 1 (decisão do Rafael, 12/11); falha = lista vazia.
+export const loadSiteReviews = sku => {
+  if (!sku) return Promise.resolve([])
+  if (!siteCache[sku]) {
+    siteCache[sku] = getJson(SITE_SOURCE + encodeURIComponent(sku) + '?limit=50', { credentials: 'omit' })
+      .then(body => (body && Array.isArray(body.reviews) ? body.reviews : [])
+        .filter(r => r && Number.isInteger(r.rating) && r.rating >= 1 && r.rating <= 5)
+        .map(r => ({ rating: r.rating, text: typeof r.comment === 'string' ? r.comment : '', date: r.responded_at, source: 'site' })))
+      .catch(() => [])
+  }
+  return siteCache[sku]
+}
+
+// Junta ML (já filtrado pelo mínimo de 3) e site. Nota no topo só com 3+ no total; sem texto nenhum, nada aparece.
+export const combineReviews = (ml, site) => {
+  const mlTotal = ml ? ml.total : 0
+  const total = mlTotal + site.length
+  const reviews = site.filter(validReview).concat(ml ? ml.reviews : [])
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+  if (!reviews.length) return null
+  const sum = (ml ? ml.rating * mlTotal : 0) + site.reduce((acc, r) => acc + r.rating, 0)
+  return { rating: sum / total, total, showScore: total >= MIN_TOTAL, hasMl: mlTotal > 0, hasSite: site.length > 0, reviews }
 }
