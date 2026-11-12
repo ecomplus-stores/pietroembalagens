@@ -166,3 +166,66 @@ test('wiring: summary in TheProduct, section after the description', () => {
   const pages = fs.readFileSync(path.join(root, 'template/js/custom-js/pages.js'), 'utf8')
   assert.ok(pages.includes("getElementById('pe-ml-reviews')"))
 })
+
+// Avaliações do site (aprovadas no PIMI), decisão do Rafael em 12/11: a partir de 1, sem nota no topo abaixo de 3.
+const SITE = 'https://reviews.pietroembalagens.com.br/api/codex/reviews/public/'
+const siteBody = (reviews) => ({ sku: 'BMG_08_B_TV_10', total: reviews.length, reviews })
+const siteReview = (extra = {}) => ({ id: 49, rating: 5, comment: 'Embalagens impecáveis', responded_at: '2026-10-03T12:55:15+00:00', customer_first_name: 'Damona', ...extra })
+const routedSite = (body, calls = [], mlData = data({ updated_at: new Date().toISOString() })) => (url, options) => {
+  calls.push({ url, options })
+  if (url.startsWith('/pe-ml-reviews.json')) return response({ enabled: true, source: PIMI })
+  if (url.startsWith(SITE)) return typeof body === 'function' ? body() : response(body)
+  return response(mlData)
+}
+
+test('loadSiteReviews: reads the PIMI without cookies, once per sku; failure is empty', async () => {
+  const calls = []
+  const loaded = load('template/js/custom-js/ml-reviews.js', { fetch: routedSite(siteBody([siteReview(), siteReview({ rating: 9 }), null]), calls) })
+  const list = await loaded.loadSiteReviews('BMG_08_B_TV_10')
+  await loaded.loadSiteReviews('BMG_08_B_TV_10')
+  assert.equal(calls.length, 1)
+  assert.equal(calls[0].url, SITE + 'BMG_08_B_TV_10?limit=50')
+  assert.equal(calls[0].options.credentials, 'omit')
+  assert.deepEqual(JSON.parse(JSON.stringify(list)), [{ rating: 5, text: 'Embalagens impecáveis', date: '2026-10-03T12:55:15+00:00', source: 'site' }])
+  const down = load('template/js/custom-js/ml-reviews.js', { fetch: routedSite(() => Promise.reject(new Error('rede'))) })
+  assert.equal((await down.loadSiteReviews('X')).length, 0)
+  assert.equal((await down.loadSiteReviews('')).length, 0)
+})
+
+test('combineReviews: site from 1, score only with 3+, weighted with ML', () => {
+  const { combineReviews } = load('template/js/custom-js/ml-reviews.js')
+  const s = (rating, text = 'ok', date = '2026-10-03') => ({ rating, text, date, source: 'site' })
+  assert.equal(combineReviews(null, []), null)
+  assert.equal(combineReviews(null, [s(5, '')]), null, 'sem texto nada aparece')
+  const one = combineReviews(null, [s(5)])
+  assert.equal(one.total, 1)
+  assert.equal(one.showScore, false)
+  assert.equal(combineReviews(null, [s(5), s(4), s(3, '')]).showScore, true)
+  const mixed = combineReviews({ rating: 4.9, total: 36, reviews: [{ rating: 5, text: 'ml', date: '2026-09' }] }, [s(1, 'ruim', '2026-11-01')])
+  assert.equal(mixed.total, 37)
+  assert.equal(Math.round(mixed.rating * 100) / 100, 4.79)
+  assert.equal(mixed.reviews[0].text, 'ruim', 'mais recente primeiro')
+  assert.equal(mixed.hasMl && mixed.hasSite, true)
+})
+
+test('component: one site review shows only the section, no name, no score on top', async () => {
+  const noMl = data({ updated_at: new Date().toISOString(), items: {} })
+  const summary = mount({ sku: 'BMG_08_B_TV_10' }, routedSite(siteBody([siteReview()]), [], noMl))
+  await tick()
+  assert.equal(summary._render().tag, undefined, 'sem nota no topo com 1 avaliação')
+  const section = mount({ sku: 'BMG_08_B_TV_10', section: true }, routedSite(siteBody([siteReview()]), [], noMl))
+  await tick()
+  const v = section._render()
+  const text = textOf(v)
+  assert.equal(v.data.attrs.id, 'avaliacoes')
+  assert.match(text, /Avaliação de quem comprou no site/)
+  assert.match(text, /Embalagens impecáveis out\/2026 · Compra verificada no site/)
+  assert.doesNotMatch(text, /Damona/)
+  assert.equal(flat(v).filter(n => n.data && n.data.staticClass === 'pe-ml-reviews__score').length, 0)
+})
+
+test('component: ML 3+ plus site says both origins', async () => {
+  const section = mount({ sku: 'D_09_B_10', section: true }, routedSite({ reviews: [siteReview()] }))
+  await tick()
+  assert.match(textOf(section._render()), /37 avaliações de compras verificadas no site e no Mercado Livre/)
+})

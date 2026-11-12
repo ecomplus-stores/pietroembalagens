@@ -1,6 +1,6 @@
 <template>
   <a
-    v-if="data && !section"
+    v-if="data && data.showScore && !section"
     class="pe-ml-reviews-summary"
     href="#avaliacoes"
   >
@@ -21,12 +21,15 @@
   </a>
 
   <section
-    v-else-if="data"
+    v-else-if="data && section"
     id="avaliacoes"
     class="pe-ml-reviews container"
   >
     <h2 class="pe-ml-reviews__title">O que as clientes dizem</h2>
-    <div class="pe-ml-reviews__score">
+    <div
+      v-if="data.showScore"
+      class="pe-ml-reviews__score"
+    >
       <strong>{{ rating }}</strong>
       <div>
         <span
@@ -41,9 +44,15 @@
             :class="{ 'is-on': i <= rounded }"
           ><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>
         </span>
-        <p>{{ data.total }} avaliações de compras verificadas no Mercado Livre</p>
+        <p>{{ data.total }} avaliações de compras verificadas {{ origin }}</p>
       </div>
     </div>
+    <p
+      v-else
+      class="pe-ml-reviews__lead"
+    >
+      {{ data.total === 1 ? 'Avaliação' : 'Avaliações' }} de quem comprou no site
+    </p>
 
     <article
       v-for="(review, index) in shown"
@@ -84,10 +93,10 @@
 </template>
 
 <script>
-// Avaliações do Mercado Livre: resumo abaixo do nome (padrão) e seção completa depois da descrição (prop `section`).
+// Avaliações do Mercado Livre e do site: resumo abaixo do nome (padrão, só com 3+) e seção completa depois da descrição (prop `section`).
 // Sem nome de quem avaliou (dado pessoal) e sem link para o ML (decisão do Rafael, 02/11: não mandar a cliente comparar preço lá);
 // todas as notas, das mais recentes para as mais antigas, sem filtro.
-import { loadMlReviews, findMlReviews, formatRating, formatMonth } from '../ml-reviews'
+import { loadMlReviews, findMlReviews, loadSiteReviews, combineReviews, formatRating, formatMonth } from '../ml-reviews'
 
 export default {
   name: 'PeMlReviews',
@@ -108,6 +117,9 @@ export default {
     rounded () {
       return Math.round(this.data.rating)
     },
+    origin () {
+      return [this.data.hasSite && 'no site', this.data.hasMl && 'no Mercado Livre'].filter(Boolean).join(' e ')
+    },
     shown () {
       return this.expanded ? this.data.reviews : this.data.reviews.slice(0, this.collapsed)
     }
@@ -115,6 +127,7 @@ export default {
 
   methods: {
     meta (review) {
+      if (review.source === 'site') return [formatMonth(review.date), 'Compra verificada no site'].filter(Boolean).join(' · ')
       return [
         formatMonth(review.date),
         Number.isInteger(review.pack) && review.pack > 1 ? `Comprou: pacote com ${review.pack}` : '',
@@ -125,8 +138,8 @@ export default {
 
   created () {
     if (!this.sku) return
-    loadMlReviews().then(data => {
-      this.data = findMlReviews(data, this.sku)
+    Promise.all([loadMlReviews(), loadSiteReviews(this.sku)]).then(([ml, site]) => {
+      this.data = combineReviews(findMlReviews(ml, this.sku), site)
     })
   }
 }

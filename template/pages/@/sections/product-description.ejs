@@ -18,7 +18,7 @@
   </section>
 <% } %>
 
-<%# Avaliações do Mercado Livre (template/js/custom-js/ml-reviews.js): montado no navegador, só aparece com 3+ avaliações %>
+<%# Avaliações do Mercado Livre e do site (template/js/custom-js/ml-reviews.js): montado no navegador; ML com 3+, site a partir de 1 %>
 <div id="pe-ml-reviews" data-sku="<%= _.state.sku %>"></div>
 
 <%- await include('@/helpers/widgets-append', {
