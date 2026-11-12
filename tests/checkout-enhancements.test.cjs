@@ -110,6 +110,48 @@ test('checkout steps retain the existing event names, BRL payload, both channels
   assert.deepEqual(f.stored, { pe_dados: '1', pe_entrega: '1', pe_pagamento: '1' })
 })
 
+test('each checkout step also reaches the PIMI pixel once, after GA4, with the cart id', () => {
+  const f = fixture({ hasCpf: true })
+  const pixel = []
+  f.window.pimi = { track: (...args) => pixel.push(args) }
+  f.window.ecomCart = { data: { _id: 'cart-1' } }
+  for (const hash of ['#/checkout', '#/checkout/1', '#/checkout/1', '#/checkout/2', '#/cart', '#/checkout/2']) {
+    f.changeHash(hash); f.mutation(); f.drain()
+  }
+  // The payload objects are created inside the vm context, so compare by value.
+  assert.deepEqual(JSON.parse(JSON.stringify(pixel)), [
+    ['checkout_step', { cart_id: 'cart-1', step_name: 'dados', step_number: 1 }],
+    ['checkout_step', { cart_id: 'cart-1', step_name: 'entrega', step_number: 2 }],
+    ['checkout_step', { cart_id: 'cart-1', step_name: 'pagamento', step_number: 3 }]
+  ])
+  assert.equal(f.window.dataLayer.length, 3)
+})
+
+test('a missing pixel is retried a bounded number of times and a late pixel still gets the step', () => {
+  // The module runs once on load: with the CPF field present it emits the first step right away.
+  const f = fixture({ hasCpf: true })
+  assert.equal(f.window.dataLayer.length, 1)
+  let retries = 0
+  while (f.timers.length) { f.timers.shift()(); retries++ }
+  assert.equal(retries, 16)
+  const g = fixture({ hasCpf: true })
+  const pixel = []
+  g.timers.shift()()
+  assert.equal(g.timers.length, 1)
+  g.window.pimi = { track: (...args) => pixel.push(args) }
+  g.drain()
+  assert.deepEqual(JSON.parse(JSON.stringify(pixel)), [['checkout_step', { cart_id: '', step_name: 'dados', step_number: 1 }]])
+  assert.equal(g.window.dataLayer.length, 1)
+})
+
+test('a pixel that throws cannot remove a GA4 event or stop the next steps', () => {
+  const f = fixture({ hasCpf: true })
+  f.window.pimi = { track: () => { throw new Error('pixel fora') } }
+  for (const hash of ['#/checkout', '#/checkout/1', '#/checkout/2']) { f.changeHash(hash); f.mutation(); f.drain() }
+  assert.deepEqual(f.calls.map(args => args[1]), ['checkout_dados_cadastrais', 'add_shipping_info', 'add_payment_info'])
+  assert.deepEqual(Array.from(f.window.dataLayer, value => value.event), ['checkout_dados_cadastrais', 'add_shipping_info', 'add_payment_info'])
+})
+
 test('a previous session step and a queued update after leaving checkout cannot produce another event', () => {
   const f = fixture({ hash: '#/checkout/1', stored: { pe_entrega: '1' } })
   assert.equal(f.window.dataLayer.length, 0)
