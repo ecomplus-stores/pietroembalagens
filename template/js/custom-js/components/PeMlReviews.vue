@@ -71,7 +71,31 @@
           :class="{ 'is-on': i <= review.rating }"
         ><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>
       </span>
-      <p class="pe-ml-reviews__text">{{ review.text }}</p>
+      <p
+        v-if="review.text"
+        class="pe-ml-reviews__text"
+      >{{ review.text }}</p>
+      <div
+        v-if="review.photos && review.photos.length"
+        class="pe-ml-reviews__photos"
+      >
+        <a
+          v-for="(photo, n) in review.photos"
+          :key="photo"
+          :href="photo"
+          target="_blank"
+          rel="noopener"
+          :aria-label="`Abrir a foto ${n + 1} da cliente em tamanho grande`"
+        >
+          <img
+            :src="photo"
+            :alt="`Foto ${n + 1} enviada pela cliente`"
+            loading="lazy"
+            width="88"
+            height="88"
+          >
+        </a>
+      </div>
       <p class="pe-ml-reviews__meta">
         {{ meta(review) }}
       </p>

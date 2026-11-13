@@ -61,6 +61,14 @@ export const loadMlReviews = () => {
 
 const siteCache = {}
 
+// Fotos que a cliente mandou junto com a avaliação (opcionais, até 3). O PIMI só entrega as de avaliação aprovada;
+// aqui só passa nome de arquivo no formato que ele grava, para o endereço da foto nunca sair do PIMI da Pietro.
+const PHOTO_NAME = /^\d+-[\w-]{16}\.jpg$/
+const sitePhotos = photos => (Array.isArray(photos) ? photos : [])
+  .filter(name => typeof name === 'string' && PHOTO_NAME.test(name))
+  .slice(0, 3)
+  .map(name => SITE_SOURCE + 'foto/' + name)
+
 // Avaliações do site aparecem a partir de 1 (decisão do Rafael, 12/11); falha = lista vazia.
 export const loadSiteReviews = sku => {
   if (!sku) return Promise.resolve([])
@@ -68,17 +76,17 @@ export const loadSiteReviews = sku => {
     siteCache[sku] = getJson(SITE_SOURCE + encodeURIComponent(sku) + '?limit=50', { credentials: 'omit' })
       .then(body => (body && Array.isArray(body.reviews) ? body.reviews : [])
         .filter(r => r && Number.isInteger(r.rating) && r.rating >= 1 && r.rating <= 5)
-        .map(r => ({ rating: r.rating, text: typeof r.comment === 'string' ? r.comment : '', date: r.responded_at, source: 'site' })))
+        .map(r => ({ rating: r.rating, text: typeof r.comment === 'string' ? r.comment : '', date: r.responded_at, source: 'site', photos: sitePhotos(r.photos) })))
       .catch(() => [])
   }
   return siteCache[sku]
 }
 
-// Junta ML (já filtrado pelo mínimo de 3) e site. Nota no topo só com 3+ no total; sem texto nenhum, nada aparece.
+// Junta ML (já filtrado pelo mínimo de 3) e site. Nota no topo só com 3+ no total; sem texto nem foto, nada aparece.
 export const combineReviews = (ml, site) => {
   const mlTotal = ml ? ml.total : 0
   const total = mlTotal + site.length
-  const reviews = site.filter(validReview).concat(ml ? ml.reviews : [])
+  const reviews = site.filter(r => validReview(r) || (r.photos && r.photos.length > 0)).concat(ml ? ml.reviews : [])
     .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
   if (!reviews.length) return null
   const sum = (ml ? ml.rating * mlTotal : 0) + site.reduce((acc, r) => acc + r.rating, 0)
