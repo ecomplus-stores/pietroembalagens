@@ -192,15 +192,18 @@ for (const route of ['/json', '/no-transform', '/encoded']) {
 }
 
 for (const resource of ['html', 'script']) {
-  test(`reverse proxy ${resource}: preserves the real upstream response and bypasses middleware entirely`, async () => {
+  // Security: the renderer proxy forwards visitor headers to any URL (SSRF to the GCP
+  // metadata server), so the exported handler must refuse it without reaching upstream.
+  test(`reverse proxy ${resource}: route is disabled and never reaches the upstream`, async () => {
     const route = '/~reverse-proxy/?url=' + encodeURIComponent(`http://127.0.0.1:${upstreamPort}/${resource}`)
     const original = await request(originalPort, route)
     const result = await request(compressedPort, route)
-    assert.equal(result.status, 200)
-    for (const header of ['content-type', 'content-length', 'content-encoding', 'cache-control', 'vary', 'access-control-allow-origin']) {
-      assert.equal(result.headers[header], original.headers[header], header)
-    }
+    assert.equal(original.status, 200)
+    assert.equal(result.status, 404)
+    assert.equal(result.headers['access-control-allow-origin'], undefined)
+    assert.equal(result.headers['content-encoding'], undefined)
     assert.equal(result.headers['x-test-compression-installed'], 'false')
-    assert.deepEqual(result.body, original.body)
+    assert.equal(result.body.toString(), 'Not Found')
+    assert.notDeepEqual(result.body, original.body)
   })
 }
