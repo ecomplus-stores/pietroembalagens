@@ -534,6 +534,16 @@
                   >+</button>
                   <span>{{ customQnt > 1 ? 'pacotes' : 'pacote' }}</span>
                 </div>
+                <div
+                  v-if="customNudge"
+                  class="pdp-ladder__nudge"
+                >
+                  <span>Com <b>{{ customNudge.qnt }} pacotes</b> sai {{ customNudge.off }}% OFF: <b>+ {{ formatMoney(customNudge.extra) }}</b> por mais 1 pacote</span>
+                  <button
+                    type="button"
+                    @click="pickStep(customNudge.qnt)"
+                  >Levar {{ customNudge.qnt }}</button>
+                </div>
               </div>
             </div>
 

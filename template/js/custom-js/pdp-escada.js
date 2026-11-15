@@ -65,6 +65,14 @@ export const buildCustomStep = ({ qnt, price, basePrice, onPromotion, kitCta, pa
   return makeStep({ qnt, discount, price, basePrice, hasFullPrice, packUnits })
 }
 
+// Empurrãozinho: só quando falta 1 pacote para o degrau mais econômico (ex.: 4 → 5). Fora disso, null.
+// extra = quanto o total sobe ao ir para o degrau; off = o selo do cartão desse degrau.
+export const nudgeFor = (customStep, ladder) => {
+  const best = (ladder || []).find(step => step.isBest)
+  if (!customStep || !best || customStep.qnt !== best.qnt - 1 || customStep.qnt < 2) return null
+  return { qnt: best.qnt, extra: roundMoney(best.total - customStep.total), off: best.off }
+}
+
 // "3% OFF a partir de 2, 5% a partir de 5", a partir dos degraus da escada.
 export const discountHint = ladder => (ladder || [])
   .filter(step => step.discount > 0)
