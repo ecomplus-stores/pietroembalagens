@@ -604,3 +604,124 @@ $pdp-muted: #8a7d75;
     box-shadow: 0 4px 18px rgba(63, 45, 37, 0.06);
   }
 }
+
+// Cartão "Outra quantidade" e cartões mais finos (só com a chave pe-pdp-qtd ligada; classe pdp-ladder--qtd)
+.pdp-ladder--qtd {
+  .pdp-ladder__hint {
+    margin: 0 0 8px;
+    color: $pdp-title;
+    font-size: 13px;
+  }
+
+  .pdp-ladder__card {
+    margin-bottom: 6px;
+    padding: 6px 12px;
+    line-height: 1.2;
+
+    &.is-selected {
+      padding: 5px 11px;
+    }
+  }
+
+  .pdp-ladder__what small {
+    font-size: 12px;
+  }
+
+  .pdp-ladder__price {
+    b {
+      font-size: 19px;
+    }
+
+    em {
+      line-height: 1.1;
+    }
+
+    i {
+      margin-top: 1px;
+    }
+  }
+
+  .pdp-ladder__best {
+    top: -8px;
+  }
+
+  .pdp-ladder__custom {
+    display: block;
+    cursor: default;
+  }
+
+  .pdp-ladder__custom-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .pdp-ladder__stepper {
+    display: flex;
+    align-items: center;
+    margin: 6px 0 2px 28px;
+
+    button {
+      width: 34px;
+      height: 34px;
+      border: 1px solid $pdp-orange;
+      border-radius: 10px;
+      background: #fff;
+      color: $pdp-orange;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+
+    input {
+      width: 64px;
+      height: 34px;
+      margin: 0 6px;
+      border: 1px solid #e0d6d0;
+      border-radius: 10px;
+      color: $pdp-brown;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+      }
+    }
+
+    span {
+      margin-left: 6px;
+      color: $pdp-title;
+      font-size: 13px;
+    }
+  }
+
+  .pdp-ladder__wa {
+    display: block;
+    margin: 4px 0 0 28px;
+    color: $pdp-title;
+    font-size: 12px;
+
+    u {
+      color: $pdp-orange;
+    }
+  }
+}

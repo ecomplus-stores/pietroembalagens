@@ -436,6 +436,7 @@
             <div
               v-if="ladder.length"
               class="pdp-ladder"
+              :class="{ 'pdp-ladder--qtd': hasCustomQnt }"
             >
               <div
                 v-if="isLadderChoice"
@@ -444,15 +445,19 @@
                 <strong>Quantos pacotes?</strong>
                 <span>Preço total</span>
               </div>
+              <p
+                v-if="hasCustomQnt"
+                class="pdp-ladder__hint"
+              >Escolha uma opção ou digite outra quantidade.</p>
               <component
                 v-for="step in ladder"
                 :key="step.qnt"
                 :is="isLadderChoice ? 'button' : 'div'"
                 :type="isLadderChoice ? 'button' : null"
                 class="pdp-ladder__card"
-                :class="{ 'is-selected': isLadderChoice && step.qnt === qntCt, 'is-fixed': !isLadderChoice }"
-                :aria-pressed="isLadderChoice ? String(step.qnt === qntCt) : null"
-                @click="isLadderChoice && (qntCt = step.qnt)"
+                :class="{ 'is-selected': isLadderChoice && !isCustomQnt && step.qnt === qntCt, 'is-fixed': !isLadderChoice }"
+                :aria-pressed="isLadderChoice ? String(!isCustomQnt && step.qnt === qntCt) : null"
+                @click="isLadderChoice && pickStep(step.qnt)"
               >
                 <span
                   v-if="step.isBest"
@@ -474,6 +479,69 @@
                   <i v-if="step.off > 0">{{ step.off }}% OFF</i>
                 </span>
               </component>
+              <div
+                v-if="hasCustomQnt && customStep"
+                class="pdp-ladder__card pdp-ladder__custom"
+                :class="{ 'is-selected': isCustomQnt }"
+              >
+                <button
+                  type="button"
+                  class="pdp-ladder__custom-top"
+                  :aria-pressed="String(isCustomQnt)"
+                  @click="setCustomQnt(customQnt)"
+                >
+                  <span
+                    class="pdp-ladder__radio"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="pdp-ladder__what">
+                    <b>Outra quantidade</b>
+                    <small v-if="!isCustomQnt">Quantos precisar<template v-if="customHint"> · {{ customHint }}</template></small>
+                    <small v-else><template v-if="customStep.units">{{ customStep.units }} unid. · </template>{{ formatMoney(customStep.each) }} cada</small>
+                  </span>
+                  <span
+                    v-if="isCustomQnt"
+                    class="pdp-ladder__price"
+                  >
+                    <s v-if="customStep.compareTotal">{{ formatMoney(customStep.compareTotal) }}</s>
+                    <b>{{ formatMoney(customStep.total) }}</b>
+                    <em>total</em>
+                    <i v-if="customStep.off > 0">{{ customStep.off }}% OFF</i>
+                  </span>
+                </button>
+                <div
+                  v-if="isCustomQnt"
+                  class="pdp-ladder__stepper"
+                >
+                  <button
+                    type="button"
+                    aria-label="Diminuir pacotes"
+                    :disabled="customQnt <= 1"
+                    @click="setCustomQnt(customQnt - 1)"
+                  >−</button>
+                  <input
+                    type="number"
+                    inputmode="numeric"
+                    min="1"
+                    aria-label="Quantidade de pacotes"
+                    :value="customQnt"
+                    @change="setCustomQnt($event.target.value); $event.target.value = customQnt"
+                  >
+                  <button
+                    type="button"
+                    aria-label="Aumentar pacotes"
+                    @click="setCustomQnt(customQnt + 1)"
+                  >+</button>
+                  <span>{{ customQnt > 1 ? 'pacotes' : 'pacote' }}</span>
+                </div>
+                <a
+                  v-if="isCustomQnt"
+                  class="pdp-ladder__wa"
+                  href="https://wa.me/5511945764807?text=Oi!%20Quero%20pedir%20mais%20de%2020%20pacotes"
+                  target="_blank"
+                  rel="noopener"
+                >Mais de 20 pacotes? <u>Fale com a gente no WhatsApp</u></a>
+              </div>
             </div>
 
             <slot
