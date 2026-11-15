@@ -7,7 +7,7 @@ const file = path.resolve(__dirname, '../template/js/custom-js/pdp-escada.js')
 const module_ = { exports: {} }
 const code = babel.transformSync(fs.readFileSync(file, 'utf8'), { filename: file, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code
 new Function('module', 'exports', code)(module_, module_.exports)
-const { buildLadder, isChoice, buildBenefits, postingText, roundMoney, tierFor, clampQnt, buildCustomStep, discountHint } = module_.exports
+const { buildLadder, isChoice, buildBenefits, postingText, roundMoney, tierFor, clampQnt, buildCustomStep, discountHint, nudgeFor } = module_.exports
 const KITS = [{ qnt: 2, discount: 3 }, { qnt: 5, discount: 5 }]
 const cents = n => Math.round(n * 100)
 
@@ -189,4 +189,14 @@ test('chave do cartão Outra quantidade: publicada {"enabled": boolean}; ?qtd=no
   assert.equal(pickQtdMode({ search: '?qtd=antiga', stored: null, enabled: true }).isNova, false)
   assert.equal(pickQtdMode({ search: '', stored: 'nova', enabled: false }).isNova, true)
   assert.equal(pickQtdMode({ search: '?qtd=lixo', stored: 'lixo', enabled: false }).isNova, false)
+})
+
+test('empurrãozinho: só com 4 pacotes (falta 1 para os 5), em reais', () => {
+  const base = { price: 19.49, basePrice: 19.49, onPromotion: false, kitCta: KITS, packUnits: 10 }
+  const ladder = buildLadder(base)
+  const at = q => nudgeFor(buildCustomStep({ ...base, qnt: q }), ladder)
+  assert.deepEqual(at(4), { qnt: 5, extra: 16.96, off: 5 })
+  for (const q of [1, 2, 3, 5, 6, 7]) assert.equal(at(q), null, `${q} pacotes`)
+  assert.equal(nudgeFor(null, ladder), null)
+  assert.equal(nudgeFor(buildCustomStep({ ...base, qnt: 4 }), buildLadder({ ...base, kitCta: [] })), null)
 })

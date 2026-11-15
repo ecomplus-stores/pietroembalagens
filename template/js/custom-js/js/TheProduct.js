@@ -52,7 +52,7 @@ import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import APrices from '@ecomplus/storefront-components/src/APrices.vue'
 import PePdpPrices from '../components/PePdpPrices.vue'
 import PePdpTotals from '../components/PePdpTotals.vue'
-import { buildLadder, isChoice, buildBenefits, postingText, tierFor, clampQnt, buildCustomStep, discountHint } from '../pdp-escada'
+import { buildLadder, isChoice, buildBenefits, postingText, tierFor, clampQnt, buildCustomStep, discountHint, nudgeFor } from '../pdp-escada'
 import { loadPdpQtd } from '../pdp-qtd'
 import { loadPdpNova } from '../pdp-nova'
 import { runtime, cutoffNoteOn, init as initFreightConfig } from '../freight/runtime'
@@ -355,6 +355,10 @@ export default {
 
     customHint () {
       return discountHint(this.ladder)
+    },
+
+    customNudge () {
+      return this.isCustomQnt ? nudgeFor(this.customStep, this.ladder) : null
     },
 
     selectedStep () {
