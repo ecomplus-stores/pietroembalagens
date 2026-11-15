@@ -52,7 +52,8 @@ import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import APrices from '@ecomplus/storefront-components/src/APrices.vue'
 import PePdpPrices from '../components/PePdpPrices.vue'
 import PePdpTotals from '../components/PePdpTotals.vue'
-import { buildLadder, isChoice, buildBenefits, postingText } from '../pdp-escada'
+import { buildLadder, isChoice, buildBenefits, postingText, tierFor, clampQnt, buildCustomStep, discountHint } from '../pdp-escada'
+import { loadPdpQtd } from '../pdp-qtd'
 import { loadPdpNova } from '../pdp-nova'
 import { runtime, cutoffNoteOn, init as initFreightConfig } from '../freight/runtime'
 import PeBestSeller from '../components/PeBestSeller.vue'
@@ -178,6 +179,9 @@ export default {
       currentTimer: null,
       // Chave da página nova (pdp-nova.js); desligada, tudo segue como antes.
       pdpNova: false,
+      outraQtd: false,
+      isCustomQnt: false,
+      customQnt: 3,
       postsToday: typeof window === 'object' && window.peDeliveryDate && typeof window.peDeliveryDate.postaHoje === 'function'
         ? Boolean(window.peDeliveryDate.postaHoje())
         : false
@@ -329,6 +333,30 @@ export default {
       return isChoice(this.ladder)
     },
 
+    // Cartão "Outra quantidade": só com a chave pe-pdp-qtd ligada e quando a escada é escolha.
+    hasCustomQnt () {
+      return this.outraQtd && this.pdpNova && this.isLadderChoice
+    },
+
+    maxCustomQnt () {
+      return this.productQuantity > 0 ? this.productQuantity : undefined
+    },
+
+    customStep () {
+      return buildCustomStep({
+        qnt: this.customQnt,
+        price: this.unitPrices.price,
+        basePrice: this.unitPrices.base_price,
+        onPromotion: checkOnPromotion(this.body),
+        kitCta: this.kitCta,
+        packUnits: this.packUnits
+      })
+    },
+
+    customHint () {
+      return discountHint(this.ladder)
+    },
+
     selectedStep () {
       return this.ladder.find(({ qnt }) => qnt === this.qntCt) || this.ladder[0]
     },
@@ -459,6 +487,17 @@ export default {
       }
     },
 
+    pickStep (qnt) {
+      this.isCustomQnt = false
+      this.qntCt = qnt
+    },
+
+    setCustomQnt (value) {
+      this.customQnt = clampQnt(value, this.maxCustomQnt)
+      this.isCustomQnt = true
+      this.qntCt = this.customQnt
+    },
+
     toggleFavorite () {
       if (this.isLogged) {
         this.isFavorite = toggleFavorite(this.body._id, this.ecomPassport)
@@ -467,7 +506,9 @@ export default {
 
     addProgressiveDiscount (price) {
       const { kitCta, isKit } = this
-      const getKit = kitCta.find(kit => kit.qnt === this.qntCt)
+      const getKit = this.isCustomQnt
+        ? tierFor(this.qntCt, kitCta)
+        : kitCta.find(kit => kit.qnt === this.qntCt)
       const progressiveDiscount =  !isKit && getKit && getKit.qnt > 1 && this.qntToBuy * this.qntCt >= getKit.qnt
         ? getKit.discount : 0
       if (progressiveDiscount) {
@@ -493,7 +534,7 @@ export default {
         ecomCart.addProduct({
           ...product,
           customizations,
-          min_quantity: this.qntCt,
+          min_quantity: this.isCustomQnt ? tierFor(this.qntCt, this.kitCta).qnt : this.qntCt,
           price: this.addProgressiveDiscount(product.price)
         }, variationId, this.qntToBuy * this.qntCt)
         const { target } = event
@@ -637,7 +678,10 @@ export default {
     }
     this.isFavorite = checkFavorite(this.body._id || this.productId, this.ecomPassport)
     if (this.isSSR && !this.isQuickview) {
-      loadPdpNova().then(isNova => { this.pdpNova = isNova }).catch(() => {})
+      loadPdpNova().then(isNova => {
+        this.pdpNova = isNova
+        if (isNova) loadPdpQtd().then(on => { this.outraQtd = on }).catch(() => {})
+      }).catch(() => {})
     }
   },
 

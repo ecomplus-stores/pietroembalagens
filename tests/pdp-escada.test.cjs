@@ -7,7 +7,7 @@ const file = path.resolve(__dirname, '../template/js/custom-js/pdp-escada.js')
 const module_ = { exports: {} }
 const code = babel.transformSync(fs.readFileSync(file, 'utf8'), { filename: file, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code
 new Function('module', 'exports', code)(module_, module_.exports)
-const { buildLadder, isChoice, buildBenefits, postingText, roundMoney } = module_.exports
+const { buildLadder, isChoice, buildBenefits, postingText, roundMoney, tierFor, clampQnt, buildCustomStep, discountHint } = module_.exports
 const KITS = [{ qnt: 2, discount: 3 }, { qnt: 5, discount: 5 }]
 const cents = n => Math.round(n * 100)
 
@@ -124,4 +124,69 @@ test('frete: resumo escolhe a opção mais barata e a mais rápida a partir do t
   const same = pickShipping([{ name: 'A', when: 'Chega até 04/11 (qua)', price: 'R$ 9,00' }, { name: 'B', when: 'Chega até 06/11 (sex)', price: 'R$ 9,00' }], now)
   assert.deepEqual(orderShipping(same, 5).map(l => l[1].name), ['A'])
   assert.deepEqual(orderShipping(null, 5), [])
+})
+
+test('outra quantidade: vale o maior degrau alcançado (3 e 4 = 3%, 7 e 20 = 5%, 1 = nada)', () => {
+  assert.deepEqual([1, 2, 3, 4, 5, 6, 7, 20].map(q => tierFor(q, KITS).discount), [0, 3, 3, 3, 5, 5, 5, 5])
+  assert.deepEqual([1, 2, 3, 4, 5, 7].map(q => tierFor(q, KITS).qnt), [1, 2, 2, 2, 5, 5])
+  assert.deepEqual(tierFor(9, undefined), { qnt: 1, discount: 0 })
+  assert.deepEqual(tierFor(9, {}), { qnt: 1, discount: 0 })
+})
+
+test('outra quantidade: total bate com o cartão nos degraus e com a conta do carrinho nos demais', () => {
+  const base = { price: 19.49, basePrice: 19.49, onPromotion: false, kitCta: KITS, packUnits: 10 }
+  const ladder = buildLadder(base)
+  for (const step of ladder) {
+    const custom = buildCustomStep({ ...base, qnt: step.qnt })
+    assert.equal(custom.total, step.total, `${step.qnt} pacotes`)
+    assert.equal(custom.off, step.off)
+  }
+  const seven = buildCustomStep({ ...base, qnt: 7 })
+  assert.equal(seven.total, 129.61)
+  assert.equal(seven.units, 70)
+  assert.equal(cents(seven.each), 185)
+  assert.equal(seven.off, 5)
+  assert.equal(cents(buildCustomStep({ ...base, qnt: 3 }).total), 5672)
+  assert.equal(buildCustomStep({ ...base, price: 0, qnt: 3 }), null)
+})
+
+test('outra quantidade: promoção mostra o total cheio riscado', () => {
+  const custom = buildCustomStep({ price: 19.49, basePrice: 22.99, onPromotion: true, kitCta: KITS, packUnits: 10, qnt: 7 })
+  assert.equal(cents(custom.compareTotal), 16093)
+  assert.equal(custom.off, 19)
+})
+
+test('outra quantidade: campo limpa lixo e respeita estoque e 999', () => {
+  assert.equal(clampQnt('7'), 7)
+  assert.equal(clampQnt('7.9'), 7)
+  assert.equal(clampQnt(''), 1)
+  assert.equal(clampQnt('abc'), 1)
+  assert.equal(clampQnt(-4), 1)
+  assert.equal(clampQnt(0), 1)
+  assert.equal(clampQnt(5000), 999)
+  assert.equal(clampQnt(50, 12), 12)
+  assert.equal(clampQnt(50, 0), 50)
+  assert.equal(clampQnt(50, undefined), 50)
+})
+
+test('outra quantidade: texto do desconto sai dos degraus da escada', () => {
+  assert.equal(discountHint(buildLadder({ price: 10, kitCta: KITS, packUnits: 0 })), '3% OFF a partir de 2, 5% a partir de 5')
+  assert.equal(discountHint(buildLadder({ price: 10, kitCta: [], packUnits: 0 })), '')
+})
+
+test('chave do cartão Outra quantidade: publicada {"enabled": boolean}; ?qtd=nova e ?qtd=antiga mandam sobre o arquivo', () => {
+  const shipped = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../template/public/pe-pdp-qtd.json'), 'utf8'))
+  assert.deepEqual(Object.keys(shipped), ['enabled'])
+  assert.equal(typeof shipped.enabled, 'boolean')
+  const f = path.resolve(__dirname, '../template/js/custom-js/pdp-qtd.js')
+  const m = { exports: {} }
+  new Function('module', 'exports', babel.transformSync(fs.readFileSync(f, 'utf8'), { filename: f, presets: [['@babel/preset-env', { targets: { node: '20' } }]], babelrc: false, configFile: false }).code)(m, m.exports)
+  const { pickQtdMode } = m.exports
+  assert.equal(pickQtdMode({ search: '', stored: null, enabled: false }).isNova, false)
+  assert.equal(pickQtdMode({ search: '', stored: null, enabled: true }).isNova, true)
+  assert.equal(pickQtdMode({ search: '', stored: null, enabled: 'true' }).isNova, false)
+  assert.equal(pickQtdMode({ search: '?qtd=nova', stored: null, enabled: false }).remember, 'nova')
+  assert.equal(pickQtdMode({ search: '?qtd=antiga', stored: null, enabled: true }).isNova, false)
+  assert.equal(pickQtdMode({ search: '', stored: 'nova', enabled: false }).isNova, true)
+  assert.equal(pickQtdMode({ search: '?qtd=lixo', stored: 'lixo', enabled: false }).isNova, false)
 })
