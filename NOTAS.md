@@ -30,6 +30,14 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 18/11/2026 — SSR: sobreviver à falha na carga dos dados da loja (suporte E-Com Plus)
+
+- **Por quê:** em 17/11/2026 todas as páginas de produto, categoria e institucionais ficaram em 404 (home, busca e checkout abriam). A função `ssr` carrega os dados da loja (loja, categorias, grades, itens da busca) uma vez por instância; se essa carga falha, a instância responde 404 para tudo até ser trocada. Voltou com a reexecução do deploy `44107038578`. Mesma falha da loja Disfoil (ecomplus-stores/disfoil#66).
+- **O que muda:** `.functions/index.js` envolve o carregador de dados do renderer: tenta até 3 vezes (espera de 1 s e 2 s); se continuar falhando, usa o `.ecom.json` gerado no build e copiado pelo predeploy; se nem isso houver, encerra o processo em 3 s para a plataforma subir outra instância. Nada muda no site quando a carga funciona. Na prática, com o snapshot no pacote (conferido na evidência do deploy `44107038578`), a sequência é uma tentativa na API e, a partir da segunda, o próprio renderer já lê o snapshot (`STORE_DATA_FROM_CACHE` é ligado no primeiro acesso): a instância segue com os dados do último deploy até ser trocada. Se uma atualização do renderer mudar o caminho interno, o wrapper só registra o erro e a função segue como antes.
+- **Validação local (Node 22, dependências do lock):** `tests/ssr-store-data.test.cjs` (5 testes). Função real com API respondendo erro na subida: código anterior 404 em tudo (103 bytes, igual à produção); código novo 200 em `/search` e `/index` com o snapshot, ou processo encerrado sem snapshot. Com API normal: produto, categoria, `/search` e `/index` em 200, `/~reverse-proxy/` segue 404.
+- **Limite:** com a API fora e usando o snapshot, páginas que consultam a API a cada acesso (produto, categoria) continuam falhando até a API voltar; o snapshot evita que a instância fique presa depois disso. Não testado no Cloud Functions antes do deploy.
+- **Desfazer:** `git revert` do commit desta entrega e push no `master` (novo build/deploy de Hosting + SSR). O teste novo sai junto no revert.
+
 ### 12/11/2026 — Pixel próprio: carrinho, WhatsApp e etapas do checkout (PREPARADO, não publicado)
 
 - Plano `ccos-ratos/.claude/plans/plano-pixel-proprio-v2.md`, fase 3. Nada visual muda. O pixel (`window.pimi.track`) passa a receber `view_cart` (rota do carrinho), `remove_from_cart` (`ecomCart.on('removeItem')`, fora de `#/confirmation`), `whatsapp_click` (clique em link de WhatsApp; o link nunca é enviado) e `checkout_step` dados/entrega/pagamento.
