@@ -1,4 +1,5 @@
 <div class="payment" v-if="amount.subtotal >= minToBuy">
+    <pe-out-of-stock v-if="peEsgotados.length" :nomes="peEsgotados" />
     <transition-group
       enter-active-class="animated fadeIn slow"
     >
@@ -189,7 +190,8 @@
     </transition-group>
 </div>
 <div v-else>
-  <div class="container text-center py-4">
+  <pe-out-of-stock v-if="peEsgotados.length" :nomes="peEsgotados" />
+  <div v-if="amount.subtotal > 0 || !peEsgotados.length" class="container text-center py-4">
     <button
       type="button"
       disabled

@@ -163,7 +163,8 @@ function mountPayment (mod, subtotal) {
     '@ecomplus/shopping-cart': { __esModule: true, default: { data: { items: [] } } },
     '@ecomplus/storefront-app/src/lib/load-payment-client': { __esModule: true, default: () => Promise.resolve() },
     '@ecomplus/storefront-app/src/lib/utils': { sortApps () {} },
-    '../pedido-minimo': mod
+    '../pedido-minimo': mod,
+    '../esgotado': { itensEsgotados: () => [] }
   }, { window: { location: { hostname: 'test' } } }).default
   const { render, staticRenderFns } = compiler.compileToFunctions('<div>' + fs.readFileSync(path.join(root, 'template/js/custom-js/html/PaymentMethods.html'), 'utf8') + '</div>')
   // Como componente (Vue.extend), igual à loja: o computed minToBuy vence a prop "minToBuy: 20" de mesmo nome.

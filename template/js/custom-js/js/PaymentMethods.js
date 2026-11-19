@@ -29,12 +29,15 @@ import {
   import { sortApps } from '@ecomplus/storefront-app/src/lib/utils'
   import CreditCardForm from '@ecomplus/storefront-app/src/components/CreditCardForm.vue'
   import { state as pedidoMinimo, loadPedidoMinimo } from '../pedido-minimo'
+  import { itensEsgotados } from '../esgotado'
+  import PeOutOfStock from '../components/PeOutOfStock.vue'
   
   export default {
     name: 'PaymentMethods',
   
     components: {
-      CreditCardForm
+      CreditCardForm,
+      PeOutOfStock
     },
   
     props: {
@@ -109,6 +112,11 @@ import {
         return this.cartItems || this.ecomCart.data.items
       },
   
+      // Itens que esgotaram e saíram do pedido (quantidade 0): aviso no topo do pagamento (esgotado.js).
+      peEsgotados () {
+        return itensEsgotados(this.items)
+      },
+
       // Pedido mínimo de /pe-cart-config.json (pedido-minimo.js); sem o arquivo, R$ 20.
       minToBuy () {
         return pedidoMinimo.minimo
