@@ -98,12 +98,19 @@
             </template>
 
             <slot name="checkout">
+              <pe-min-order
+                v-if="isValidCart && peMinimo"
+                :aviso="peMinimo"
+              />
+
               <a
                 v-if="isValidCart"
                 class="cart__btn-checkout btn btn-lg btn-block"
-                :class="peV2 ? 'pe-fs2-checkout' : 'btn-success'"
+                :class="[peV2 ? 'pe-fs2-checkout' : 'btn-success', { disabled: peMinimo }]"
                 role="button"
-                :href="checkoutUrl"
+                :href="peMinimo ? null : checkoutUrl"
+                :aria-disabled="peMinimo ? 'true' : null"
+                :tabindex="peMinimo ? -1 : null"
               >
                 <span class="mr-1">
                   <i class="i-shopping-bag"></i>

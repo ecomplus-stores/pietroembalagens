@@ -1,4 +1,6 @@
 {
   "minicart": false,
-  "noMinicartPercent": 100
+  "noMinicartPercent": 100,
+  "pedidoMinimo": 20,
+  "avisoPedidoMinimo": true
 }
