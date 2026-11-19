@@ -314,6 +314,22 @@
   white-space: pre-line;
 }
 
+.pe-ml-reviews__photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+
+  img {
+    display: block;
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border: 1px solid #efe7dd;
+    border-radius: 10px;
+  }
+}
+
 .pe-ml-reviews__meta {
   margin: 0;
   color: #7a6a60;
