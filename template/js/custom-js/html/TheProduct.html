@@ -761,6 +761,11 @@
             />
 
             <template v-if="!isKit">
+              <pe-min-order
+                v-if="isVariationInStock && hasBuyButton && peMinimo"
+                :aviso="peMinimo"
+              />
+
               <div
                 v-if="!isVariationInStock"
                 class="product__out-of-stock"

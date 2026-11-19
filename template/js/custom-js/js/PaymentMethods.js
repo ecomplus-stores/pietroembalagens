@@ -28,6 +28,7 @@ import {
   import loadPaymentClient from '@ecomplus/storefront-app/src/lib/load-payment-client'
   import { sortApps } from '@ecomplus/storefront-app/src/lib/utils'
   import CreditCardForm from '@ecomplus/storefront-app/src/components/CreditCardForm.vue'
+  import { state as pedidoMinimo, loadPedidoMinimo } from '../pedido-minimo'
   
   export default {
     name: 'PaymentMethods',
@@ -108,8 +109,9 @@ import {
         return this.cartItems || this.ecomCart.data.items
       },
   
+      // Pedido mínimo de /pe-cart-config.json (pedido-minimo.js); sem o arquivo, R$ 20.
       minToBuy () {
-        return window.minToBuy || 20
+        return pedidoMinimo.minimo
       },
   
       minToBuyMsg () {
@@ -425,6 +427,7 @@ import {
     },
   
     created () {
+      loadPedidoMinimo()
       if (!this.paymentGateways.length) {
         this.fetchPaymentGateways()
       }

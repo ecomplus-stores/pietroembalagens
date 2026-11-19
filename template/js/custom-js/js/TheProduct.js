@@ -52,6 +52,8 @@ import APicture from '@ecomplus/storefront-components/src/APicture.vue'
 import APrices from '@ecomplus/storefront-components/src/APrices.vue'
 import PePdpPrices from '../components/PePdpPrices.vue'
 import PePdpTotals from '../components/PePdpTotals.vue'
+import PeMinOrder from '../components/PeMinOrder.vue'
+import { avisoMinimo, loadPedidoMinimo } from '../pedido-minimo'
 import { buildLadder, isChoice, buildBenefits, postingText, tierFor, clampQnt, buildCustomStep, discountHint, nudgeFor } from '../pdp-escada'
 import { loadPdpQtd } from '../pdp-qtd'
 import { loadPdpNova } from '../pdp-nova'
@@ -92,6 +94,7 @@ export default {
     APrices,
     PePdpPrices,
     PePdpTotals,
+    PeMinOrder,
     PeBestSeller,
     PeMlReviews,
     AShare,
@@ -165,6 +168,7 @@ export default {
       selectedVariationId: null,
       currentGalleyImg: 1,
       isOnCart: false,
+      peCartSubtotal: ecomCart.data.subtotal || 0,
       qntToBuy: 1,
       qntCt: 1,
       kitCta: window.productKitCta || {},
@@ -363,6 +367,12 @@ export default {
 
     selectedStep () {
       return this.ladder.find(({ qnt }) => qnt === this.qntCt) || this.ladder[0]
+    },
+
+    // Pedido mínimo (pedido-minimo.js): carrinho de agora + o que está escolhido aqui; depois de adicionar, só o carrinho.
+    peMinimo () {
+      const escolhido = this.isOnCart ? 0 : this.ghostProductForPrices.price * this.qntToBuy
+      return avisoMinimo(this.peCartSubtotal + escolhido)
     },
 
     totalLabel () {
@@ -655,6 +665,8 @@ export default {
 
   created () {
     initFreightConfig()
+    loadPedidoMinimo()
+    ecomCart.on('change', ({ data }) => { this.peCartSubtotal = data.subtotal || 0 })
     const { productKitCtas } = window
     if (this.product && Array.isArray(productKitCtas)) {
       let kitCta = this.product.sku && productKitCtas.find(({ skus }) => {
