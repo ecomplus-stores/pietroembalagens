@@ -19,11 +19,16 @@ export function uiVersion () {
   return enabled() && runtime.config && runtime.config.ui === 'v2' ? 'v2' : 'v1'
 }
 
-// PDP: até quantos reais a opção mais rápida pode custar a mais que a mais barata para aparecer primeiro (padrão 5).
+// PDP (e carrinho/checkout, com a chave abaixo): até quantos reais a opção mais rápida pode custar a mais que a mais barata para aparecer primeiro (padrão 5).
 // 0 em "freteRapidoPrimeiroAte" no pe-freight-config.json volta à ordem antiga (mais barato primeiro).
 export function fastestFirstLimit () {
   const value = runtime.ready && runtime.config ? runtime.config.freteRapidoPrimeiroAte : undefined
   return typeof value === 'number' && value >= 0 ? value : 5
+}
+
+// Carrinho, minicart e checkout: mais rápido primeiro e marcado. Liga com "freteRapidoPrimeiroCarrinho": true; false ou ausente = ordem por preço.
+export function fastestFirstCart () {
+  return runtime.ready === true && Boolean(runtime.config) && runtime.config.freteRapidoPrimeiroCarrinho === true
 }
 
 // Avisos "pagamento até 12h / postamos hoje" (carrinho, PDP): escondidos por padrão; religa com "avisoPostagemHoje": true em pe-freight-config.json.

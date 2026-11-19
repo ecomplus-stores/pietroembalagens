@@ -1,4 +1,5 @@
 // Pure rules shared by the calculator, suggestions and regression tests.
+import { parseDay, orderShipping } from '../pdp-frete'
 const cents = value => value !== null && value !== '' && typeof value !== 'boolean' && Number.isFinite(Number(value)) ? Math.round(Number(value) * 100) : null
 const zip = value => String(value || '').replace(/\D/g, '')
 const money = item => typeof item.final_price === 'number' ? item.final_price : item.price
@@ -89,6 +90,18 @@ const chooseService = (services, preferredKey, autoSelect = true) => {
   const free = services.findIndex(isFreeDelivery)
   return free >= 0 ? free : services.findIndex(service => !isPickup(service))
 }
+// Carrinho, minicart e checkout: a opção que chega antes vai para o topo quando a regra da PDP (orderShipping) põe ela primeiro.
+// Mais barato = preço e depois data; mais rápido = data que a cliente vê (whenText) e depois preço, como no pickShipping da PDP.
+// Nada muda com frete grátis na lista, nem quando alguma opção (fora retirada) não tem data para comparar ("Até N dias").
+const fastestFirst = (services, whenText, limit, now) => {
+  if (services.some(isFreeDelivery)) return services
+  const list = services.filter(service => !isPickup(service)).map(service => ({ service, cost: serviceCost(service) / 100, day: parseDay(whenText(service), now) }))
+  if (list.length < 2 || list.some(option => option.day === null)) return services
+  const cheapest = [...list].sort((a, b) => a.cost - b.cost || a.day - b.day)[0]
+  const fastest = [...list].sort((a, b) => a.day - b.day || a.cost - b.cost)[0]
+  if (fastest === cheapest || orderShipping({ cheapest, fastest }, limit)[0][1] !== fastest) return services
+  return [fastest.service, ...services.filter(service => service !== fastest.service)]
+}
 const hasOptions = product => ['customizations', 'kit_composition'].some(key => Array.isArray(product[key]) && product[key].length)
 const canRecommend = (product, variationId) => {
   if (!product || product.available !== true || product.visible === false || hasOptions(product) || (product.currency_id && product.currency_id !== 'BRL')) return false
@@ -104,4 +117,4 @@ const quantityFor = (gap, unitPrice, minimum, available) => {
 }
 const rank = (a, b) => Number(b.confirmed) - Number(a.confirmed) || Number(b.completes) - Number(a.completes) || a.additional - b.additional || b.relevance - a.relevance || a.key.localeCompare(b.key)
 
-export default { cents, zip, money, subtotal, serviceKey, serviceCost, hasTwoDayPostingDeadline, applyPostingDeadline, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, canRecommend, quantityFor, rank }
+export default { cents, zip, money, subtotal, serviceKey, serviceCost, hasTwoDayPostingDeadline, applyPostingDeadline, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, fastestFirst, canRecommend, quantityFor, rank }
