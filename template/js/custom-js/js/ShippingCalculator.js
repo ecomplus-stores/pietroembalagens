@@ -1,5 +1,5 @@
 import core from '../freight/core'
-import { runtime, enabled, uiVersion, cutoffNoteOn, autoSelectFree, readAutoSelect, clearAutoSelect, init, getPreference, setPreference } from '../freight/runtime'
+import { runtime, enabled, uiVersion, cutoffNoteOn, autoSelectFree, fastestFirstCart, fastestFirstLimit, readAutoSelect, clearAutoSelect, init, refreshConfig, getPreference, setPreference } from '../freight/runtime'
 import { deliveryText } from '../freight/delivery-date'
 import FreightStatus from '../components/FreightStatus.vue'
 import {
@@ -191,9 +191,13 @@ import {
       parseShippingOptions (shippingResult = []) {
         const result = core.parseQuote(shippingResult, this.skipAppIds || [])
         this.freeFromValue = result.threshold === null ? null : result.threshold / 100
-        this.shippingServices = Array.isArray(this.shippingAppsSort) && this.shippingAppsSort.length
+        const services = Array.isArray(this.shippingAppsSort) && this.shippingAppsSort.length
           ? sortApps(result.services, this.shippingAppsSort)
           : result.services
+        // Só onde a cliente escolhe o frete (minicart, carrinho, checkout); a PDP não seleciona e fica como está.
+        this.shippingServices = this.canSelectServices && fastestFirstCart()
+          ? core.fastestFirst(services, this.peDate, fastestFirstLimit())
+          : services
         this.hasPaidOption = this.shippingServices.some(service => core.serviceCost(service) > 0)
         this.hasFreeOption = this.shippingServices.some(core.isFreeDelivery)
         this.peError = !result.valid || !this.shippingServices.length
@@ -267,8 +271,9 @@ import {
           this.peRequest = JSON.parse(JSON.stringify(data))
           this.peRequestUrl = url
           const current = () => !this.peDestroyed && sequence === this.peSequence && requestKey === this.peCurrentKey
-          modules({ url, method: 'POST', storeId: this.storeId, data, axiosConfig: { timeout: 15000 } })
-            .then(({ data }) => {
+          // A ordem depende da chave do pe-freight-config.json: a cotação espera a config da primeira carga, para a lista não mudar depois de aparecer.
+          Promise.all([modules({ url, method: 'POST', storeId: this.storeId, data, axiosConfig: { timeout: 15000 } }), runtime.ready || refreshConfig()])
+            .then(([{ data }]) => {
               if (current()) this.parseShippingOptions(data.result)
             })
             .catch(() => {

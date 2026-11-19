@@ -173,7 +173,7 @@ test('calculator ignores stale requests after CEP change and preserves explicit 
   const calls = []
   const preferences = new Map()
   const component = load('template/js/custom-js/js/ShippingCalculator.js', {
-    '../freight/runtime': { runtime, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, readAutoSelect: () => null, clearAutoSelect: () => {}, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
+    '../freight/runtime': { runtime, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, fastestFirstCart: () => false, readAutoSelect: () => null, clearAutoSelect: () => {}, init: () => {}, getPreference: z => preferences.get(z), setPreference: (z, key) => preferences.set(z, key) },
     '@ecomplus/client': { modules: request => new Promise(resolve => calls.push({ request, resolve })) },
     '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
     'vue-cleave-component': {}
@@ -478,7 +478,7 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
   const preferences = new Map()
   const flags = Vue.observable({ ui: 'v2', auto: true, mark: null, cleared: 0 })
   const runtimeMock = {
-    runtime, enabled: () => true, uiVersion: () => flags.ui, autoSelectFree: () => flags.auto && flags.ui === 'v2', init: () => {},
+    runtime, enabled: () => true, uiVersion: () => flags.ui, autoSelectFree: () => flags.auto && flags.ui === 'v2', fastestFirstCart: () => false, init: () => {},
     readAutoSelect: () => flags.mark, clearAutoSelect: () => { flags.mark = null; flags.cleared++ },
     getPreference: z => preferences.get(z) || '', setPreference: (z, key) => preferences.set(z, key)
   }
@@ -566,6 +566,148 @@ test('calculator v2 branch needs peSurface AND ui v2; autoSelectFree is gated, o
   assert.equal(minicart.instance.peCompactLine, true)
   assert.equal(minicart.instance.peOptionsList, false, 'a single service keeps the one-line summary')
   for (const entry of [minicart, plain, checkout]) entry.instance.$destroy()
+})
+
+// ---- T113: mais rápido primeiro (até freteRapidoPrimeiroAte) também no carrinho e no checkout ----
+// Casos reais do pedido teste de 19/11/2026, CEP 01310-100.
+const pdpNow = new Date(2026, 10, 19)
+const dateOf = when => item => when[item.service_code] || ''
+const order = list => Array.from(list, item => item.service_code)
+
+test('mais rápido primeiro: 1 pacote, Sedex R$ 0,53 a mais e 2 dias antes vai para o topo e é marcado', () => {
+  const when = { 'Loggi Ponto': 'Chega até 26/11 (qui)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 9.94), service('Loggi Ponto', 9.41)])).services
+  assert.deepEqual(order(quoted), ['Loggi Ponto', 'Sedex'], 'hoje: mais barato primeiro')
+  const sorted = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  assert.deepEqual(order(sorted), ['Sedex', 'Loggi Ponto'])
+  assert.equal(sorted[core.chooseService(sorted, '')].service_code, 'Sedex')
+})
+test('mais rápido primeiro: 15 pacotes, Sedex R$ 1,83 a mais e 8 dias antes passa a .Package; o resto mantém a ordem', () => {
+  const when = { '.Package': 'Chega até 02/12 (qua)', 'Loggi Ponto': 'Chega até 26/11 (qui)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 19.52), service('.Package', 17.69), service('Loggi Ponto', 18.4)])).services
+  assert.deepEqual(order(quoted), ['.Package', 'Loggi Ponto', 'Sedex'])
+  const sorted = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  assert.deepEqual(order(sorted), ['Sedex', '.Package', 'Loggi Ponto'])
+  assert.equal(sorted[core.chooseService(sorted, '')].service_code, 'Sedex')
+})
+test('mais rápido primeiro: diferença acima do limite ou limite 0 deixam o mais barato primeiro e marcado', () => {
+  const when = { '.Package': 'Chega até 02/12 (qua)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 22.70), service('.Package', 17.69)])).services
+  const far = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  assert.deepEqual(order(far), ['.Package', 'Sedex'], 'R$ 5,01 a mais')
+  assert.equal(far[core.chooseService(far, '')].service_code, '.Package')
+  const near = core.parseQuote(results([service('Sedex', 22.69), service('.Package', 17.69)])).services
+  assert.deepEqual(order(core.fastestFirst(near, dateOf(when), 5, pdpNow)), ['Sedex', '.Package'], 'exatamente R$ 5,00 a mais ainda vale')
+  assert.deepEqual(order(core.fastestFirst(near, dateOf(when), 0, pdpNow)), ['.Package', 'Sedex'], 'limite 0: ordem de hoje')
+})
+test('mais rápido primeiro: a escolha salva da cliente para o CEP continua marcada', () => {
+  const when = { 'Loggi Ponto': 'Chega até 26/11 (qui)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 9.94), service('Loggi Ponto', 9.41)])).services
+  const sorted = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  const loggi = core.serviceKey(sorted.find(item => item.service_code === 'Loggi Ponto'))
+  assert.equal(sorted[core.chooseService(sorted, loggi)].service_code, 'Loggi Ponto')
+})
+test('mais rápido primeiro: com frete grátis nada muda (grátis primeiro e marcado)', () => {
+  const when = { FREE: 'Chega até 02/12 (qua)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 9.94), service('FREE', 0)])).services
+  const sorted = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  assert.equal(sorted, quoted)
+  assert.equal(sorted[core.chooseService(sorted, '')].service_code, 'FREE')
+})
+test('mais rápido primeiro: retirada na loja não vira "mais barato" nem "mais rápido"', () => {
+  const when = { 'Retirada na loja': 'Chega até 20/11 (sex)', 'Loggi Ponto': 'Chega até 26/11 (qui)', Sedex: 'Chega até 24/11 (ter)' }
+  const quoted = core.parseQuote(results([service('Sedex', 9.94), service('Loggi Ponto', 9.41), service('Retirada na loja', 0)])).services
+  assert.deepEqual(order(quoted), ['Retirada na loja', 'Loggi Ponto', 'Sedex'])
+  const sorted = core.fastestFirst(quoted, dateOf(when), 5, pdpNow)
+  assert.deepEqual(order(sorted), ['Sedex', 'Retirada na loja', 'Loggi Ponto'], 'R$ 0 da retirada não barra a regra e a retirada não sobe')
+  assert.equal(sorted[core.chooseService(sorted, '')].service_code, 'Sedex')
+})
+test('mais rápido primeiro: empate de data fica com o mais barato; opção sem data (dias corridos ou sem o script do topo) não mexe na ordem', () => {
+  const when = { Sedex: 'Chega até 24/11 (ter)', Jadlog: 'Chega até 24/11 (ter)', 'Loggi Ponto': 'Chega até 26/11 (qui)' }
+  const quoted = core.parseQuote(results([service('Sedex', 9.94), service('Jadlog', 9.6), service('Loggi Ponto', 9.41)])).services
+  assert.deepEqual(order(core.fastestFirst(quoted, dateOf(when), 5, pdpNow)), ['Jadlog', 'Loggi Ponto', 'Sedex'])
+  const calendar = { ...when, 'Loggi Ponto': 'Até 2 dias' }
+  assert.equal(core.fastestFirst(quoted, dateOf(calendar), 5, pdpNow), quoted)
+  const noHead = { Sedex: '3 dias úteis', Jadlog: '3 dias úteis', 'Loggi Ponto': '5 dias úteis' }
+  assert.equal(core.fastestFirst(quoted, dateOf(noHead), 5, pdpNow), quoted)
+})
+test('mais rápido primeiro no calculador: só com a chave, só onde se escolhe o frete, e a cotação espera a config', async () => {
+  const preferences = new Map()
+  const flags = Vue.observable({ on: true })
+  const state = { runtime: { config: {}, ready: true }, pending: null, releaseConfig: null }
+  const pad = n => String(n).padStart(2, '0')
+  // Mesma ideia do textoData do topo, em dias corridos a partir de hoje: a data muda com o dia, a ordem não.
+  const textoData = n => { const d = new Date(); d.setDate(d.getDate() + n); return 'Chega até ' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) }
+  const calls = []
+  const component = load('template/js/custom-js/js/ShippingCalculator.js', {
+    '../freight/runtime': {
+      runtime: state.runtime, enabled: () => true, uiVersion: () => 'v1', autoSelectFree: () => false, init: () => {},
+      fastestFirstCart: () => flags.on, fastestFirstLimit: () => 5,
+      // Como o runtime de verdade: enquanto a config carrega, todo calculador recebe a mesma promessa.
+      refreshConfig: () => state.pending || (state.pending = new Promise(resolve => { state.releaseConfig = () => { state.runtime.ready = true; resolve() } })),
+      readAutoSelect: () => null, clearAutoSelect: () => {}, getPreference: z => preferences.get(z) || '', setPreference: (z, key) => preferences.set(z, key)
+    },
+    '@ecomplus/client': { modules: request => new Promise(resolve => calls.push({ request, resolve })) },
+    '@ecomplus/storefront-components/src/js/helpers/sort-apps': list => list,
+    'vue-cleave-component': {},
+    '@ecomplus/utils': { $ecomConfig: { get: () => 'BR' }, i18n: v => v.pt_br || v, price: item => item.price, formatMoney: v => 'R$ ' + v.toFixed(2).replace('.', ',') }
+  }, { window: { localStorage: { getItem: () => null, setItem: () => {} }, sessionStorage: { getItem: () => null, setItem: () => {} }, peDeliveryDate: { textoData } } }).default
+  const quote = () => results([
+    service('Loggi Ponto', 9.41, { shipping_line: { price: 9.41, total_price: 9.41, delivery_time: { days: 5, working_days: true } } }),
+    service('Sedex', 9.94, { shipping_line: { price: 9.94, total_price: 9.94, delivery_time: { days: 3, working_days: true } } })
+  ])
+  const build = propsData => new Vue({ ...component, propsData: { shippedItems: cartWith(product(), 1).data.items, zipCode: '01310100', ...propsData } })
+  const selected = calc => calc.selectedService === null ? null : calc.shippingServices[calc.selectedService].service_code
+  const cart = build({ canSelectServices: true, peSurface: 'cart' })
+  const checkout = build({ canSelectServices: true })
+  const pdp = build({})
+  for (const calc of [cart, checkout, pdp]) calc.parseShippingOptions(quote())
+  assert.deepEqual(order(cart.shippingServices), ['Sedex', 'Loggi Ponto'])
+  assert.equal(selected(cart), 'Sedex')
+  assert.deepEqual(order(checkout.shippingServices), ['Sedex', 'Loggi Ponto'], 'checkout: mesmo calculador, mesma regra')
+  assert.equal(selected(checkout), 'Sedex')
+  assert.deepEqual(order(pdp.shippingServices), ['Loggi Ponto', 'Sedex'], 'PDP (não seleciona frete) fica como está')
+  // A escolha salva para o CEP vence a regra.
+  preferences.set('01310100', core.serviceKey(cart.shippingServices.find(item => item.service_code === 'Loggi Ponto')))
+  cart.parseShippingOptions(quote())
+  assert.equal(selected(cart), 'Loggi Ponto')
+  preferences.clear()
+  // Chave desligada: ordem e marcação de hoje.
+  flags.on = false
+  cart.parseShippingOptions(quote())
+  assert.deepEqual(order(cart.shippingServices), ['Loggi Ponto', 'Sedex'])
+  assert.equal(selected(cart), 'Loggi Ponto')
+  flags.on = true
+  // Primeira carga: a cotação chega antes da config e só entra na lista depois dela, já na ordem certa.
+  state.runtime.ready = false
+  cart.localZipCode = '01310200'
+  await Vue.nextTick()
+  await tick(300)
+  calls.find(call => call.request.data.to.zip === '01310200').resolve({ data: { result: quote() } })
+  await tick(5)
+  assert.equal(cart.isWaiting, true, 'sem config, a lista ainda não aparece')
+  state.releaseConfig()
+  await tick(5)
+  assert.equal(cart.isWaiting, false)
+  assert.deepEqual(order(cart.shippingServices), ['Sedex', 'Loggi Ponto'])
+  for (const calc of [cart, checkout, pdp]) calc.$destroy()
+})
+test('mais rápido primeiro: chave no pe-freight-config.json e no runtime (só true de verdade liga)', async () => {
+  const shipped = JSON.parse(fs.readFileSync(path.join(root, 'template/public/pe-freight-config.json'), 'utf8'))
+  assert.equal(typeof shipped.freteRapidoPrimeiroCarrinho, 'boolean')
+  assert.equal(typeof shipped.freteRapidoPrimeiroAte, 'number')
+  let config = {}
+  const storage = { getItem: () => '10', setItem: () => {} }
+  const module = load('template/js/custom-js/freight/runtime.js', {}, {
+    window: { localStorage: storage, sessionStorage: storage }, AbortController,
+    fetch: async () => ({ ok: true, json: async () => config })
+  })
+  assert.equal(module.fastestFirstCart(), false, 'antes da config: ordem de hoje')
+  for (const [value, expected] of [[true, true], [false, false], ['true', false], [undefined, false]]) {
+    config = { enabled: true, freteRapidoPrimeiroCarrinho: value }
+    await module.refreshConfig()
+    assert.equal(module.fastestFirstCart(), expected, String(value))
+  }
 })
 
 test('topo v2: chave em header.json, templates EJS compilam e o markup v1 não ganha classes da v2', async () => {
