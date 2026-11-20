@@ -59,6 +59,13 @@ export const loadMlReviews = () => {
   return pending
 }
 
+// Primeiro nome de quem avaliou no site (pedido do Rafael, 20/11). "Cliente" (pedido sem nome) ou algo que não parece nome: fica sem.
+export const formatFirstName = name => {
+  const n = typeof name === 'string' ? name.trim() : ''
+  if (!/^[A-Za-zÀ-ÿ'-]{2,}$/.test(n) || n.toLowerCase() === 'cliente') return ''
+  return n.charAt(0).toUpperCase() + n.slice(1).toLowerCase()
+}
+
 const siteCache = {}
 
 // Avaliações do site aparecem a partir de 1 (decisão do Rafael, 12/11); falha = lista vazia.
@@ -68,7 +75,7 @@ export const loadSiteReviews = sku => {
     siteCache[sku] = getJson(SITE_SOURCE + encodeURIComponent(sku) + '?limit=50', { credentials: 'omit' })
       .then(body => (body && Array.isArray(body.reviews) ? body.reviews : [])
         .filter(r => r && Number.isInteger(r.rating) && r.rating >= 1 && r.rating <= 5)
-        .map(r => ({ rating: r.rating, text: typeof r.comment === 'string' ? r.comment : '', date: r.responded_at, source: 'site' })))
+        .map(r => ({ rating: r.rating, text: typeof r.comment === 'string' ? r.comment : '', date: r.responded_at, source: 'site', name: formatFirstName(r.customer_first_name) })))
       .catch(() => [])
   }
   return siteCache[sku]
