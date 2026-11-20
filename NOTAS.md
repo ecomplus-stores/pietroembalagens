@@ -30,6 +30,12 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 20/11/2026 — Pix: QR aparece mesmo se a loja publicar no meio da compra (T115)
+- Problema (19/11): cada deploy apaga os `chunk.*.js` da versão anterior. A tela de confirmação só era baixada depois do `/@checkout.json`; quem abriu o checkout antes de um deploy e finalizou depois ficava parado na etapa 2, sem aviso (ChunkLoadError), com o pedido já criado e sem o QR. Testes do Rafael 10012569/10012570 caíram nisso.
+- Correção em `template/js/custom-js/checkout.js`: (1) baixa a rota `confirmation` assim que a página carrega; (2) se mesmo assim der erro de chunk indo para a confirmação, manda para o `payment_link` https do próprio pedido (Pix/boleto PagHiper) ou, sem link (cartão), recarrega uma vez já na confirmação (trava em `sessionStorage`, sem loop). Evento `pe_chunk_fallback` no dataLayer mede quantas vezes a rede de segurança agiu; nesse caso o Purchase da confirmação não dispara (não é disparado na mão para não duplicar).
+- Testes: `tests/pix-confirmacao.test.cjs`; build local + Playwright com o `@checkout.json` interceptado (nenhum pedido real): normal, deploy depois de abrir o pagamento, pré-carregamento falho (Pix → PagHiper), cartão (recarga única).
+- Rollback: `git revert` do merge (um arquivo de código + teste + esta nota) e novo deploy (~3 min). Sem chave.
+
 ### 18/11/2026 — SSR: sobreviver à falha na carga dos dados da loja (suporte E-Com Plus)
 
 - **Por quê:** em 17/11/2026 todas as páginas de produto, categoria e institucionais ficaram em 404 (home, busca e checkout abriam). A função `ssr` carrega os dados da loja (loja, categorias, grades, itens da busca) uma vez por instância; se essa carga falha, a instância responde 404 para tudo até ser trocada. Voltou com a reexecução do deploy `44107038578`. Mesma falha da loja Disfoil (ecomplus-stores/disfoil#66).
