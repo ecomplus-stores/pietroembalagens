@@ -27,7 +27,8 @@ router.onError(err => {
     return
   }
   isFallbackDone = true
-  const order = (router.app.$store.getters.orders || []).find(({ _id }) => _id === to.params.id)
+  const store = router.app && router.app.$store
+  const order = ((store && store.getters.orders) || []).find(({ _id }) => _id === to.params.id)
   const transaction = order && (order.transactions || []).find(({ payment_link: link }) => /^https:\/\//.test(link || ''))
   ;(window.dataLayer = window.dataLayer || []).push({
     event: 'pe_chunk_fallback',
