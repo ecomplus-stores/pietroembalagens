@@ -94,7 +94,7 @@
 
 <script>
 // Avaliações do Mercado Livre e do site: resumo abaixo do nome (padrão, só com 3+) e seção completa depois da descrição (prop `section`).
-// Sem nome de quem avaliou (dado pessoal) e sem link para o ML (decisão do Rafael, 02/11: não mandar a cliente comparar preço lá);
+// ML sem nome de quem avaliou; site com o primeiro nome (pedido do Rafael, 20/11). Sem link para o ML (decisão do Rafael, 02/11: não mandar a cliente comparar preço lá);
 // todas as notas, das mais recentes para as mais antigas, sem filtro.
 import { loadMlReviews, findMlReviews, loadSiteReviews, combineReviews, formatRating, formatMonth } from '../ml-reviews'
 
@@ -127,7 +127,7 @@ export default {
 
   methods: {
     meta (review) {
-      if (review.source === 'site') return [formatMonth(review.date), 'Compra verificada no site'].filter(Boolean).join(' · ')
+      if (review.source === 'site') return [review.name, formatMonth(review.date), 'Compra verificada no site'].filter(Boolean).join(' · ')
       return [
         formatMonth(review.date),
         Number.isInteger(review.pack) && review.pack > 1 ? `Comprou: pacote com ${review.pack}` : '',

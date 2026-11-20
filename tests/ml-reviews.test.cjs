@@ -186,10 +186,18 @@ test('loadSiteReviews: reads the PIMI without cookies, once per sku; failure is 
   assert.equal(calls.length, 1)
   assert.equal(calls[0].url, SITE + 'BMG_08_B_TV_10?limit=50')
   assert.equal(calls[0].options.credentials, 'omit')
-  assert.deepEqual(JSON.parse(JSON.stringify(list)), [{ rating: 5, text: 'Embalagens impecáveis', date: '2026-10-03T12:55:15+00:00', source: 'site' }])
+  assert.deepEqual(JSON.parse(JSON.stringify(list)), [{ rating: 5, text: 'Embalagens impecáveis', date: '2026-10-03T12:55:15+00:00', source: 'site', name: 'Damona' }])
   const down = load('template/js/custom-js/ml-reviews.js', { fetch: routedSite(() => Promise.reject(new Error('rede'))) })
   assert.equal((await down.loadSiteReviews('X')).length, 0)
   assert.equal((await down.loadSiteReviews('')).length, 0)
+})
+
+test('formatFirstName: first name tidy; generic or odd name stays out', () => {
+  const { formatFirstName } = load('template/js/custom-js/ml-reviews.js')
+  assert.equal(formatFirstName('Damona'), 'Damona')
+  assert.equal(formatFirstName(' MARIA '), 'Maria')
+  assert.equal(formatFirstName('joão'), 'João')
+  for (const odd of ['Cliente', 'cliente', '', 'A', 'ana123', 'x@y.com', null, undefined, 7]) assert.equal(formatFirstName(odd), '', String(odd))
 })
 
 test('combineReviews: site from 1, score only with 3+, weighted with ML', () => {
@@ -208,7 +216,7 @@ test('combineReviews: site from 1, score only with 3+, weighted with ML', () => 
   assert.equal(mixed.hasMl && mixed.hasSite, true)
 })
 
-test('component: one site review shows only the section, no name, no score on top', async () => {
+test('component: one site review shows only the section, first name, no score on top', async () => {
   const noMl = data({ updated_at: new Date().toISOString(), items: {} })
   const summary = mount({ sku: 'BMG_08_B_TV_10' }, routedSite(siteBody([siteReview()]), [], noMl))
   await tick()
@@ -219,8 +227,7 @@ test('component: one site review shows only the section, no name, no score on to
   const text = textOf(v)
   assert.equal(v.data.attrs.id, 'avaliacoes')
   assert.match(text, /Avaliação de quem comprou no site/)
-  assert.match(text, /Embalagens impecáveis out\/2026 · Compra verificada no site/)
-  assert.doesNotMatch(text, /Damona/)
+  assert.match(text, /Embalagens impecáveis Damona · out\/2026 · Compra verificada no site/)
   assert.equal(flat(v).filter(n => n.data && n.data.staticClass === 'pe-ml-reviews__score').length, 0)
 })
 
