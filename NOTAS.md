@@ -30,6 +30,13 @@ Para restaurar: `git checkout backup-29mar2026` ou `git checkout v-antes-ajustes
 
 ## ✅ Histórico de Alterações
 
+### 22/11/2026 — Pixel PIMI: compra e "ver carrinho" repetidos ~80 vezes (conserto do T84)
+- Problema (desde o deploy do PR #133, 20/11 ~15:40 UTC): na confirmação com URL curta o `purchase` entrava ~80 vezes por pedido em ~4 s (10012581 a 10012585) e o `view_cart` foi de ~60/dia para 2.635 em 21/11. Meta, GA4 e os pedidos não foram afetados (só o pixel próprio).
+- Causa: a ponte (`content/code.json`) chamava `router.beforeEach`/`router.onError`, mas `window.storefrontApp.router` só tem `afterEach` e `currentRoute`. O erro caía no `catch` do `waitFor`, que tentava de novo a cada 100 ms por 8 s, e cada volta reagendava a compra e registrava mais um `afterEach`. Sem o pedido na URL, cada volta buscava o pedido na API e todas registravam.
+- Correção: `waitFor` não repete quando o erro é do callback; cada parte do início fica isolada; trava em memória enquanto a busca do pedido está em andamento; o fallback do T84 agora vem por aviso do `checkout.js` (que tem o router de verdade), evento `pe:confirmation-chunk-error`.
+- Testes: `tests/pimi-purchase-fallback.test.cjs` reescrito com o router no formato real (no código antigo: 12 compras e 4 "ver carrinho"; no novo: 1 e 1) e 1 teste novo em `tests/pix-confirmacao.test.cjs`.
+- Rollback: `git revert -m 1` do merge e novo deploy (~3 min). Sem chave.
+
 ### 20/11/2026 — Pix: QR aparece mesmo se a loja publicar no meio da compra (T115)
 - Problema (19/11): cada deploy apaga os `chunk.*.js` da versão anterior. A tela de confirmação só era baixada depois do `/@checkout.json`; quem abriu o checkout antes de um deploy e finalizou depois ficava parado na etapa 2, sem aviso (ChunkLoadError), com o pedido já criado e sem o QR. Testes do Rafael 10012569/10012570 caíram nisso.
 - Correção em `template/js/custom-js/checkout.js`: (1) baixa a rota `confirmation` assim que a página carrega; (2) se mesmo assim der erro de chunk indo para a confirmação, manda para o `payment_link` https do próprio pedido (Pix/boleto PagHiper) ou, sem link (cartão), recarrega uma vez já na confirmação (trava em `sessionStorage`, sem loop). Evento `pe_chunk_fallback` no dataLayer mede quantas vezes a rede de segurança agiu; nesse caso o Purchase da confirmação não dispara (não é disparado na mão para não duplicar).
