@@ -35,6 +35,10 @@ router.onError(err => {
     pe_order_number: order && order.number,
     pe_fallback: transaction ? 'payment_link' : 'reload'
   })
+  // T84: a ponte do pixel PIMI (content/code.json) registra a compra antes de a página sair.
+  try {
+    window.dispatchEvent(new window.CustomEvent('pe:confirmation-chunk-error', { detail: { order, route: to } }))
+  } catch (e) {}
   if (transaction) {
     window.location.href = transaction.payment_link
     return

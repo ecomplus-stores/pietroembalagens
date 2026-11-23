@@ -22,7 +22,15 @@ function setup ({ readyState = 'complete', orders = [], storage = {}, preload = 
     app: { $store: { getters: { orders } } }
   }
   const location = { href: 'https://www.pietroembalagens.com.br/app/#/checkout/x/2', hash: '#/checkout/x/2', reload: () => { calls.reload++ } }
-  const window = { location, dataLayer: [], addEventListener: (name, fn) => { calls.listeners[name] = fn } }
+  calls.dispatched = []
+  const window = {
+    location,
+    dataLayer: [],
+    addEventListener: (name, fn) => { calls.listeners[name] = fn },
+    CustomEvent: function (type, init) { this.type = type; this.detail = init && init.detail },
+    // Guarda o href do momento do aviso: a ponte do pixel precisa receber antes de a página sair.
+    dispatchEvent: event => { calls.dispatched.push({ type: event.type, detail: event.detail, href: location.href, reload: calls.reload }) }
+  }
   const sessionStorage = {
     getItem: key => (key in storage ? storage[key] : null),
     setItem: (key, value) => { storage[key] = String(value) }
@@ -117,4 +125,17 @@ test('outros erros ou outras telas seguem como antes (nada acontece)', () => {
     assert.equal(calls.reload, 0)
     assert.equal(window.dataLayer.length, 0)
   }
+})
+
+test('T84: avisa a ponte do pixel com o pedido antes de sair da página, uma vez só', () => {
+  const { hooks, calls, navigate } = setup({ orders: [pixOrder] })
+  navigate(toConfirmation)
+  hooks.onError(chunkError())
+  hooks.onError(chunkError())
+  assert.equal(calls.dispatched.length, 1)
+  assert.equal(calls.dispatched[0].type, 'pe:confirmation-chunk-error')
+  assert.equal(calls.dispatched[0].detail.order, pixOrder)
+  assert.equal(calls.dispatched[0].detail.route, toConfirmation)
+  assert.notEqual(calls.dispatched[0].href, PIX_LINK)
+  assert.equal(calls.dispatched[0].reload, 0)
 })
