@@ -53,8 +53,8 @@ const textOf = vnode => {
 }
 
 // Carrinho (/app/#/cart): TheCart.html + TheCart.js com o TheCart nativo reduzido ao que o template usa.
-function mountCart (mod, subtotal) {
-  const cart = { items: [{ _id: 'x', quantity: 1, price: subtotal }], subtotal }
+function mountCart (mod, subtotal, fromCatalog = false) {
+  const cart = { items: [{ _id: 'x', name: 'Caixa Natal', sku: 'NATAL-10', quantity: 1, price: subtotal }], subtotal }
   const Native = {
     name: 'TheCart',
     components: {},
@@ -76,16 +76,29 @@ function mountCart (mod, subtotal) {
     '../freight/core': { __esModule: true, default: { isFreeDelivery: () => false } },
     '../freight/runtime': runtime,
     '../pedido-minimo': mod,
+    '../wholesale-cart': load('template/js/custom-js/wholesale-cart.js'),
     '../components/PeMinOrder.vue': load('template/js/custom-js/components/PeMinOrder.vue')
   }).default
   const { render, staticRenderFns } = compiler.compileToFunctions(fs.readFileSync(path.join(root, 'template/js/custom-js/html/TheCart.html'), 'utf8'))
   // Como componente (Vue.extend), igual à loja: é assim que o computed vence a prop de mesmo nome.
   const instance = new (Vue.extend({ ...options, render, staticRenderFns }))({ propsData: {} })
+  instance.peWholesale = fromCatalog
   const tree = instance._render()
   const [button] = findAll(tree, node => node.data && node.data.staticClass && node.data.staticClass.includes('cart__btn-checkout'))
   const notices = findAll(tree, node => node.componentOptions && node.componentOptions.tag === 'pe-min-order')
-  return { button, notices }
+  const [wholesale] = findAll(tree, node => node.data && node.data.attrs && node.data.attrs['aria-label'] === 'Atacado')
+  return { button, notices, wholesale }
 }
+
+test('CA-ATC-002 e CA-ATC-004: renderiza o atacado conforme o subtotal e a origem', async () => {
+  const mod = await pedidoMinimo(() => response(shipped))
+  assert.equal(mountCart(mod, 700).wholesale, undefined)
+  assert.match(textOf(mountCart(mod, 699.99, true).wholesale), /Faltam R\$ 0\.01/)
+  const { wholesale, button } = mountCart(mod, 700, true)
+  const [link] = findAll(wholesale, node => node.tag === 'a')
+  assert.match(link.data.attrs.href, /^https:\/\/wa\.me\/551151995309\?text=/)
+  assert.equal(button.data.attrs.href, '/app/#/checkout')
+})
 
 // O texto do aviso sai do componente, com os dados de avisoMinimo().
 function noticeText (aviso) {
