@@ -56,7 +56,7 @@ test('invalid app response and skipped app cannot promise a threshold', () => {
   assert.equal(core.parseQuote(results([service('PAC', 0)]), [1]).free, null)
   assert.equal(core.parseQuote([{ validated: true, response: {} }]).services.length, 0)
 })
-test('posting deadline is two working days only for JeT Standard and Loggi Express', () => {
+test('posting deadline is two working days for every carrier, except pickup', () => {
   const quoted = (carrier, name) => service(name, 10, {
     carrier,
     service_name: name,
@@ -77,8 +77,8 @@ test('posting deadline is two working days only for JeT Standard and Loggi Expre
   const deadline = name => parsed.find(item => item.service_name === name).shipping_line.posting_deadline.days
   assert.equal(deadline('Standard'), 2)
   assert.equal(deadline('Loggi Express'), 2)
-  assert.equal(deadline('Loggi Ponto'), 1)
-  assert.equal(deadline('Sedex'), 1)
+  assert.equal(deadline('Loggi Ponto'), 2)
+  assert.equal(deadline('Sedex'), 2)
   assert.equal(rawJet.shipping_line.posting_deadline.days, 1)
 })
 test('explicit express choice survives sorting, free availability and recalculation', () => {
@@ -913,20 +913,18 @@ test('quadros informativos: padrão ligado, painel tem o campo e os ícones exis
   const header = JSON.parse(fs.readFileSync(path.join(root, 'content/header.json'), 'utf8')).pe_header_v2
   for (const promo of header.promos) assert.ok(boxes.INFO_ICONS.includes(promo.icon), `ícone ${promo.icon} da cápsula sem ilustração`)
 })
-test('Correios and Jadlog post same day before the 12h cutoff; other carriers keep their days', () => {
+test('every carrier gets two working days of posting, even before the 12h cutoff; pickup is untouched', () => {
   const quoted = (carrier, name, days = 1) => service(name, 10, {
     carrier,
     service_name: name,
     shipping_line: { price: 10, total_price: 10, delivery_time: { days: 4, working_days: true }, posting_deadline: { days, working_days: true, after_approval: true } }
   })
-  const raw = [quoted('Correios', 'Sedex'), quoted('Jadlog', '.Package'), quoted('JeT', 'Standard'), quoted('Correios', 'PAC', 3)]
-  const days = (core, name) => core.parseQuote(results(raw)).services.find(item => item.service_name === name).shipping_line.posting_deadline.days
+  const raw = [quoted('Correios', 'Sedex'), quoted('Jadlog', '.Package'), quoted('JeT', 'Standard'), quoted('Correios', 'PAC', 3), quoted('Loja', 'Retirada na loja', 0)]
   const open = load('template/js/custom-js/freight/core.js', {}, { window: { peDeliveryDate: { postaHoje: () => true } } }).default
-  const closed = load('template/js/custom-js/freight/core.js', {}, { window: { peDeliveryDate: { postaHoje: () => false } } }).default
-  assert.deepEqual(['Sedex', '.Package', 'Standard', 'PAC'].map(name => days(open, name)), [0, 0, 2, 3])
-  assert.deepEqual(['Sedex', '.Package', 'Standard', 'PAC'].map(name => days(closed, name)), [1, 1, 2, 3])
-  assert.equal(open.parseQuote(results(raw)).services.find(item => item.service_name === 'Sedex').pe_cutoff, true)
-  assert.equal(days(core, 'Sedex'), 1)
+  const days = name => open.parseQuote(results(raw)).services.find(item => item.service_name === name).shipping_line.posting_deadline.days
+  assert.deepEqual(['Sedex', '.Package', 'Standard', 'PAC'].map(days), [2, 2, 2, 2])
+  assert.equal(days('Retirada na loja'), 0)
+  assert.equal(open.parseQuote(results(raw)).services.find(item => item.service_name === 'Sedex').pe_cutoff, undefined)
 })
 test('head cutoff clock: working day before 12h in Sao Paulo only', () => {
   const html = JSON.parse(fs.readFileSync(path.join(root, 'content/code.json'), 'utf8')).html_head
