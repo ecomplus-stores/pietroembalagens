@@ -98,6 +98,27 @@
             </template>
 
             <slot name="checkout">
+              <section v-if="peWholesale" class="border rounded p-3 mb-3" aria-label="Atacado">
+                <h2 class="h5">Pedido de atacado</h2>
+                <p class="mb-2">Mínimo de R$ 700 em produtos. Frete grátis no Sudeste a partir de R$ 700 e no Sul a partir de R$ 1.000.</p>
+                <p class="mb-2">O Rafa confirma o desconto de atacado e o frete antes do pagamento.</p>
+                <p v-if="peWholesaleRemaining" class="mb-0" role="status">
+                  Faltam {{ formatMoney(peWholesaleRemaining) }} para enviar o carrinho para o atacado.
+                </p>
+                <template v-else-if="isValidCart && peWholesaleMessage">
+                  <a v-if="peWholesaleLink" :href="peWholesaleLink" class="btn btn-primary btn-block" target="_blank" rel="noopener noreferrer">
+                    Enviar carrinho para o atacado
+                  </a>
+                  <div v-else>
+                    <label for="pe-wholesale-message">Lista completa para o WhatsApp</label>
+                    <textarea id="pe-wholesale-message" class="form-control mb-2" :value="peWholesaleMessage" rows="4" readonly></textarea>
+                    <button type="button" class="btn btn-outline-secondary btn-block" @click="peCopyWholesale">Copiar carrinho</button>
+                    <p v-if="peWholesaleCopy" role="status">{{ peWholesaleCopy }}</p>
+                    <a href="https://wa.me/551151995309" class="btn btn-primary btn-block" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+                  </div>
+                </template>
+              </section>
+
               <pe-min-order
                 v-if="isValidCart && peMinimo"
                 :aviso="peMinimo"
