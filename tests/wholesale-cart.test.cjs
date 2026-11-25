@@ -27,6 +27,12 @@ test('CA-ATC-003: conserva a seleção e as quantidades no WhatsApp', async () =
   assert.match(message, /1 pacote — Caixa com visor \(cód\. VISOR-20\)/)
   assert.doesNotMatch(message, /Brinde/)
   assert.equal(wholesaleWhatsapp(message.repeat(100)), '')
+  const variations = wholesaleMessage([
+    { name: 'Caixa', sku: 'BASE', variation_id: 'vermelha', quantity: 1 },
+    { name: 'Caixa', sku: 'BASE', variation_id: 'azul', quantity: 2 }
+  ])
+  assert.match(variations, /1 pacote — Caixa \(cód\. BASE, variação vermelha\)/)
+  assert.match(variations, /2 pacotes — Caixa \(cód\. BASE, variação azul\)/)
 })
 
 test('CA-ATC-004: origem do catálogo permanece na aba ao navegar', async () => {
