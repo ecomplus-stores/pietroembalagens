@@ -10,29 +10,9 @@ const serviceCost = service => {
   if (!line) return null
   return cents(line.total_price !== undefined ? line.total_price : line.price)
 }
-const normalizeServiceText = value => String(value || '').trim().toLowerCase()
-const hasTwoDayPostingDeadline = service => {
-  const carrier = normalizeServiceText(service && service.carrier)
-  const serviceName = normalizeServiceText(service && [service.service_name, service.label, service.service_code].filter(Boolean).join(' '))
-  return (carrier === 'jet' && /\bstandard\b/.test(serviceName)) ||
-    (carrier === 'loggi' && /\bexpress\b/.test(serviceName))
-}
-// Correios and Jadlog: payment approved before 12h on a working day is posted the same day (head script decides the clock).
-const hasSameDayCutoff = service => /correios|jadlog|jad log/.test(normalizeServiceText(service && [service.carrier, service.service_name, service.label].filter(Boolean).join(' ')))
-const postsToday = () => typeof window === 'object' && window.peDeliveryDate && typeof window.peDeliveryDate.postaHoje === 'function' && window.peDeliveryDate.postaHoje()
+// Prazo de postagem: 2 dias úteis após a aprovação do pagamento, em qualquer transportadora (retirada na loja fica de fora).
 const applyPostingDeadline = service => {
-  if (service && service.shipping_line && hasSameDayCutoff(service)) {
-    const posting = service.shipping_line.posting_deadline || {}
-    return {
-      ...service,
-      pe_cutoff: true,
-      shipping_line: {
-        ...service.shipping_line,
-        posting_deadline: { ...posting, days: posting.days === 1 && postsToday() ? 0 : posting.days, working_days: true, after_approval: true }
-      }
-    }
-  }
-  if (!hasTwoDayPostingDeadline(service) || !service.shipping_line) return service
+  if (!service || !service.shipping_line || isPickup(service)) return service
   return {
     ...service,
     shipping_line: {
@@ -117,4 +97,4 @@ const quantityFor = (gap, unitPrice, minimum, available) => {
 }
 const rank = (a, b) => Number(b.confirmed) - Number(a.confirmed) || Number(b.completes) - Number(a.completes) || a.additional - b.additional || b.relevance - a.relevance || a.key.localeCompare(b.key)
 
-export default { cents, zip, money, subtotal, serviceKey, serviceCost, hasTwoDayPostingDeadline, applyPostingDeadline, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, fastestFirst, canRecommend, quantityFor, rank }
+export default { cents, zip, money, subtotal, serviceKey, serviceCost, applyPostingDeadline, isPickup, isFreeDelivery, reduceItem, shippingItem, fingerprint, parseQuote, chooseService, fastestFirst, canRecommend, quantityFor, rank }
