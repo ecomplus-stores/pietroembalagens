@@ -86,6 +86,7 @@ import {
         peSequence: 0,
         peFetchTimer: null,
         peSettledKey: null,
+        peItemsKey: null,
         peError: false,
         peRequest: {},
         peRequestUrl: null,
@@ -329,6 +330,11 @@ import {
         handler () {
           this.localShippedItems = this.shippedItems.map(reduceItemBody)
           this.amountSubtotal = this.shippedItems.reduce((sum, item) => sum + getPrice(item) * item.quantity, 0)
+          // O app do carrinho regrava os itens com os mesmos valores (campanha de desconto, troca de frete);
+          // sem esta trava, cada cotação dispara outra e o bloco de frete fica piscando.
+          const itemsKey = core.fingerprint(this.shippedItems)
+          if (itemsKey === this.peItemsKey) return
+          this.peItemsKey = itemsKey
           this.fetchShippingServices()
         },
         deep: true, immediate: true
