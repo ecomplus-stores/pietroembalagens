@@ -5,7 +5,7 @@ const os = require('node:os')
 const path = require('node:path')
 const { execFileSync } = require('node:child_process')
 const { checkSource, checkBuild, prepareSsr, evidence } = require('../.github/scripts/verify-deploy.cjs')
-const { build } = require('../.github/scripts/build-storefront.cjs')
+const { build, cleanSitemap } = require('../.github/scripts/build-storefront.cjs')
 
 function fixture (t) {
   const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'pietro-deploy-'))
@@ -159,4 +159,17 @@ test('PURGE rejects malformed hostnames and slugs rather than requesting another
   f.write('content/settings.json', { domain: 'www.pietroembalagens.com.br' })
   f.write('.ecomplus.cd.json', { slug: '../other' })
   assert.throws(() => build(f.cwd, '[".ecomplus.cd.json"]'), /slug/)
+})
+
+test('sitemap drops technical pages and keeps store pages', t => {
+  const f = fixture(t)
+  const url = p => `\n    <url>\n      <loc>https://www.pietroembalagens.com.br${p}</loc>\n      <priority>0.8</priority>\n    </url>\n  `
+  const keep = ['/', '/tortas', '/pages/contato', '/blog', '/search-box-test']
+  const drop = ['/404', '/search', '/admin/index', '/app/index', '/maintenance/index']
+  f.write('dist/sitemap.xml', `<?xml version="1.0"?>\n<urlset>${keep.concat(drop).map(url).join('')}\n</urlset>\n`)
+  assert.equal(cleanSitemap(f.cwd), drop.length)
+  const xml = fs.readFileSync(path.join(f.cwd, 'dist/sitemap.xml'), 'utf8')
+  const locs = [...xml.matchAll(/<loc>https:\/\/www\.pietroembalagens\.com\.br([^<]*)<\/loc>/g)].map(m => m[1])
+  assert.deepEqual(locs, keep)
+  assert.match(xml, /<\/urlset>/)
 })
