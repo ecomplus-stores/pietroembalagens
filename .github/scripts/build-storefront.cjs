@@ -7,6 +7,25 @@ function run (command, args, cwd) {
   if (result.status !== 0) throw new Error(`${command} failed with exit status ${result.status}`)
 }
 
+// paginas tecnicas que o sitemap padrao do framework inclui e o Google nao deve indexar
+const SITEMAP_EXCLUDED = ['/404', '/search', '/admin/index', '/app/index', '/maintenance/index']
+
+function cleanSitemap (cwd) {
+  const filename = `${cwd}/dist/sitemap.xml`
+  if (!fs.existsSync(filename)) {
+    console.warn('WARN: dist/sitemap.xml not found; sitemap left untouched')
+    return 0
+  }
+  let removed = 0
+  const xml = fs.readFileSync(filename, 'utf8').replace(/\s*<url>\s*<loc>https:\/\/[^/<]+([^<]*)<\/loc>[\s\S]*?<\/url>/g, (block, pathname) => {
+    if (!SITEMAP_EXCLUDED.includes(pathname)) return block
+    removed++
+    return ''
+  })
+  fs.writeFileSync(filename, xml)
+  return removed
+}
+
 function build (cwd, changedFiles, output) {
   const changed = JSON.parse(changedFiles || '[]')
   if (!Array.isArray(changed) || !changed.every(file => typeof file === 'string')) throw new Error('Invalid changed-file list')
@@ -25,7 +44,10 @@ function build (cwd, changedFiles, output) {
       mode = 'purge'
     }
   }
-  if (mode === 'build') run('npm', ['run', 'build', '--', '--prerender=index,app/index,search,404,blog,admin/index', '--prerender-limit=0'], cwd)
+  if (mode === 'build') {
+    run('npm', ['run', 'build', '--', '--prerender=index,app/index,search,404,blog,admin/index', '--prerender-limit=0'], cwd)
+    console.log(`Sitemap: removed ${cleanSitemap(cwd)} technical URLs`)
+  }
   if (output) fs.appendFileSync(output, `mode=${mode}\n`)
   return mode
 }
@@ -39,4 +61,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { build }
+module.exports = { build, cleanSitemap }
