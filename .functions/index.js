@@ -52,6 +52,15 @@ const ssr = (req, res) => {
   if (/reverse-proxy/i.test(`${req.url}${req.originalUrl || ''}`)) {
     return res.sendStatus(404)
   }
+  // SEO: URL com barra no fim vira 301 para a sem barra. O renderer responde 302
+  // e perde a query string (UTM). Barras duplicadas no início viram uma só,
+  // para o Location nunca sair como //outro-site.
+  const [pathname, query] = req.url.split(/\?(.*)/s)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    const target = '/' + pathname.replace(/^\/+|\/+$/g, '')
+    res.set('Cache-Control', 'public, max-age=30, s-maxage=3600')
+    return res.redirect(301, query ? `${target}?${query}` : target)
+  }
   return renderSsr(req, res)
 }
 
