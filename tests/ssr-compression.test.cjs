@@ -152,8 +152,8 @@ test('HEAD keeps the original content length and never sends a compressed body',
   assert.match(result.headers.vary, /Accept-Encoding/)
 })
 
-for (const route of ['/redirect/', '/missing', '/small']) {
-  test(`${route}: preserves redirect, 404 and small responses without unnecessary compression`, async () => {
+for (const route of ['/missing', '/small']) {
+  test(`${route}: preserves 404 and small responses without unnecessary compression`, async () => {
     const original = await request(originalPort, route)
     const result = await request(compressedPort, route)
     assert.equal(result.status, original.status)
@@ -207,3 +207,24 @@ for (const resource of ['html', 'script']) {
     assert.notDeepEqual(result.body, original.body)
   })
 }
+
+test('trailing slash answers 301 to the path without it, keeping the query and staying on the site', async () => {
+  const cases = [
+    ['/redirect/', '/redirect'],
+    ['/tortas/?utm_source=meta&utm_campaign=natal', '/tortas?utm_source=meta&utm_campaign=natal'],
+    ['/pages/contato//', '/pages/contato'],
+    ['//evil.example/', '/evil.example'],
+    ['///', '/']
+  ]
+  for (const [route, location] of cases) {
+    const result = await request(compressedPort, route)
+    assert.equal(result.status, 301, route)
+    assert.equal(result.headers.location, location, route)
+    assert.equal(result.headers['cache-control'], 'public, max-age=30, s-maxage=3600', route)
+  }
+  const backslash = await request(compressedPort, '/\\evil.example/')
+  assert.equal(backslash.status, 301)
+  assert.ok(!/^\/[\\/]/.test(backslash.headers.location), backslash.headers.location)
+  const home = await request(compressedPort, '/')
+  assert.equal(home.status, 200)
+})
