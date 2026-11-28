@@ -1,6 +1,12 @@
 {
   "hosting": {
-    "redirects": [],
+    "redirects": [
+      {
+        "source": "/3-brigadeiros-ou-doces-c700",
+        "destination": "/3-brigadeiros-ou-doces",
+        "type": 301
+      }
+    ],
     "public": "dist",
     "ignore": [
       "firebase.json",
