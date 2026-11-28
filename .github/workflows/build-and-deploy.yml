@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: firebase-production-${{ github.repository }}
@@ -70,10 +71,10 @@ jobs:
       - name: Test storefront safeguards
         run: node --test tests/*.test.cjs
 
-      - name: Check last changed files
-        uses: lots0logs/gh-action-get-changed-files@2.1.4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check files changed since the last successful deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/changed-files.cjs
         id: changed_files
 
       - name: Run partial build
